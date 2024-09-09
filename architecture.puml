@@ -1,8 +1,30 @@
 @startuml
-class DataLayer{
+class Controller{
+    responsible for the game loop.
+    highest layer and master of system.
+    asks input layer for input.
 }
-class ModelLayer{
+
+class Model{
+    holds color data grid paintings state
+    Holds location data for visitors
+
+    Holds menu structure data.
+    Holds screen state data (is menu active or museum).
 }
-class ViewLayer{
+
+class View{
+    View gets render elements from controller
+    View is able to differentiate between rectangles and text elements.
+    View renders rectangles in a differenet manner than text elements.
 }
+
+class Input{
+    Input layer retrieves user input from OS or sdl
+}
+
+Controller *-- Model : updates > 
+Controller *-- View : sends data >
+Controller *-- Input : asks for >
+
 @enduml
