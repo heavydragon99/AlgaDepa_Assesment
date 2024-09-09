@@ -3,6 +3,8 @@ class Controller{
     responsible for the game loop.
     highest layer and master of system.
     asks input layer for input.
+
+    passes mouse button down coordinates to model.
 }
 
 class Model{
@@ -11,6 +13,8 @@ class Model{
 
     Holds menu structure data.
     Holds screen state data (is menu active or museum).
+
+    Model hanldes click events based on received x,y coordinates.
 }
 
 class View{
@@ -21,6 +25,8 @@ class View{
 
 class Input{
     Input layer retrieves user input from OS or sdl
+    Input layer returns x,y coordinates on mouse button down.
+
 }
 
 Controller *-- Model : updates > 
