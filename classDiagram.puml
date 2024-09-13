@@ -1,0 +1,142 @@
+@startuml
+
+class fileHandler {
+}
+
+class fileReader {
+}
+
+class fileParser {
+}
+
+class fileTypeReaderStrategy <<interface>>{
+    
+}
+
+class typeReaderStrategy <<interface>>{
+    
+}
+
+class fileTypeParserStrategy <<interface>>{
+    
+}
+
+class concreteCSVParser {
+}
+
+class concreteXMLParser {
+}
+
+class concreteTXTParser {
+}
+
+class onlineReader {
+
+}
+
+class localReader {
+}
+
+class concreteXMLReader {
+}
+
+class concreteTXTReader {
+}
+
+class concreteCSVReader {
+}
+
+class controller{
+
+}
+
+class model{
+    void updatemodel();
+}
+
+class levelData{
+    void updateLevelData();
+}
+
+class painting{
+    void updatePainting();
+}
+
+class visitor{
+    void updateVisitor();
+}
+
+class painter{
+    void updatePainter();
+}
+
+class inputHandler{
+}
+
+class mouse{
+    ' use 3rd party library to get mouse coordinates and translate to generic data
+}
+
+class keyboard{
+    ' use 3rd party library to get keyboard input and translate to generic data
+}
+
+class xboxController{
+    ' use 3rd party library to get xbox controller input and translate to generic data
+}
+
+class builder{}
+
+class paintingFactory{}
+
+class view{}
+
+
+
+
+controller --> fileHandler
+controller --> model
+controller --> inputHandler
+controller --> view
+view --> model
+
+' model
+model --> levelData
+levelData --> painting
+levelData --> visitor
+levelData --> painter
+
+levelData --> builder
+
+builder --> paintingFactory
+
+
+' filehandler
+fileHandler --> fileReader
+
+' Reader
+fileReader --> typeReaderStrategy
+
+typeReaderStrategy <|.. onlineReader
+typeReaderStrategy <|.. localReader
+
+onlineReader --> fileTypeReaderStrategy
+localReader --> fileTypeReaderStrategy
+
+fileTypeReaderStrategy <|.. concreteXMLReader
+fileTypeReaderStrategy <|.. concreteTXTReader
+fileTypeReaderStrategy <|.. concreteCSVReader
+
+' Parser
+fileHandler --> fileParser
+fileParser --> fileTypeParserStrategy
+fileTypeParserStrategy <|.. concreteCSVParser
+fileTypeParserStrategy <|.. concreteXMLParser
+fileTypeParserStrategy <|.. concreteTXTParser
+
+
+' inputHandler
+inputHandler --> mouse
+inputHandler --> keyboard
+inputHandler --> xboxController
+@enduml
