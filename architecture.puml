@@ -5,10 +5,11 @@ class Controller{
     asks input layer for input.
 
     passes mouse button down coordinates to model.
+    Model should not know x y coordinates
 }
 
 class Model{
-    holds color data grid paintings state
+    holds ,color, data, grid, paintings, state
     Holds location data for visitors
 
     Holds menu structure data.
@@ -21,6 +22,8 @@ class View{
     View gets render elements from controller
     View is able to differentiate between rectangles and text elements.
     View renders rectangles in a differenet manner than text elements.
+    View may know about the model
+    Menu is a view component
 }
 
 class Input{
