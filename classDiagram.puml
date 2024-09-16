@@ -10,15 +10,15 @@ class fileParser {
 }
 
 class fileTypeReaderStrategy <<interface>>{
-    
+
 }
 
 class typeReaderStrategy <<interface>>{
-    
+
 }
 
 class fileTypeParserStrategy <<interface>>{
-    
+
 }
 
 class concreteCSVParser {
@@ -91,7 +91,29 @@ class paintingFactory{}
 
 class view{}
 
+struct parsedArtist{
+    float x;
+    float y;
+    float vx;
+    float vy;
+}
 
+' vector<char> parsedPainting()
+
+struct parsedGrid{
+    int rows;
+    int cols;
+    parsedGridColor[] colors;
+
+}
+
+struct parsedGridColor{
+    char letter;
+    int red;
+    int green;
+    int blue;
+    int weight;
+}
 
 
 controller --> fileHandler
