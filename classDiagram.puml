@@ -9,25 +9,22 @@ class fileReader {
 class fileParser {
 }
 
-class fileTypeReaderStrategy <<interface>>{
+class artistParserStrategy <<interface>>{
 
 }
 
-class typeReaderStrategy <<interface>>{
+class paintingParserStrategy <<interface>>{
 
 }
 
-class fileTypeParserStrategy <<interface>>{
 
+class artistCSVParser{ 
 }
 
-class concreteCSVParser {
+class paintingXMLParser {
 }
 
-class concreteXMLParser {
-}
-
-class concreteTXTParser {
+class paintingTXTParser {
 }
 
 class onlineReader {
@@ -116,49 +113,50 @@ struct parsedGridColor{
 }
 
 
-controller --> fileHandler
-controller --> model
-controller --> inputHandler
-controller --> view
-view --> model
+controller <-- fileHandler
+controller <-- model
+controller <-- inputHandler
+controller <-- view
+view <-- model
 
 ' model
-model --> levelData
-levelData --> painting
-levelData --> visitor
-levelData --> painter
+model <-- levelData
+levelData <-- painting
+levelData <-- visitor
+levelData <-- painter
 
-levelData --> builder
+levelData <-- builder
 
-builder --> paintingFactory
+builder <-- paintingFactory
 
 
 ' filehandler
-fileHandler --> fileReader
+fileHandler <-- fileReader
 
 ' Reader
-fileReader --> typeReaderStrategy
+fileReader <-- onlineReader
+fileReader <-- localReader
 
-typeReaderStrategy <|.. onlineReader
-typeReaderStrategy <|.. localReader
 
-onlineReader --> fileTypeReaderStrategy
-localReader --> fileTypeReaderStrategy
+onlineReader <-- fileTypeReaderStrategy
+localReader <-- fileTypeReaderStrategy
 
 fileTypeReaderStrategy <|.. concreteXMLReader
 fileTypeReaderStrategy <|.. concreteTXTReader
 fileTypeReaderStrategy <|.. concreteCSVReader
 
 ' Parser
-fileHandler --> fileParser
-fileParser --> fileTypeParserStrategy
-fileTypeParserStrategy <|.. concreteCSVParser
-fileTypeParserStrategy <|.. concreteXMLParser
-fileTypeParserStrategy <|.. concreteTXTParser
+fileHandler <-- fileParser
+fileParser <-- artistParserStrategy
+fileParser <-- paintingParserStrategy
+
+artistParserStrategy <|.. artistCSVParser
+paintingParserStrategy <|.. paintingTXTParser
+paintingParserStrategy <|.. paintingXMLParser
 
 
 ' inputHandler
-inputHandler --> mouse
-inputHandler --> keyboard
-inputHandler --> xboxController
+inputHandler <-- mouse
+inputHandler <-- keyboard
+inputHandler <-- xboxController
 @enduml
