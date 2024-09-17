@@ -11,11 +11,11 @@ class fileReader {
 class fileParser {
 }
 
-interface artistParserStrategy {
+interface iArtistParser {
 
 }
 
-interface paintingParserStrategy {
+interface iPaintingParser {
 
 }
 
@@ -43,19 +43,42 @@ class levelData{
 
     vector<artist> mArtist;
     vector<painting> mPainting;
-    int cols;
-    int rows;
-    parsedGridColor mGridColor[];
+    int mCols;
+    int mRows;
+    gridColor mGridColor[];
 }
 
 class painting{
     void updatePainting();
 
-    char stateColor;
-    int weight;
+    iColor* mColor;
 }
 
-interface person{
+interface iColor{
+    virtual void doSomething();
+}
+
+class redColor{
+    void doSomething() override;
+}
+
+class blueColor{
+    void doSomething() override;
+}
+
+class greenColor{
+    void doSomething() override;
+}
+
+class yellowColor{
+    void doSomething() override;
+}
+
+class whiteColor{
+    void doSomething() override;
+}
+
+interface iPerson{
     virutal void updatePerson();
 
     float mX;
@@ -107,11 +130,11 @@ struct parsedArtist{
 struct parsedGrid{
     int rows;
     int cols;
-    vector<parsedGridColor> colors;
+    vector<gridColor> colors;
 
 }
 
-struct parsedGridColor{
+struct gridColor{
     char letter;
     int red;
     int green;
@@ -129,11 +152,16 @@ view <-- model
 ' model
 model <-- levelData
 levelData <-- painting
-levelData <-- person
-person <-- visitor
-person <-- artist
+painting <-- iColor
+iColor <|.. redColor
+iColor <|.. blueColor
+iColor <|.. greenColor
+iColor <|.. yellowColor
+iColor <|.. whiteColor
 
-
+levelData <-- iPerson
+iPerson <-- visitor
+iPerson <-- artist
 
 levelData <-- levelDataFactory
 
@@ -145,12 +173,12 @@ fileHandler <-- fileReader
 
 ' Parser
 fileHandler <-- fileParser
-fileParser <-- artistParserStrategy
-fileParser <-- paintingParserStrategy
+fileParser <-- iArtistParser
+fileParser <-- iPaintingParser
 
-artistParserStrategy <|.. artistCSVParser
-paintingParserStrategy <|.. paintingTXTParser
-paintingParserStrategy <|.. paintingXMLParser
+iArtistParser <|.. artistCSVParser
+iPaintingParser <|.. paintingTXTParser
+iPaintingParser <|.. paintingXMLParser
 
 ' inputHandler
 inputHandler <-- mouse
