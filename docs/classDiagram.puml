@@ -53,18 +53,37 @@ class model{
 
 class levelData{
     void updateLevelData();
+    void buildLevelData();
+
+    vector<artist> mArtist;
+    vector<painting> mPainting;
+    int cols;
+    int rows;
+    parsedGridColor mGridColor[];
 }
 
 class painting{
     void updatePainting();
+
+    char stateColor;
+    int weight;
+}
+
+interface person{
+    virutal void updatePerson();
+
+    float mX;
+    float mY;
+    float mVelX
+    float mVelY;
 }
 
 class visitor{
-    void updateVisitor();
+    void updateVisitor() override;
 }
 
-class painter{
-    void updatePainter();
+class artist{
+    void updateArtist() override;
 }
 
 class inputHandler{
@@ -82,9 +101,11 @@ class xboxController{
     ' use 3rd party library to get xbox controller input and translate to generic data
 }
 
-class builder{}
+class levelDataFactory{}
 
 class paintingFactory{}
+
+class personFactory{}
 
 class view{}
 
@@ -100,7 +121,7 @@ struct parsedArtist{
 struct parsedGrid{
     int rows;
     int cols;
-    parsedGridColor[] colors;
+    vector<parsedGridColor> colors;
 
 }
 
@@ -122,12 +143,17 @@ view <-- model
 ' model
 model <-- levelData
 levelData <-- painting
-levelData <-- visitor
-levelData <-- painter
+levelData <-- person
+person <-- visitor
+person <-- artist
 
-levelData <-- builder
 
-builder <-- paintingFactory
+
+levelData <-- levelDataFactory
+
+levelDataFactory <-- paintingFactory
+levelDataFactory <-- personFactory
+
 
 
 ' filehandler
