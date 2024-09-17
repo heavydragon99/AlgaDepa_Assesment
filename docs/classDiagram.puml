@@ -9,11 +9,11 @@ class fileReader {
 class fileParser {
 }
 
-class artistParserStrategy <<interface>>{
+interface artistParserStrategy {
 
 }
 
-class paintingParserStrategy <<interface>>{
+interface paintingParserStrategy {
 
 }
 
