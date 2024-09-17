@@ -4,6 +4,8 @@ class fileHandler {
 }
 
 class fileReader {
+    file* openOnlineFile(string url);
+    file* openLocalFile(string path);
 }
 
 class fileParser {
@@ -25,22 +27,6 @@ class paintingXMLParser {
 }
 
 class paintingTXTParser {
-}
-
-class onlineReader {
-
-}
-
-class localReader {
-}
-
-class concreteXMLReader {
-}
-
-class concreteTXTReader {
-}
-
-class concreteCSVReader {
 }
 
 class controller{
@@ -154,22 +140,8 @@ levelData <-- levelDataFactory
 levelDataFactory <-- paintingFactory
 levelDataFactory <-- personFactory
 
-
-
 ' filehandler
 fileHandler <-- fileReader
-
-' Reader
-fileReader <-- onlineReader
-fileReader <-- localReader
-
-
-onlineReader <-- fileTypeReaderStrategy
-localReader <-- fileTypeReaderStrategy
-
-fileTypeReaderStrategy <|.. concreteXMLReader
-fileTypeReaderStrategy <|.. concreteTXTReader
-fileTypeReaderStrategy <|.. concreteCSVReader
 
 ' Parser
 fileHandler <-- fileParser
@@ -179,7 +151,6 @@ fileParser <-- paintingParserStrategy
 artistParserStrategy <|.. artistCSVParser
 paintingParserStrategy <|.. paintingTXTParser
 paintingParserStrategy <|.. paintingXMLParser
-
 
 ' inputHandler
 inputHandler <-- mouse
