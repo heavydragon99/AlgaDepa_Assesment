@@ -5,10 +5,8 @@
 
 class visitor : public iPerson {
 public:
-    visitor();
-    ~visitor();
-
-    void someMethod();
+    visitor(float aX, float aY, float aVelX, float aVelY);
+    void update() override;
 };
 
 #endif // VISITOR_H

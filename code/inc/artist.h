@@ -5,10 +5,8 @@
 
 class artist : public iPerson {
 public:
-    artist();
-    ~artist();
-
-    void createArt();
+    artist(float aX, float aY, float aVelX, float aVelY);
+    void update() override;
 };
 
 #endif // ARTIST_H

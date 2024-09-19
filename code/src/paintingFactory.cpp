@@ -1,1 +1,0 @@
-#include "paintingFactory.h"

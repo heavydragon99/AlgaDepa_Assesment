@@ -1,13 +1,16 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+#include "personFactory.h"
+
 #include <vector>
 
-struct parsedArtist{
+struct parsedPerson{
     float x;
     float y;
     float vx;
     float vy;
+    personType type;
 };
 
 struct gridColor{
@@ -22,6 +25,7 @@ struct parsedGrid{
     int rows;
     int cols;
     std::vector<gridColor> gridColors;
+    std::vector<char> grid;
 };
 
 #endif // STRUCTS_H
