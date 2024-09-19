@@ -7,6 +7,9 @@ public:
 
     virtual void update() = 0;
 
+    virtual float getX() const { return mX; }
+    virtual float getY() const { return mY; }
+
     protected:
     float mX;
     float mY;

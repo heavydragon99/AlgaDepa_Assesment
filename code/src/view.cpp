@@ -28,11 +28,11 @@ void view::render() {
     }
 
     // Render persons
-    // for (const auto& person : levelData.getPeople()) {
-    //     SDL_Rect fillRect = { person->getX(), person->getY(), person->getWidth(), person->getHeight() };
-    //     SDL_SetRenderDrawColor(mRenderer, person->getColor().r, person->getColor().g, person->getColor().b, 0xFF);
-    //     SDL_RenderFillRect(mRenderer, &fillRect);
-    // }
+    for (int i = 0; i < levelData.getPersonCount(); i++) {
+        SDL_Rect fillRect = { levelData.getPersonX(i) * personSize, levelData.getPersonY(i) * personSize, personSize, personSize };
+        SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
+        SDL_RenderFillRect(mRenderer, &fillRect);
+    }
 
     SDL_RenderPresent(mRenderer);
 }

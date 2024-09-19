@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #define renderSize 50
+#define personSize 25 //half of renderSize
 
 class view {
 public:
