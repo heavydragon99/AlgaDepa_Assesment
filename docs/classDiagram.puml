@@ -15,18 +15,17 @@ interface iArtistParser {
 
 }
 
-interface iPaintingParser {
+interface iTileParser {
 
 }
-
 
 class artistCSVParser{ 
 }
 
-class paintingXMLParser {
+class tileXMLParser {
 }
 
-class paintingTXTParser {
+class tileTXTParser {
 }
 
 class controller{
@@ -34,65 +33,64 @@ class controller{
 }
 
 class model{
-    void updatemodel();
 }
 
 class levelData{
     void updateLevelData();
-    void buildLevelData();
+    void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
 
-    vector<artist> mArtist;
-    vector<painting> mPainting;
+    std::vector<std::unique_ptr<iPerson>> mPeople;
+    std::vector<std::unique_ptr<tile>> mGrid;
     int mCols;
     int mRows;
-    gridColor mGridColor[];
+    std::vector<gridColor> mGridColor;
 }
 
-class painting{
-    void updatePainting();
+class tile{
+    void updateTile();
 
-    iColor* mColor;
+    iTileState* mColor;
 }
 
-interface iColor{
+interface iTileState{
     virtual void doSomething();
 }
 
-class redColor{
+class tileStateRed{
     void doSomething() override;
 }
 
-class blueColor{
+class tileStateBlue{
     void doSomething() override;
 }
 
-class greenColor{
+class tileStateGray{
     void doSomething() override;
 }
 
-class yellowColor{
+class tileStateYellow{
     void doSomething() override;
 }
 
-class whiteColor{
+class tileStateWhite{
     void doSomething() override;
 }
 
 interface iPerson{
-    virutal void updatePerson();
+    virtual void updatePerson();
 
     float mX;
     float mY;
-    float mVelX
+    float mVelX;
     float mVelY;
 }
 
 class visitor{
-    void updateVisitor() override;
+    void updatePerson() override;
 }
 
 class artist{
-    void updateArtist() override;
+    void updatePerson() override;
 }
 
 class inputHandler{
@@ -110,11 +108,10 @@ class xboxController{
     ' use 3rd party library to get xbox controller input and translate to generic data
 }
 
-class levelDataFactory{}
+class tileFactory{}
 
-class paintingFactory{}
-
-class personFactory{}
+class personFactory{
+}
 
 class view{}
 
@@ -125,13 +122,13 @@ struct parsedArtist{
     float vy;
 }
 
-' vector<char> parsedPainting()
+' vector<char> parsedTile()
 
 struct parsedGrid{
     int rows;
     int cols;
-    vector<gridColor> colors;
-
+    std::vector<gridColor> colors;
+    std::vector<char> grid;
 }
 
 struct gridColor{
@@ -151,22 +148,20 @@ view <-- model
 
 ' model
 model <-- levelData
-levelData <-- painting
-painting <-- iColor
-iColor <|.. redColor
-iColor <|.. blueColor
-iColor <|.. greenColor
-iColor <|.. yellowColor
-iColor <|.. whiteColor
+levelData <-- tile
+tile <-- iTileState
+iTileState <|.. tileStateRed
+iTileState <|.. tileStateBlue
+iTileState <|.. tileStateGray
+iTileState <|.. tileStateYellow
+iTileState <|.. tileStateWhite
 
 levelData <-- iPerson
 iPerson <-- visitor
 iPerson <-- artist
 
-levelData <-- levelDataFactory
-
-levelDataFactory <-- paintingFactory
-levelDataFactory <-- personFactory
+levelData <-- tileFactory
+levelData <-- personFactory
 
 ' filehandler
 fileHandler <-- fileReader
@@ -174,11 +169,11 @@ fileHandler <-- fileReader
 ' Parser
 fileHandler <-- fileParser
 fileParser <-- iArtistParser
-fileParser <-- iPaintingParser
+fileParser <-- iTileParser
 
 iArtistParser <|.. artistCSVParser
-iPaintingParser <|.. paintingTXTParser
-iPaintingParser <|.. paintingXMLParser
+iTileParser <|.. tileTXTParser
+iTileParser <|.. tileXMLParser
 
 ' inputHandler
 inputHandler <-- mouse
