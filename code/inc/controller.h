@@ -10,6 +10,7 @@ public:
     controller(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
 
     void createLevel();
+    void run();
 
 private:
     model mModel;

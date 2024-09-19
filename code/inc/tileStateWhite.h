@@ -7,6 +7,7 @@ class tileStateWhite : public iTileState {
 public:
     tileStateWhite();
     void updateTile(tile* t) override;
+    char getColor() const override;
 };
 
 #endif // TILESTATEWHITE_H

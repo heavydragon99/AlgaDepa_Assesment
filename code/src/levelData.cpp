@@ -41,3 +41,30 @@ void levelData::buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aG
     }
     std::cout << "Level data built successfully!" << std::endl;
 }
+
+int levelData::getX(int tileIndex) const {
+    return tileIndex % mCols;
+}
+
+int levelData::getY(int tileIndex) const {
+    return tileIndex / mCols;
+}
+
+int levelData::getTotalTiles() const {
+    return mCols * mRows;
+}
+
+void levelData::getGridColor(int tileIndex, int &red, int &green, int &blue) const {
+    char color = mGrid[tileIndex]->getColor();
+    for (const gridColor& gridColor : mGridColor) {
+        if (gridColor.letter == color) {
+            red = gridColor.red;
+            green = gridColor.green;
+            blue = gridColor.blue;
+            return;
+        }
+    }
+    red = 255;
+    green = 255;
+    blue = 255;
+}

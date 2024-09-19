@@ -10,10 +10,10 @@ class model {
 public:
     model();
     void createLevel(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
+    const levelData& getLevelData() const;
 
 private:
     levelData mLevel;
-
 };
 
 #endif // MODEL_H

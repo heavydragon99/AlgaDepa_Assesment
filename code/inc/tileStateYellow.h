@@ -7,6 +7,7 @@ class tileStateYellow : public iTileState {
 public:
     tileStateYellow();
     void updateTile(tile* t) override;
+    char getColor() const override;
 };
 
 #endif // TILESTATEYELLOW_H

@@ -11,6 +11,7 @@ public:
     void updateTile();
 
     void setState(iTileState* newState);
+    char getColor() const;
 
 private:
     iTileState* state;

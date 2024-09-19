@@ -17,6 +17,11 @@ public:
     void updateLevelData();
     void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
 
+    int getX(int tileIndex) const;
+    int getY(int tileIndex) const;
+    int getTotalTiles() const;
+    void getGridColor(int tileIndex, int &red, int &green, int &blue) const;
+
 private:
     std::vector<std::unique_ptr<iPerson>> mPeople;
     std::vector<std::unique_ptr<tile>> mGrid;

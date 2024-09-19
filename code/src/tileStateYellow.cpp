@@ -10,3 +10,7 @@ void tileStateYellow::updateTile(tile* t) {
     // Transition to the next state
     t->setState(new tileStateBlue());
 }
+
+char tileStateYellow::getColor() const {
+    return 'Y';
+}

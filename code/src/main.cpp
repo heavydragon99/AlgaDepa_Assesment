@@ -64,6 +64,7 @@ int main()
 
     controller ctrl(persons, grid);
     ctrl.createLevel();
+    ctrl.run();
 
     return 0;
 }

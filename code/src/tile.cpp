@@ -14,3 +14,7 @@ void tile::setState(iTileState* newState) {
     delete state;
     state = newState;
 }
+
+char tile::getColor() const {
+    return state->getColor();
+}
