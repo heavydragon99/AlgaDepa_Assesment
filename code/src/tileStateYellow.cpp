@@ -8,9 +8,17 @@ tileStateYellow::tileStateYellow() {
 
 void tileStateYellow::updateTile(tile* t) {
     // Transition to the next state
-    t->setState(new tileStateBlue());
+    t->setState(std::make_unique<tileStateBlue>());
 }
 
 char tileStateYellow::getColor() const {
     return 'Y';
+}
+
+void tileStateYellow::enter(tile* t) {
+    // Code to execute when entering the yellow state
+}
+
+void tileStateYellow::exit(tile* t) {
+    // Code to execute when exiting the yellow state
 }

@@ -3,18 +3,19 @@
 
 #include "iTileState.h"
 
+#include <memory>
+
 class tile {
 public:
-    tile(iTileState* initialState);
-    ~tile();
+    tile(std::unique_ptr<iTileState> initialState);
+    ~tile() = default;
 
     void updateTile();
-
-    void setState(iTileState* newState);
+    void setState(std::unique_ptr<iTileState> newState);
     char getColor() const;
 
 private:
-    iTileState* state;
+    std::unique_ptr<iTileState> state;
 };
 
 #endif // TILE_H
