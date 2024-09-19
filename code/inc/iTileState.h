@@ -5,7 +5,7 @@ class tile;
 
 class iTileState {
 public:
-    virtual ~iTileState() {}
+    virtual ~iTileState() = default;
     virtual void updateTile(tile* t) = 0;
 };
 

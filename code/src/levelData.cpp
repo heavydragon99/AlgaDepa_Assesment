@@ -4,6 +4,8 @@
 #include "iPerson.h"
 #include "tile.h"
 
+#include <iostream>
+
 levelData::levelData() : mCols(0), mRows(0) {}
 
 levelData::~levelData() {}
@@ -34,28 +36,8 @@ void levelData::buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aG
 
     // Create tiles and add to mGrid
     for (const char& color : aGrid.grid) {
-        tileColor tileColor;
-        switch (color) {
-            case 'R':
-                tileColor = tileColor::Red;
-                break;
-            case 'B':
-                tileColor = tileColor::Blue;
-                break;
-            case 'Y':
-                tileColor = tileColor::Yellow;
-                break;
-            case 'G':
-                tileColor = tileColor::Gray;
-                break;
-            case 'W':
-                tileColor = tileColor::White;
-                break;
-            default:
-                tileColor = tileColor::White; // Default to white if unknown
-                break;
-        }
-        std::unique_ptr<tile> tile = tileFactory::createTile(tileColor);
+        std::unique_ptr<tile> tile = tileFactory::createTile(color);
         mGrid.push_back(std::move(tile));
     }
+    std::cout << "Level data built successfully!" << std::endl;
 }

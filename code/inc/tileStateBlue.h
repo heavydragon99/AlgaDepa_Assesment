@@ -5,6 +5,7 @@
 
 class tileStateBlue : public iTileState {
 public:
+    tileStateBlue();
     void updateTile(tile* t) override;
 };
 

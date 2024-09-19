@@ -1,8 +1,12 @@
 #include "tileStateWhite.h"
 #include "tile.h"
-#include "tileStateRed.h"
+#include "tileStateYellow.h"
+
+tileStateWhite::tileStateWhite() {
+    // Constructor implementation (if needed)
+}
 
 void tileStateWhite::updateTile(tile* t) {
     // Transition to the next state
-    t->setState(new tileStateRed());
+    t->setState(new tileStateYellow());
 }

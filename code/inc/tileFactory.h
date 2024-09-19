@@ -20,7 +20,9 @@ enum class tileColor {
 
 class tileFactory {
 public:
-    static std::unique_ptr<tile> createTile(tileColor color);
+    static std::unique_ptr<tile> createTile(char color);
+private:
+    static tileColor charToTileColor(char color);
 };
 
 #endif // TILEFACTORY_H
