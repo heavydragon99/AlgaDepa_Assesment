@@ -1,8 +1,9 @@
 #include "tileEdge.h"
 
-tileEdge::tileEdge(tileNode* aFrom, tileNode* aTo, float aWeight) : mFrom(aFrom), mTo(aTo), mWeight(aWeight) {}
+tileEdge::tileEdge(tileNode *aFrom, tileNode *aTo, float aWeight)
+    : mFrom(aFrom), mTo(aTo), mWeight(aWeight) {}
 
-tileNode* tileEdge::getOtherSide(tileNode* aNode) const
+tileNode *tileEdge::getOtherSide(tileNode *aNode) const
 {
     if (aNode == mFrom)
     {

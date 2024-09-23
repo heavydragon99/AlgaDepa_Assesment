@@ -1,16 +1,14 @@
 #include "tileNode.h"
 
 tileNode::tileNode(std::unique_ptr<tile> aTile)
-    : mTile(std::move(aTile)) // Correct initialization list
+    : mTile(std::move(aTile)) {}
+
+void tileNode::addEdge(std::shared_ptr<tileEdge> aEdge)
 {
+    mEdges.push_back(aEdge);
 }
 
-void tileNode::addEdge(std::unique_ptr<tileEdge> aEdge)
-{
-    mEdges.push_back(std::move(aEdge));
-}
-
-const std::vector<std::unique_ptr<tileEdge>> &tileNode::getEdges() const
+const std::vector<std::shared_ptr<tileEdge>> &tileNode::getEdges() const
 {
     return mEdges;
 }

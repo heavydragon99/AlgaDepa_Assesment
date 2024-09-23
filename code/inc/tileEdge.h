@@ -3,17 +3,18 @@
 
 class tileNode;
 
-class tileEdge {
+class tileEdge
+{
 public:
-    tileEdge(tileNode* aFrom, tileNode* aTo, float aWeight);
+    tileEdge(tileNode *aFrom, tileNode *aTo, float aWeight);
 
-    tileNode* getOtherSide(tileNode* aNode) const;
+    tileNode *getOtherSide(tileNode *aNode) const;
 
     float getWeight() const;
 
 private:
-    tileNode* mFrom;
-    tileNode* mTo;
+    tileNode *mFrom;
+    tileNode *mTo;
     float mWeight;
 };
 
