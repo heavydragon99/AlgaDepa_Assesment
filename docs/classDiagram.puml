@@ -95,7 +95,7 @@ class personFactory{}
 
 class view{}
 
-struct parsedArtist{
+class parsedArtist{
     float x;
     float y;
     float vx;
@@ -104,14 +104,14 @@ struct parsedArtist{
 
 ' vector<char> parsedPainting()
 
-struct parsedGrid{
+class parsedGrid{
     int rows;
     int cols;
     vector<parsedGridColor> colors;
 
 }
 
-struct parsedGridColor{
+class parsedGridColor{
     char letter;
     int red;
     int green;
