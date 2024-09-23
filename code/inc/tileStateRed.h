@@ -3,9 +3,14 @@
 
 #include "iTileState.h"
 
-class tileStateRed : public iTileState {
+class tileStateRed : public iTileState
+{
 public:
-    void updateTile(tile* t) override;
+    tileStateRed();
+    void updateTile(tile *t) override;
+    char getColor() const override;
+    void enter(tile *t) override;
+    void exit(tile *t) override;
 };
 
-#endif // TILESTATRED_H
+#endif // TILESTATERED_H
