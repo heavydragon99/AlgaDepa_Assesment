@@ -3,6 +3,8 @@
 #include "tileFactory.h"
 #include "iPerson.h"
 #include "tile.h"
+#include "tileNode.h"
+#include "tileEdge.h"
 
 #include <iostream>
 
@@ -35,11 +37,31 @@ void levelData::buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aG
     }
 
     // Create tiles and add to mGrid
-    for (const char& color : aGrid.grid) {
-        std::unique_ptr<tile> tile = tileFactory::createTile(color);
-        mGrid.push_back(std::move(tile));
+    mGrid.resize(mRows * mCols);
+    for (int row = 0; row < mRows; ++row) {
+        for (int col = 0; col < mCols; ++col) {
+            char color = aGrid.grid[row * mCols + col];
+            std::unique_ptr<tile> tile = tileFactory::createTile(color);
+            mGrid[row * mCols + col] = std::make_unique<tileNode>(std::move(tile));
+        }
     }
+
+    // Connect neighbors
+    connectNeighbors();
+
     std::cout << "Level data built successfully!" << std::endl;
+}
+
+void levelData::connectNeighbors() {
+    for (int row = 0; row < mRows; ++row) {
+        for (int col = 0; col < mCols; ++col) {
+            tileNode* currentNode = mGrid[row * mCols + col].get();
+            if (row > 0) currentNode->addEdge(std::make_unique<tileEdge>(currentNode, mGrid[(row - 1) * mCols + col].get())); // Up
+            if (row < mRows - 1) currentNode->addEdge(std::make_unique<tileEdge>(currentNode, mGrid[(row + 1) * mCols + col].get())); // Down
+            if (col > 0) currentNode->addEdge(std::make_unique<tileEdge>(currentNode, mGrid[row * mCols + (col - 1)].get())); // Left
+            if (col < mCols - 1) currentNode->addEdge(std::make_unique<tileEdge>(currentNode, mGrid[row * mCols + (col + 1)].get())); // Right
+        }
+    }
 }
 
 int levelData::getX(int tileIndex) const {
@@ -55,7 +77,9 @@ int levelData::getTotalTiles() const {
 }
 
 void levelData::getGridColor(int tileIndex, int &red, int &green, int &blue) const {
-    char color = mGrid[tileIndex]->getColor();
+    int row = getY(tileIndex);
+    int col = getX(tileIndex);
+    char color = mGrid[row][col]->getTile()->getColor();
     for (const gridColor& gridColor : mGridColor) {
         if (gridColor.letter == color) {
             red = gridColor.red;

@@ -57,8 +57,8 @@ int main()
         parsedPerson person;
         person.x = (randomPosition % cols);
         person.y = (randomPosition / cols);
-        person.vx = randomDirection ? 1 : 0;
-        person.vy = randomDirection ? 0 : 1;
+        person.vx = randomDirection ? 0.1 : 0;
+        person.vy = randomDirection ? 0 : 0.1;
         persons.push_back(person);
     }
 
