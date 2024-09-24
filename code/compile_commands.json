@@ -1,0 +1,30 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/ParseGrid.cpp.o",
+      "/home/seger/projects/dpa/code/src/ParseGrid.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/ParseGrid.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/ParseGrid.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/main.cpp.o",
+      "/home/seger/projects/dpa/code/src/main.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/main.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/main.cpp.o"
+  }
+]
