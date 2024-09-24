@@ -3,32 +3,34 @@
 #include <iostream>
 #include <sstream>
 
+#include "structs.h"
+
 // Function to parse a color line like "Y,[250,201,1],1"
-Color GridTXTParser::parseColor(const std::string& line) const {
-    Color color;
+GridColor GridTXTParser::parseColor(const std::string& line) const {
+    GridColor color;
     std::stringstream ss(line);
     char ignore, comma;
 
-    ss >> color.letter;      // letter
-    ss >> ignore >> ignore;  // "["
-    ss >> color.r >> comma;  // red value
-    ss >> color.g >> comma;  // green value
-    ss >> color.b >> ignore; // blue value
-    ss >> ignore;            // "]"
-    ss >> color.weight;      // weight
+    ss >> color.letter;         // letter
+    ss >> ignore >> ignore;     // "["
+    ss >> color.red >> comma;   // red value
+    ss >> color.green >> comma; // green value
+    ss >> color.blue >> ignore; // blue value
+    ss >> ignore;               // "]"
+    ss >> color.weight;         // weight
 
     return color;
 }
 
 // Function to parse the grid file and store the data
-GridData GridTXTParser::parseFile(std::ifstream& aFileStream) {
+ParsedGrid GridTXTParser::parseFile(std::ifstream& aFileStream) {
     int rows, cols;
-    std::vector<Color> colors;
+    std::vector<GridColor> colors;
     std::vector<char> gridBuffer;
 
     if (!aFileStream.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
-        return GridData();
+        return ParsedGrid();
     }
 
     std::string line;
@@ -44,7 +46,7 @@ GridData GridTXTParser::parseFile(std::ifstream& aFileStream) {
     while (std::getline(aFileStream, line) && !line.empty()) {
         if (line[0] == '_')
             break; // Break on the grid data section
-        Color color = parseColor(line);
+        GridColor color = parseColor(line);
         colors.push_back(color);
     }
 
@@ -61,11 +63,11 @@ GridData GridTXTParser::parseFile(std::ifstream& aFileStream) {
         }
     } while (std::getline(aFileStream, line));
 
-    GridData data;
+    ParsedGrid data;
     data.rows = rows;
     data.cols = cols;
-    data.gridBuffer = gridBuffer; // Copy grid buffer
-    data.colors = colors;         // Copy color mappings
+    data.grid = gridBuffer;   // Copy grid buffer
+    data.gridColors = colors; // Copy color mappings
     return data;
 }
 

@@ -25,7 +25,7 @@ public:
     virtual ~GridParser() = default;
 
     // Virtual method for parsing, to be overridden by derived parsers
-    virtual GridData parseFile(std::ifstream& aFileStream) = 0;
+    virtual ParsedGrid parseFile(std::ifstream& aFileStream) = 0;
 };
 
 // CSV Parser
@@ -33,8 +33,8 @@ class GridCSVParser : public GridParser {
 public:
     GridCSVParser() {}
 
-    GridData parseFile(std::ifstream& aFileStream) override {
-        GridData gridData;
+    ParsedGrid parseFile(std::ifstream& aFileStream) override {
+        ParsedGrid gridData;
         std::cout << "CSV grid loading not implemented" << std::endl;
         return gridData;
     }
@@ -52,11 +52,11 @@ public:
 class GridTXTParser : public GridParser {
 public:
     // Function to parse file and return GridData
-    GridData parseFile(std::ifstream& aFileStream);
+    ParsedGrid parseFile(std::ifstream& aFileStream);
 
 private:
     // Helper function to parse a color line
-    Color parseColor(const std::string& line) const;
+    GridColor parseColor(const std::string& line) const;
 };
 
 // XML Parser (placeholder, implement XML parsing logic)
@@ -71,8 +71,8 @@ private:
 // GridXMLParser to parse grid data from an XML file
 class GridXMLParser : public GridParser {
 public:
-    GridData parseFile(std::ifstream& aFileStream) override {
-        GridData gridData;
+    ParsedGrid parseFile(std::ifstream& aFileStream) override {
+        ParsedGrid gridData;
 
         // Check if the file stream is open
         if (!aFileStream.is_open()) {
@@ -115,24 +115,24 @@ public:
 
 private:
     // Helper function to parse <nodeTypes> and fill color information
-    void parseNodeTypes(tinyxml2::XMLElement* nodeTypesElement, GridData& gridData) {
+    void parseNodeTypes(tinyxml2::XMLElement* nodeTypesElement, ParsedGrid& gridData) {
         for (tinyxml2::XMLElement* nodeType = nodeTypesElement->FirstChildElement("nodeType"); nodeType != nullptr;
              nodeType = nodeType->NextSiblingElement("nodeType")) {
 
-            Color color;
+            GridColor color;
             color.letter = nodeType->Attribute("tag")[0];
-            nodeType->QueryIntAttribute("red", &color.r);
-            nodeType->QueryIntAttribute("green", &color.g);
-            nodeType->QueryIntAttribute("blue", &color.b);
+            nodeType->QueryIntAttribute("red", &color.red);
+            nodeType->QueryIntAttribute("green", &color.green);
+            nodeType->QueryIntAttribute("blue", &color.blue);
             nodeType->QueryIntAttribute("weight", &color.weight);
 
-            gridData.colors.push_back(color);
+            gridData.gridColors.push_back(color);
         }
     }
 
     // Helper function to parse <nodes> and fill grid buffer information
-    void parseNodes(tinyxml2::XMLElement* nodesElement, GridData& gridData) {
-        gridData.gridBuffer.resize(gridData.rows * gridData.cols, '_'); // Initialize with spaces
+    void parseNodes(tinyxml2::XMLElement* nodesElement, ParsedGrid& gridData) {
+        gridData.grid.resize(gridData.rows * gridData.cols, '_'); // Initialize with spaces
 
         for (tinyxml2::XMLElement* node = nodesElement->FirstChildElement(); node != nullptr;
              node = node->NextSiblingElement()) {
@@ -144,7 +144,7 @@ private:
 
             // Place the tag in the corresponding position in the grid
             if (x < gridData.cols && y < gridData.rows) {
-                gridData.gridBuffer[y * gridData.cols + x] = tag[0];
+                gridData.grid[y * gridData.cols + x] = tag[0];
             }
         }
     }
@@ -168,7 +168,7 @@ public:
     }
 
     // Method to load and parse the file
-    GridData parseFile(LoadedFile& aLoadedFile) {
+    ParsedGrid parseFile(LoadedFile& aLoadedFile) {
         std::ifstream& fileStream = *(aLoadedFile.openedFile);
         if (!fileStream.is_open()) {
             throw std::runtime_error("Failed to open file in grid parsing");

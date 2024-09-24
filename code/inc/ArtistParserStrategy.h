@@ -10,27 +10,29 @@
 #include "ArtistCSVParser.h"
 #include "FileHandler.h"
 
+#include "structs.h"
+
 // Base class for all parsers
 class ArtistParser {
 public:
     virtual ~ArtistParser() = default;
 
     // Virtual method for parsing, to be overridden by derived parsers
-    virtual std::vector<ArtistData> parseFile(std::ifstream& aFileStream) = 0;
+    virtual std::vector<ParsedPerson> parseFile(std::ifstream& aFileStream) = 0;
 };
 
 class ArtistCSVParser : public ArtistParser {
 public:
     ArtistCSVParser() {}
 
-    std::vector<ArtistData> parseFile(std::ifstream& aFileStream) override {
-        std::vector<ArtistData> artistsData;
+    std::vector<ParsedPerson> parseFile(std::ifstream& aFileStream) override {
+        std::vector<ParsedPerson> artistsData;
 
         // std::ifstream file(filename);
 
         if (!aFileStream.is_open()) {
             std::cerr << "Failed to open file: ArtistCSParser" << std::endl;
-            return std::vector<ArtistData>();
+            return std::vector<ParsedPerson>();
         }
 
         std::string line;
@@ -39,7 +41,8 @@ public:
 
         while (std::getline(aFileStream, line)) {
             std::stringstream ss(line);
-            ArtistData artist;
+            ParsedPerson artist;
+            artist.type = personType::Artist;
             char comma;
 
             ss >> artist.x >> comma >> artist.y >> comma >> artist.vx >> comma >> artist.vy;
@@ -71,20 +74,20 @@ private:
 // TXT Parser
 class ArtistTXTParser : public ArtistParser {
 public:
-    std::vector<ArtistData> parseFile(std::ifstream& fileStream) override {
+    std::vector<ParsedPerson> parseFile(std::ifstream& fileStream) override {
         std::cout << "Parsing TXT file..." << std::endl;
         // Implement TXT parsing logic here
-        return std::vector<ArtistData>();
+        return std::vector<ParsedPerson>();
     }
 };
 
 // XML Parser
 class ArtistXMLParser : public ArtistParser {
 public:
-    std::vector<ArtistData> parseFile(std::ifstream& fileStream) override {
+    std::vector<ParsedPerson> parseFile(std::ifstream& fileStream) override {
         std::cout << "Parsing XML file..." << std::endl;
         // Implement XML parsing logic here
-        return std::vector<ArtistData>();
+        return std::vector<ParsedPerson>();
     }
 };
 
@@ -106,7 +109,7 @@ public:
     }
 
     // Method to load and parse the file
-    std::vector<ArtistData> parseFile(LoadedFile& aLoadedFile) {
+    std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile) {
         // Open the file
         std::ifstream& fileStream = *(aLoadedFile.openedFile);
         if (!fileStream.is_open()) {

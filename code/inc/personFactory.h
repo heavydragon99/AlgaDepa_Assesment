@@ -2,14 +2,10 @@
 #define PERSONFACTORY_H
 
 #include "artist.h"
+#include "structs.h"
 #include "visitor.h"
 
 #include <memory>
-
-enum class personType {
-    Artist,
-    Visitor
-};
 
 class personFactory {
 public:

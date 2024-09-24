@@ -10,12 +10,11 @@ public:
     virtual float getX() const { return mX; }
     virtual float getY() const { return mY; }
 
-    protected:
+protected:
     float mX;
     float mY;
     float mVelX;
     float mVelY;
-
 };
 
 #endif // IPERSON_H

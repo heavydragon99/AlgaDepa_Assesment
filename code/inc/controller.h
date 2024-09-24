@@ -1,21 +1,20 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "structs.h"
 #include "model.h"
+#include "structs.h"
 
-class controller
-{
+class controller {
 public:
-    controller(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
+    controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
 
     void createLevel();
     void run();
 
 private:
     model mModel;
-    std::vector<parsedPerson> mPersons;
-    parsedGrid mGrid;
+    std::vector<ParsedPerson> mPersons;
+    ParsedGrid mGrid;
 };
 
 #endif // CONTROLLER_H
