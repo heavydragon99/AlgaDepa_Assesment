@@ -16,11 +16,7 @@ void controller::createLevel()
 
 void controller::run()
 {
-        // Render the data with the view class
+    // Render the data with the view class
     view vw(mModel);
     vw.render();
-
-    // Wait for a button input to close
-    // std::cout << "Press Enter to close...";
-    // std::cin.get();
 }

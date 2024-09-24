@@ -122,6 +122,16 @@ void levelData::connectNeighbors()
     }
 }
 
+int levelData::getCols() const
+{
+    return mCols;
+}
+
+int levelData::getRows() const
+{
+    return mRows;
+}
+
 int levelData::getX(int tileIndex) const
 {
     return tileIndex % mCols;

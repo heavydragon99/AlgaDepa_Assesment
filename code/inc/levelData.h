@@ -18,6 +18,9 @@ public:
     void updateLevelData();
     void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
 
+    int getCols() const;
+    int getRows() const;
+
     int getX(int tileIndex) const;
     int getY(int tileIndex) const;
     int getTotalTiles() const;
