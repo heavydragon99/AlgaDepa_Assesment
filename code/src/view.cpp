@@ -35,6 +35,18 @@ void view::render() {
     }
 
     SDL_RenderPresent(mRenderer);
+    bool quit = false;
+    SDL_Event e;
+
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            } else if (e.type == SDL_KEYDOWN) {
+                quit = true;
+            }
+        }
+    }
 }
 
 bool view::initSDL() {

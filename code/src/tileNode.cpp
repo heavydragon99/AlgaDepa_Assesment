@@ -17,3 +17,7 @@ tile *tileNode::getTile() const
 {
     return mTile.get();
 }
+
+void tileNode::setWeight(float aWeight) { mWeight = aWeight; }
+
+float tileNode::getWeight() const { return mWeight; }
