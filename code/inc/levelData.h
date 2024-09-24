@@ -2,6 +2,7 @@
 #define LEVELDATA_H
 
 #include "structs.h"
+#include "tileNode.h"
 
 #include <vector>
 #include <memory>
@@ -26,9 +27,14 @@ public:
     int getPersonX(int personIndex) const { return mPeople[personIndex]->getX(); }
     int getPersonY(int personIndex) const { return mPeople[personIndex]->getY(); }
 
+    private:
+    void setNodeWeights();
+    float calculateWeight(tileNode* aNode);
+    void connectNeighbors();
+
 private:
     std::vector<std::unique_ptr<iPerson>> mPeople;
-    std::vector<std::unique_ptr<tile>> mGrid;
+    std::vector<std::unique_ptr<tileNode>> mGrid;
     int mCols;
     int mRows;
     std::vector<gridColor> mGridColor;

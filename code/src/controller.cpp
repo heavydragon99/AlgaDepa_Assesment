@@ -21,6 +21,6 @@ void controller::run()
     vw.render();
 
     // Wait for a button input to close
-    std::cout << "Press Enter to close...";
-    std::cin.get();
+    // std::cout << "Press Enter to close...";
+    // std::cin.get();
 }

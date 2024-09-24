@@ -4,8 +4,8 @@ class fileHandler {
 }
 
 class fileReader {
-    file* openOnlineFile(string url);
-    file* openLocalFile(string path);
+    +file* openOnlineFile(string url)
+    +file* openLocalFile(string path)
 }
 
 class fileParser {
@@ -36,61 +36,74 @@ class model{
 }
 
 class levelData{
-    void updateLevelData();
-    void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
+    +levelData()
+    +~levelData()
 
-    std::vector<std::unique_ptr<iPerson>> mPeople;
-    std::vector<std::unique_ptr<tile>> mGrid;
-    int mCols;
-    int mRows;
-    std::vector<gridColor> mGridColor;
+    +void updateLevelData()
+    +void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid)
+    +int getX(int tileIndex) const
+    +int getY(int tileIndex) const
+    +int getTotalTiles() const
+    +void getGridColor(int tileIndex, int &red, int &green, int &blue) const
+    +int getPersonCount() const
+    +int getPersonX(int personIndex) const
+    +int getPersonY(int personIndex) const
+
+    -std::vector<std::unique_ptr<iPerson>> mPeople
+    -std::vector<std::unique_ptr<tile>> mGrid
+    -int mCols
+    -int mRows
+    -std::vector<gridColor> mGridColor
 }
 
 class tile{
-    void updateTile();
+    +tile(std::unique_ptr<iTileState> initialState)
+    +~tile() = default
 
-    iTileState* mColor;
+    +void updateTile()
+    +void setState(std::unique_ptr<iTileState> newState)
+    +char getColor() const
+
+    -std::unique_ptr<iTileState> state
 }
 
 interface iTileState{
-    virtual void doSomething();
+    +void updateTile(tile* t)
+    +char getColor() const
+    +void enter(tile* t)
+    +void exit(tile* t)
 }
 
 class tileStateRed{
-    void doSomething() override;
 }
 
 class tileStateBlue{
-    void doSomething() override;
 }
 
 class tileStateGray{
-    void doSomething() override;
 }
 
 class tileStateYellow{
-    void doSomething() override;
 }
 
 class tileStateWhite{
-    void doSomething() override;
 }
 
 interface iPerson{
-    virtual void updatePerson();
+    +virtual void updatePerson()
 
-    float mX;
-    float mY;
-    float mVelX;
-    float mVelY;
+    #float mX
+    #float mY
+    #float mVelX
+    #float mVelY
 }
 
 class visitor{
-    void updatePerson() override;
+    +void updatePerson() override
 }
 
 class artist{
-    void updatePerson() override;
+    +void updatePerson() override
 }
 
 class inputHandler{
@@ -108,35 +121,39 @@ class xboxController{
     ' use 3rd party library to get xbox controller input and translate to generic data
 }
 
-class tileFactory{}
+class tileFactory{
+    +static std::unique_ptr<tile> createTile(char color)
+    -static tileColor charToTileColor(char color)
+}
 
 class personFactory{
+    +static std::unique_ptr<iPerson> createPerson(personType type, float x, float y, float velX, float velY)
 }
 
 class view{}
 
 struct parsedArtist{
-    float x;
-    float y;
-    float vx;
-    float vy;
+    +float x
+    +float y
+    +float vx
+    +float vy
 }
 
 ' vector<char> parsedTile()
 
 struct parsedGrid{
-    int rows;
-    int cols;
-    std::vector<gridColor> colors;
-    std::vector<char> grid;
+    +int rows
+    +int cols
+    +std::vector<gridColor> colors
+    +std::vector<char> grid
 }
 
 struct gridColor{
-    char letter;
-    int red;
-    int green;
-    int blue;
-    int weight;
+    +char letter
+    +int red
+    +int green
+    +int blue
+    +int weight
 }
 
 
