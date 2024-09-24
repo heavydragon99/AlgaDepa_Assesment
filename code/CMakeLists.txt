@@ -13,5 +13,13 @@ include_directories(inc)
 # Find all source files in the src directory
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
+# Find the CURL package
+find_package(CURL REQUIRED)
+
+add_subdirectory(external/tinyxml2)
+
 # Add the executable
 add_executable(depaAlgo ${SOURCES})
+
+# Link the CURL library to your project
+target_link_libraries(depaAlgo PRIVATE tinyxml2 CURL::libcurl)
