@@ -35,6 +35,9 @@ private:
     float calculateWeight(tileNode* aNode);
     void connectNeighbors();
 
+    bool checkCollisions();
+    bool isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<iPerson>& person2);
+
 private:
     std::vector<std::unique_ptr<iPerson>> mPeople;
     std::vector<std::unique_ptr<tileNode>> mGrid;

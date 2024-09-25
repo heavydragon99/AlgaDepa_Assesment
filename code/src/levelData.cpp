@@ -12,10 +12,88 @@ levelData::levelData() : mCols(0), mRows(0) {}
 
 levelData::~levelData() {}
 
+bool levelData::isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<iPerson>& person2) {
+    const float artistWidth = 0.5f;
+    const float artistHeight = 0.5f;
+
+    // std::cout << "Person1 x,y: " << person1->getX() << ", " << person1->getY() << std::endl;
+    // std::cout << "Person2 x,y: " << person2->getX() << ", " << person2->getY() << std::endl;
+
+    if (person1->getX() + artistWidth >= person2->getX() && person1->getX() <= person2->getX() + artistWidth &&
+        person1->getY() + artistHeight >= person2->getY() && person1->getY() <= person2->getY() + artistHeight) {
+
+        return true;
+    }
+    return false;
+}
+
+bool levelData::checkCollisions() {
+    // for (size_t i = 0; i < mPeople.size(); ++i) {
+    //     for (size_t j = i + 1; j < mPeople.size(); ++j) {
+    //         if (isColliding(mPeople[i], mPeople[j])) {
+    //             std::cout << "Collision detected between rectangle " << i << " and rectangle " << j << std::endl;
+    //             return true;
+    //         }
+    //     }
+    // for (const auto& basePerson : mPeople) {
+    //     for (const auto& checkPerson : mPeople) {
+    //         if (isColliding(basePerson, checkPerson)) {
+    //             return true;
+    //         }
+    //     }
+    // }
+    for (int i = 0; i < getPersonCount(); i++) {
+        if (mPeople[i]->getX() > mRows || mPeople[i]->getX() < 0) {
+            return true;
+        }
+        if (mPeople[i]->getY() > mCols || mPeople[i]->getY() < 0) {
+            return true;
+        }
+
+        for (int j = 0; j < getPersonCount(); j++) {
+            if (i == j)
+                continue;
+
+            if (isColliding(mPeople[i], mPeople[j])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+// bool levelData::somethingColliding() {
+//     const float artistWidth = 0.5f;
+//     const float artistHeight = 0.5f;
+//
+//     for (auto& basePerson : mPeople) {
+//         if (basePerson->getX() > mCols) {
+//             return true;
+//         }
+//         if (basePerson->getY() > mRows) {
+//             return true;
+//         }
+//         for (auto& checkPerson : mPeople) {
+//             if ((basePerson->getX() + artistWidth) > checkPerson->getX()) {
+//             }
+//         }
+//     }
+//
+//     return false;
+// }
+
 void levelData::updateLevelData() {
     // Implement the update logic for the level data
+
     for (auto& person : mPeople) {
+        float personX = person->getX();
+        float personY = person->getY();
         person->update();
+        if (checkCollisions()) {
+            std::cout << "COLLISIONS" << std::endl;
+            person->setX(personX);
+            person->setY(personY);
+            person->collided();
+        }
     }
 }
 
