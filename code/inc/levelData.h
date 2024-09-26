@@ -32,7 +32,7 @@ public:
 
     private:
     void setNodeWeights();
-    float calculateWeight(tileNode* aNode);
+    float calculateWeight(const tileNode& aNode);
     void connectNeighbors();
 
 private:

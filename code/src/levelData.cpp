@@ -67,16 +67,16 @@ void levelData::setNodeWeights()
     {
         for (int col = 0; col < mCols; ++col)
         {
-            tileNode *currentNode = mGrid[row * mCols + col].get();
+            tileNode& currentNode = *mGrid[row * mCols + col].get();
             float weight = calculateWeight(currentNode);
-            currentNode->setWeight(weight);
+            currentNode.setWeight(weight);
         }
     }
 }
 
-float levelData::calculateWeight(tileNode *aNode)
+float levelData::calculateWeight(const tileNode& aNode)
 {
-    char color = aNode->getTile()->getColor();
+    char color = aNode.getTile()->getColor();
     for (const gridColor &gridColor : mGridColor)
     {
         if (gridColor.letter == color)
@@ -93,29 +93,29 @@ void levelData::connectNeighbors()
     {
         for (int col = 0; col < mCols; ++col)
         {
-            tileNode *currentNode = mGrid[row * mCols + col].get();
+            tileNode &currentNode = *mGrid[row * mCols + col].get();
             if (row > 0)
             {
-                auto edge = std::make_shared<tileEdge>(*currentNode, *mGrid[(row - 1) * mCols + col].get()); // Up
-                currentNode->addEdge(edge);
+                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[(row - 1) * mCols + col].get()); // Up
+                currentNode.addEdge(edge);
                 mGrid[(row - 1) * mCols + col]->addEdge(edge);
             }
             if (row < mRows - 1)
             {
-                auto edge = std::make_shared<tileEdge>(*currentNode, *mGrid[(row + 1) * mCols + col].get()); // Down
-                currentNode->addEdge(edge);
+                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[(row + 1) * mCols + col].get()); // Down
+                currentNode.addEdge(edge);
                 mGrid[(row + 1) * mCols + col]->addEdge(edge);
             }
             if (col > 0)
             {
-                auto edge = std::make_shared<tileEdge>(*currentNode, *mGrid[row * mCols + (col - 1)].get()); // Left
-                currentNode->addEdge(edge);
+                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[row * mCols + (col - 1)].get()); // Left
+                currentNode.addEdge(edge);
                 mGrid[row * mCols + (col - 1)]->addEdge(edge);
             }
             if (col < mCols - 1)
             {
-                auto edge = std::make_shared<tileEdge>(*currentNode, *mGrid[row * mCols + (col + 1)].get()); // Right
-                currentNode->addEdge(edge);
+                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[row * mCols + (col + 1)].get()); // Right
+                currentNode.addEdge(edge);
                 mGrid[row * mCols + (col + 1)]->addEdge(edge);
             }
         }

@@ -5,15 +5,15 @@
 tileEdge::tileEdge(tileNode &aNodeA, tileNode &aNodeB)
     : mNodeA(aNodeA), mNodeB(aNodeB){}
 
-tileNode *tileEdge::getOtherSide(tileNode &aNode) const
+tileNode &tileEdge::getOtherSide(tileNode &aNode) const
 {
     if (&aNode == &mNodeA)
     {
-        return &mNodeB;
+        return mNodeB;
     }
     if (&aNode == &mNodeB)
     {
-        return &mNodeA;
+        return mNodeA;
     }
-    return nullptr;
+    return aNode;
 }

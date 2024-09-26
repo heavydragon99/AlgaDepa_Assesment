@@ -6,19 +6,19 @@ tileStateRed::tileStateRed() {
     // Constructor implementation (if needed)
 }
 
-void tileStateRed::updateTile(tile* t) {
+void tileStateRed::updateTile(tile& t) {
     // Transition to the next state
-    t->setState(std::make_unique<tileStateWhite>());
+    t.setState(std::make_unique<tileStateWhite>());
 }
 
 char tileStateRed::getColor() const {
     return 'R';
 }
 
-void tileStateRed::enter(tile* t) {
+void tileStateRed::enter(tile& t) {
     // Code to execute when entering the red state
 }
 
-void tileStateRed::exit(tile* t) {
+void tileStateRed::exit(tile& t) {
     // Code to execute when exiting the red state
 }
