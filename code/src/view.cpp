@@ -1,5 +1,7 @@
 #include "view.h"
 
+#include "artist.h"
+
 #include <chrono>
 #include <iostream>
 #include <thread>
@@ -79,9 +81,9 @@ void view::renderPeople(int tileWidth, int tileHeight) {
     const levelData& levelData = mModel.getLevelData();
     float personX, personY;
 
-    for (int i = 0; i < levelData.getPersonCount(); i++) {
-        personX = levelData.getPersonX(i);
-        personY = levelData.getPersonY(i);
+    for(const auto& personPtr : levelData.getPeople() ){
+        personX = personPtr->getX();
+        personY = personPtr->getY();
 
         int tileX = std::floor(personX);
         int tileY = std::floor(personY);

@@ -12,7 +12,6 @@ struct ParsedPerson {
     float y;
     float vx;
     float vy;
-    personType type;
 };
 
 struct GridColor {

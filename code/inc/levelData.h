@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-class iPerson;
+class artist;
 class tile;
 
 class levelData {
@@ -27,8 +27,7 @@ public:
     void getGridColor(int tileIndex, int& red, int& green, int& blue) const;
 
     int getPersonCount() const { return mPeople.size(); }
-    float getPersonX(int personIndex) const;
-    float getPersonY(int personIndex) const;
+    const std::vector<std::unique_ptr<artist>>& getPeople() const;
 
 private:
     void setNodeWeights();
@@ -36,10 +35,10 @@ private:
     void connectNeighbors();
 
     bool checkCollisions();
-    bool isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<iPerson>& person2);
+    bool isColliding(std::unique_ptr<artist>& person1, std::unique_ptr<artist>& person2);
 
 private:
-    std::vector<std::unique_ptr<iPerson>> mPeople;
+    std::vector<std::unique_ptr<artist>> mPeople;
     std::vector<std::unique_ptr<tileNode>> mGrid;
     int mCols;
     int mRows;

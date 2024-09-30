@@ -1,8 +1,6 @@
 #include "levelData.h"
 
-#include "iPerson.h"
-#include "personFactory.h"
-#include "tileEdge.h"
+#include "artist.h"
 #include "tileFactory.h"
 #include "tileNode.h"
 
@@ -12,12 +10,9 @@ levelData::levelData() : mCols(0), mRows(0) {}
 
 levelData::~levelData() {}
 
-bool levelData::isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<iPerson>& person2) {
+bool levelData::isColliding(std::unique_ptr<artist>& person1, std::unique_ptr<artist>& person2) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
-
-    // std::cout << "Person1 x,y: " << person1->getX() << ", " << person1->getY() << std::endl;
-    // std::cout << "Person2 x,y: " << person2->getX() << ", " << person2->getY() << std::endl;
 
     if (person1->getX() + artistWidth >= person2->getX() && person1->getX() <= person2->getX() + artistWidth &&
         person1->getY() + artistHeight >= person2->getY() && person1->getY() <= person2->getY() + artistHeight) {
@@ -28,20 +23,7 @@ bool levelData::isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<i
 }
 
 bool levelData::checkCollisions() {
-    // for (size_t i = 0; i < mPeople.size(); ++i) {
-    //     for (size_t j = i + 1; j < mPeople.size(); ++j) {
-    //         if (isColliding(mPeople[i], mPeople[j])) {
-    //             std::cout << "Collision detected between rectangle " << i << " and rectangle " << j << std::endl;
-    //             return true;
-    //         }
-    //     }
-    // for (const auto& basePerson : mPeople) {
-    //     for (const auto& checkPerson : mPeople) {
-    //         if (isColliding(basePerson, checkPerson)) {
-    //             return true;
-    //         }
-    //     }
-    // }
+
     for (int i = 0; i < getPersonCount(); i++) {
         if (mPeople[i]->getX() > mRows || mPeople[i]->getX() < 0) {
             return true;
@@ -61,25 +43,6 @@ bool levelData::checkCollisions() {
     }
     return false;
 }
-// bool levelData::somethingColliding() {
-//     const float artistWidth = 0.5f;
-//     const float artistHeight = 0.5f;
-//
-//     for (auto& basePerson : mPeople) {
-//         if (basePerson->getX() > mCols) {
-//             return true;
-//         }
-//         if (basePerson->getY() > mRows) {
-//             return true;
-//         }
-//         for (auto& checkPerson : mPeople) {
-//             if ((basePerson->getX() + artistWidth) > checkPerson->getX()) {
-//             }
-//         }
-//     }
-//
-//     return false;
-// }
 
 void levelData::updateLevelData() {
     // Implement the update logic for the level data
@@ -113,8 +76,8 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
 
     // Create persons and add to mPeople
     for (const ParsedPerson& personIterator : aPersons) {
-        std::unique_ptr<iPerson> person = personFactory::createPerson(
-            personIterator.type, personIterator.x, personIterator.y, personIterator.vx, personIterator.vy);
+        std::unique_ptr<artist> person =
+            std::make_unique<artist>(personIterator.x, personIterator.y, personIterator.vx, personIterator.vy);
         mPeople.push_back(std::move(person));
     }
 
@@ -137,12 +100,9 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     std::cout << "Level data built successfully!" << std::endl;
 }
 
-void levelData::setNodeWeights()
-{
-    for (int row = 0; row < mRows; ++row)
-    {
-        for (int col = 0; col < mCols; ++col)
-        {
+void levelData::setNodeWeights() {
+    for (int row = 0; row < mRows; ++row) {
+        for (int col = 0; col < mCols; ++col) {
             tileNode& currentNode = *mGrid[row * mCols + col].get();
             float weight = calculateWeight(currentNode);
             currentNode.setWeight(weight);
@@ -150,49 +110,31 @@ void levelData::setNodeWeights()
     }
 }
 
-float levelData::calculateWeight(const tileNode& aNode)
-{
+float levelData::calculateWeight(const tileNode& aNode) {
     char color = aNode.getTile().getColor();
-    for (const GridColor &gridColor : mGridColor)
-    {
-        if (gridColor.letter == color)
-        {
+    for (const GridColor& gridColor : mGridColor) {
+        if (gridColor.letter == color) {
             return static_cast<float>(gridColor.weight);
         }
     }
     return 1.0f; // Default weight
 }
 
-void levelData::connectNeighbors()
-{
-    for (int row = 0; row < mRows; ++row)
-    {
-        for (int col = 0; col < mCols; ++col)
-        {
-            tileNode &currentNode = *mGrid[row * mCols + col].get();
-            if (row > 0)
-            {
-                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[(row - 1) * mCols + col].get()); // Up
-                currentNode.addEdge(edge);
-                mGrid[(row - 1) * mCols + col]->addEdge(edge);
+void levelData::connectNeighbors() {
+    for (int row = 0; row < mRows; ++row) {
+        for (int col = 0; col < mCols; ++col) {
+            tileNode& currentNode = *mGrid[row * mCols + col].get();
+            if (row > 0) {
+                currentNode.addNeighbor(*mGrid[(row - 1) * mCols + col].get()); // Up
             }
-            if (row < mRows - 1)
-            {
-                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[(row + 1) * mCols + col].get()); // Down
-                currentNode.addEdge(edge);
-                mGrid[(row + 1) * mCols + col]->addEdge(edge);
+            if (row < mRows - 1) {
+                currentNode.addNeighbor(*mGrid[(row + 1) * mCols + col].get()); // Down
             }
-            if (col > 0)
-            {
-                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[row * mCols + (col - 1)].get()); // Left
-                currentNode.addEdge(edge);
-                mGrid[row * mCols + (col - 1)]->addEdge(edge);
+            if (col > 0) {
+                currentNode.addNeighbor(*mGrid[row * mCols + (col - 1)].get()); // Left
             }
-            if (col < mCols - 1)
-            {
-                auto edge = std::make_shared<tileEdge>(currentNode, *mGrid[row * mCols + (col + 1)].get()); // Right
-                currentNode.addEdge(edge);
-                mGrid[row * mCols + (col + 1)]->addEdge(edge);
+            if (col < mCols - 1) {
+                currentNode.addNeighbor(*mGrid[row * mCols + (col + 1)].get()); // Right
             }
         }
     }
@@ -225,5 +167,4 @@ void levelData::getGridColor(int tileIndex, int& red, int& green, int& blue) con
     blue = 255;
 }
 
-float levelData::getPersonX(int personIndex) const { return mPeople[personIndex]->getX(); }
-float levelData::getPersonY(int personIndex) const { return mPeople[personIndex]->getY(); }
+const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }

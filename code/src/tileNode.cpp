@@ -3,14 +3,14 @@
 tileNode::tileNode(std::unique_ptr<tile> aTile)
     : mTile(std::move(aTile)) {}
 
-void tileNode::addEdge(std::shared_ptr<tileEdge> aEdge)
+void tileNode::addNeighbor(tileNode &aNeighbor)
 {
-    mEdges.push_back(aEdge);
+    mNeighbors.push_back(aNeighbor);
 }
 
-const std::vector<std::shared_ptr<tileEdge>> &tileNode::getEdges() const
+const std::vector<std::reference_wrapper<tileNode>> &tileNode::getNeighbors() const
 {
-    return mEdges;
+    return mNeighbors;
 }
 
 tile &tileNode::getTile() const
