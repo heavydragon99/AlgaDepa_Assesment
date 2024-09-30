@@ -7,6 +7,7 @@
 
 #define renderSize 10
 #define personSize renderSize * 0.5
+#define scalePercent 0.8
 
 class view
 {
