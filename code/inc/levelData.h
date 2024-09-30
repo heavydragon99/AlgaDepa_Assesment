@@ -4,8 +4,8 @@
 #include "structs.h"
 #include "tileNode.h"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 class iPerson;
 class tile;
@@ -16,7 +16,7 @@ public:
     ~levelData();
 
     void updateLevelData();
-    void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid);
+    void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
 
     int getCols() const;
     int getRows() const;
@@ -24,23 +24,26 @@ public:
     int getX(int tileIndex) const;
     int getY(int tileIndex) const;
     int getTotalTiles() const;
-    void getGridColor(int tileIndex, int &red, int &green, int &blue) const;
+    void getGridColor(int tileIndex, int& red, int& green, int& blue) const;
 
     int getPersonCount() const { return mPeople.size(); }
-    int getPersonX(int personIndex) const { return mPeople[personIndex]->getX(); }
-    int getPersonY(int personIndex) const { return mPeople[personIndex]->getY(); }
+    int getPersonX(int personIndex) const;
+    int getPersonY(int personIndex) const;
 
-    private:
+private:
     void setNodeWeights();
     float calculateWeight(const tileNode& aNode);
     void connectNeighbors();
+
+    bool checkCollisions();
+    bool isColliding(std::unique_ptr<iPerson>& person1, std::unique_ptr<iPerson>& person2);
 
 private:
     std::vector<std::unique_ptr<iPerson>> mPeople;
     std::vector<std::unique_ptr<tileNode>> mGrid;
     int mCols;
     int mRows;
-    std::vector<gridColor> mGridColor;
+    std::vector<GridColor> mGridColor;
 };
 
 #endif // LEVELDATA_H

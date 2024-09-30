@@ -5,7 +5,7 @@
 
 FileHandler::FileHandler() {}
 
-std::vector<ArtistData> FileHandler::loadArtist(std::string aFilePath) {
+std::vector<ParsedPerson> FileHandler::loadArtist(std::string aFilePath) {
 
     FileLoaderContext fileLoader;
     std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
@@ -16,11 +16,11 @@ std::vector<ArtistData> FileHandler::loadArtist(std::string aFilePath) {
 
     ArtistParserStrategy artistParser;
 
-    std::vector<ArtistData> artistData = artistParser.parseFile(loadedFile);
+    std::vector<ParsedPerson> artistData = artistParser.parseFile(loadedFile);
 
     return artistData;
 }
-GridData FileHandler::loadGrid(std::string aFilePath) {
+ParsedGrid FileHandler::loadGrid(std::string aFilePath) {
 
     FileLoaderContext fileLoader;
     std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
@@ -31,7 +31,7 @@ GridData FileHandler::loadGrid(std::string aFilePath) {
 
     GridParserStrategy gridParser;
 
-    GridData gridData = gridParser.parseFile(loadedFile);
+    ParsedGrid gridData = gridParser.parseFile(loadedFile);
 
     return gridData;
 }
