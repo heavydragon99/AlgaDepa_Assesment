@@ -14,7 +14,7 @@ public:
 
     void addEdge(std::shared_ptr<tileEdge> aEdge);
     const std::vector<std::shared_ptr<tileEdge>> &getEdges() const;
-    tile *getTile() const;
+    tile &getTile() const;
 
     void setWeight(float aWeight);
     float getWeight() const;

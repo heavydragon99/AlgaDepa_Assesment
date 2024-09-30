@@ -25,8 +25,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
+# Find the CURL package
+find_package(CURL REQUIRED)
+
+add_subdirectory(external/tinyxml2)
+
 # Add the executable
 add_executable(depaAlgo ${SOURCES})
 
-# Link SDL2 libraries
-target_link_libraries(depaAlgo ${SDL2_LIBRARIES})
+target_link_libraries(depaAlgo PRIVATE tinyxml2 CURL::libcurl ${SDL2_LIBRARIES})

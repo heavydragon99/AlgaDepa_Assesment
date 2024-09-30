@@ -8,7 +8,7 @@ class tileEdge
 public:
     tileEdge(tileNode &aNodeA, tileNode &aNodeB);
 
-    tileNode *getOtherSide(tileNode &aNode) const;
+    tileNode& getOtherSide(tileNode &aNode) const;
 
     float getWeight() const;
 

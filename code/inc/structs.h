@@ -1,11 +1,13 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-#include "personFactory.h"
+// #include "personFactory.h"
 
 #include <vector>
 
-struct parsedPerson{
+enum class personType { Artist, Visitor };
+
+struct ParsedPerson {
     float x;
     float y;
     float vx;
@@ -13,7 +15,7 @@ struct parsedPerson{
     personType type;
 };
 
-struct gridColor{
+struct GridColor {
     char letter;
     int red;
     int green;
@@ -21,10 +23,10 @@ struct gridColor{
     int weight;
 };
 
-struct parsedGrid{
+struct ParsedGrid {
     int rows;
     int cols;
-    std::vector<gridColor> gridColors;
+    std::vector<GridColor> gridColors;
     std::vector<char> grid;
 };
 

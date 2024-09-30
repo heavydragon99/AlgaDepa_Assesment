@@ -13,9 +13,9 @@ const std::vector<std::shared_ptr<tileEdge>> &tileNode::getEdges() const
     return mEdges;
 }
 
-tile *tileNode::getTile() const
+tile &tileNode::getTile() const
 {
-    return mTile.get();
+    return *mTile.get();
 }
 
 void tileNode::setWeight(float aWeight) { mWeight = aWeight; }
