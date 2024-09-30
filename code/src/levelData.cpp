@@ -152,8 +152,8 @@ void levelData::setNodeWeights()
 
 float levelData::calculateWeight(const tileNode& aNode)
 {
-    char color = aNode.getTile()->getColor();
-    for (const gridColor &gridColor : mGridColor)
+    char color = aNode.getTile().getColor();
+    for (const GridColor &gridColor : mGridColor)
     {
         if (gridColor.letter == color)
         {
@@ -211,7 +211,7 @@ int levelData::getTotalTiles() const { return mCols * mRows; }
 void levelData::getGridColor(int tileIndex, int& red, int& green, int& blue) const {
     int row = getY(tileIndex);
     int col = getX(tileIndex);
-    char color = mGrid[row * mCols + col]->getTile()->getColor();
+    char color = mGrid[row * mCols + col].get()->getTile().getColor();
     for (const GridColor& gridColor : mGridColor) {
         if (gridColor.letter == color) {
             red = gridColor.red;
