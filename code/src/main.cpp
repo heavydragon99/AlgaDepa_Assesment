@@ -19,6 +19,8 @@ int main() {
     //     int blue;
     //     int weight;
     // };
+
+    //yay text
     FileHandler fileHandler;
 
     ParsedGrid grid = fileHandler.loadGrid("grid.txt");
