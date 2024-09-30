@@ -7,6 +7,7 @@
 
 #define renderSize 10
 #define personSize renderSize * 0.5
+#define scalePercent 0.8
 
 class view
 {
@@ -19,6 +20,8 @@ public:
 private:
     bool initSDL();
     void initializeWindow();
+    void renderTile(int tileWidth, int tileHeight);
+    void renderPeople(int tileWidth, int tileHeight);
 
 private:
     model &mModel;

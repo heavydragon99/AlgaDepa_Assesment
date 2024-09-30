@@ -27,8 +27,8 @@ public:
     void getGridColor(int tileIndex, int& red, int& green, int& blue) const;
 
     int getPersonCount() const { return mPeople.size(); }
-    int getPersonX(int personIndex) const;
-    int getPersonY(int personIndex) const;
+    float getPersonX(int personIndex) const;
+    float getPersonY(int personIndex) const;
 
 private:
     void setNodeWeights();
