@@ -19,6 +19,8 @@ public:
 private:
     bool initSDL();
     void initializeWindow();
+    void renderTile(int tileWidth, int tileHeight);
+    void renderPeople(int tileWidth, int tileHeight);
 
 private:
     model &mModel;

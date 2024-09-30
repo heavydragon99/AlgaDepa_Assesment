@@ -61,11 +61,46 @@ void view::initializeWindow() {
     mScaleFactor = static_cast<float>(tileSize) / renderSize;
 }
 
+void view::renderTile(int tileWidth, int tileHeight) {
+    int red, green, blue;
+    int x, y;
+    const levelData& levelData = mModel.getLevelData();
+    for (int i = 0; i < levelData.getTotalTiles(); i++) {
+        levelData.getGridColor(i, red, green, blue);
+        x = levelData.getX(i);
+        y = levelData.getY(i);
+        SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileHeight};
+        SDL_SetRenderDrawColor(mRenderer.get(), red, green, blue, 0xFF);
+        SDL_RenderFillRect(mRenderer.get(), &fillRect);
+    }
+}
+
+void view::renderPeople(int tileWidth, int tileHeight) {
+    const levelData& levelData = mModel.getLevelData();
+    float personX, personY;
+
+    for (int i = 0; i < levelData.getPersonCount(); i++) {
+        personX = levelData.getPersonX(i);
+        personY = levelData.getPersonY(i);
+
+        int tileX = std::floor(personX);
+        int tileY = std::floor(personY);
+
+        float offsetX = personX - tileX;
+        float offsetY = personY - tileY;
+
+        SDL_Rect fillRect = {static_cast<int>((tileX + offsetX) * tileWidth),
+                             static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileHeight / 2};
+        SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
+        SDL_RenderFillRect(mRenderer.get(), &fillRect);
+    }
+}
+
 void view::render() {
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
     SDL_RenderClear(mRenderer.get());
 
-    // Fetch level data from the model
+    // Get level data
     const levelData& levelData = mModel.getLevelData();
 
     // Get window size
@@ -77,34 +112,10 @@ void view::render() {
     int tileHeight = windowHeight / levelData.getRows();
 
     // Render grid
-    for (int i = 0; i < levelData.getTotalTiles(); i++) {
-        SDL_Rect fillRect = {levelData.getX(i) * tileWidth, levelData.getY(i) * tileHeight, tileWidth, tileHeight};
-        int red, green, blue;
-        levelData.getGridColor(i, red, green, blue);
-        SDL_SetRenderDrawColor(mRenderer.get(), red, green, blue, 0xFF);
-        SDL_RenderFillRect(mRenderer.get(), &fillRect);
-
-        // Draw black outline
-        SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
-        SDL_RenderDrawRect(mRenderer.get(), &fillRect);
-    }
+    renderTile(tileWidth, tileHeight);
 
     // Render people
-    for (int i = 0; i < levelData.getPersonCount(); i++) {
-        float personX = levelData.getPersonX(i);
-        float personY = levelData.getPersonY(i);
-
-        int tileX = static_cast<int>(personX);
-        int tileY = static_cast<int>(personY);
-
-        float offsetX = personX - tileX;
-        float offsetY = personY - tileY;
-
-        SDL_Rect fillRect = {static_cast<int>((tileX + offsetX) * tileWidth),
-                             static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileHeight / 2};
-        SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
-        SDL_RenderFillRect(mRenderer.get(), &fillRect);
-    }
+    renderPeople(tileWidth, tileHeight);
 
     SDL_RenderPresent(mRenderer.get());
 }

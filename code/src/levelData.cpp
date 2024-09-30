@@ -225,5 +225,5 @@ void levelData::getGridColor(int tileIndex, int& red, int& green, int& blue) con
     blue = 255;
 }
 
-int levelData::getPersonX(int personIndex) const { return mPeople[personIndex]->getX(); }
-int levelData::getPersonY(int personIndex) const { return mPeople[personIndex]->getY(); }
+float levelData::getPersonX(int personIndex) const { return mPeople[personIndex]->getX(); }
+float levelData::getPersonY(int personIndex) const { return mPeople[personIndex]->getY(); }
