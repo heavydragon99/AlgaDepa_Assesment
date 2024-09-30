@@ -2,7 +2,7 @@
 #define TILENODE_H
 
 #include "tile.h"
-#include "tileEdge.h"
+
 
 #include <memory>
 #include <vector>
@@ -12,8 +12,9 @@ class tileNode
 public:
     tileNode(std::unique_ptr<tile> aTile);
 
-    void addEdge(std::shared_ptr<tileEdge> aEdge);
-    const std::vector<std::shared_ptr<tileEdge>> &getEdges() const;
+    void addNeighbor(tileNode &aNeighbor);
+    const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const;
+    
     tile &getTile() const;
 
     void setWeight(float aWeight);
@@ -21,7 +22,8 @@ public:
 
 private:
     std::unique_ptr<tile> mTile;
-    std::vector<std::shared_ptr<tileEdge>> mEdges;
+    std::vector<std::reference_wrapper<tileNode>> mNeighbors;
+
     float mWeight;
 };
 

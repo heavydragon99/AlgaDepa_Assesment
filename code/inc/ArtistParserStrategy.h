@@ -42,7 +42,6 @@ public:
         while (std::getline(aFileStream, line)) {
             std::stringstream ss(line);
             ParsedPerson artist;
-            artist.type = personType::Artist;
             char comma;
 
             ss >> artist.x >> comma >> artist.y >> comma >> artist.vx >> comma >> artist.vy;
