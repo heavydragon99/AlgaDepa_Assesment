@@ -3,21 +3,25 @@
 
 class artist {
 public:
-    artist(float aX, float aY, float aVelX, float aVelY);
+    struct Location {
+        float mX;
+        float mY;
+    };
+
+public:
+    artist(Location aLocation, float aVelX, float aVelY);
     virtual ~artist() = default;
 
-    void update();
+    Location update();
 
-    float getX() const;
-    float getY() const;
-    void setX(float x);
-    void setY(float y);
-    
-    void collided();
+    const Location& getLocation() const;
+    void setLocation(Location aLocation);
+
+    void collidedWall();
+
 
 private:
-    float mX;
-    float mY;
+    Location mLocation;
     float mVelX;
     float mVelY;
 };

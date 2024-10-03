@@ -1,28 +1,36 @@
 #include "artist.h"
 
-artist::artist(float aX, float aY, float aVelX, float aVelY): mX(aX), mY(aY), mVelX(aVelX), mVelY(aVelY) {}
-
-
 #include <iostream>
+#include <cmath>
 
-void artist::update() {
-    mX += mVelX;
-    mY += mVelY;
+artist::artist(Location aLocation, float aVelX, float aVelY) : mLocation(aLocation), mVelX(aVelX), mVelY(aVelY) {}
+
+artist::Location artist::update() {
+    int xOld = mLocation.mX;
+    int yOld = mLocation.mY;
+
+    mLocation.mX += mVelX;
+    mLocation.mY += mVelY;
+
+    if (std::floor(mLocation.mX) != std::floor(xOld) || std::floor(mLocation.mY) != std::floor(yOld)) {
+        return mLocation;
+    }
+    else{
+        return {-1, -1};
+    }
 }
 
-    float artist::getX() const { return mX; }
+const artist::Location& artist::getLocation() const { return mLocation; }
 
-    float artist::getY() const { return mY; }
+void artist::setLocation(Location aLocation) {
+    mLocation = aLocation;
+}
 
-    void artist::setX(float x) { mX = x; }
-
-    void artist::setY(float y) { mY = y; }
-
-    void artist::collided() {
-        if (mVelX != 0) {
-            mVelX = -mVelX;
-        }
-        if (mVelY != 0) {
-            mVelY = -mVelY;
-        }
+void artist::collidedWall() {
+    if (mVelX != 0) {
+        mVelX = -mVelX;
     }
+    if (mVelY != 0) {
+        mVelY = -mVelY;
+    }
+}

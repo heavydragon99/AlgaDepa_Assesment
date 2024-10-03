@@ -29,8 +29,8 @@ private:
     // float calculateWeight(const tileNode& aNode);
     void connectNeighbors();
 
-    bool checkCollisions();
-    bool isColliding(std::unique_ptr<artist>& person1, std::unique_ptr<artist>& person2);
+    bool checkCollisions(std::unique_ptr<artist>& aPerson);
+    bool isColliding(const std::unique_ptr<artist>& aPerson1, const std::unique_ptr<artist>& aPerson2);
 
 private:
     std::vector<std::unique_ptr<artist>> mPeople;
