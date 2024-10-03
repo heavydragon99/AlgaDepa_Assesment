@@ -1,15 +1,12 @@
 #include "tileStateBlue.h"
 
 #include "tile.h"
-#include "tileStateYellow.h"
 
-tileStateBlue::tileStateBlue() {
-    // Constructor implementation (if needed)
-}
+tileStateBlue::tileStateBlue(std::unique_ptr<iTileBehavior> aBehavior)
+    : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
 void tileStateBlue::updateTile(tile& t) {
     // Transition to the next state
-    t.setState(std::make_unique<tileStateYellow>());
 }
 
 char tileStateBlue::getColor() const {
