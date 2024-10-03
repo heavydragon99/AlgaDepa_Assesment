@@ -23,12 +23,14 @@ bool levelData::isColliding(std::unique_ptr<artist>& person1, std::unique_ptr<ar
 }
 
 bool levelData::checkCollisions() {
+    const float artistWidth = 0.5f;
+    const float artistHeight = 0.5f;
 
     for (int i = 0; i < getPersonCount(); i++) {
-        if (mPeople[i]->getX() > mRows || mPeople[i]->getX() < 0) {
+        if (mPeople[i]->getX() + artistWidth > mRows || mPeople[i]->getX() < 0) {
             return true;
         }
-        if (mPeople[i]->getY() > mCols || mPeople[i]->getY() < 0) {
+        if (mPeople[i]->getY() + artistHeight > mCols || mPeople[i]->getY() < 0) {
             return true;
         }
 
