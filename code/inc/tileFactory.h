@@ -2,15 +2,12 @@
 #define TILEFACTORY_H
 
 #include "tile.h"
-#include "tileStateRed.h"
-#include "tileStateBlue.h"
-#include "tileStateYellow.h"
-#include "tileStateGray.h"
-#include "tileStateWhite.h"
+
+#include "iTileBehavior.h"
 
 #include <memory>
 
-enum class tileColor {
+enum class TileColor {
     Red,
     Blue,
     Yellow,
@@ -21,8 +18,11 @@ enum class tileColor {
 class tileFactory {
 public:
     static std::unique_ptr<tile> createTile(char color);
+    static std::unique_ptr<iTileState> createNextState(char currentColor);
 private:
-    static tileColor charToTileColor(char color);
+    static TileColor charToTileColor(char color);
+    static std::unique_ptr<iTileBehavior> createBehavior(TileColor aColor);
+    
 };
 
 #endif // TILEFACTORY_H

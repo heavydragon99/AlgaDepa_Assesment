@@ -2,8 +2,9 @@
 #define TILESTATEBLUE_H
 
 #include "iTileState.h"
-
 #include "iTileBehavior.h"
+
+#include <memory>
 
 class tileStateBlue : public iTileState {
 public:
@@ -15,8 +16,7 @@ public:
     void forceBlue(tile& t) override;
 
 private:
-    int mCounter;
-    static const int requiredActions = 3;
+    std::unique_ptr<iTileBehavior> mBehavior;
 };
 
 #endif // TILESTATEBLUE_H

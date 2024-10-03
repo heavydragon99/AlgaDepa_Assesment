@@ -2,13 +2,12 @@
 #ifndef INFECTTILESBEHAVIOR_H
 #define INFECTTILESBEHAVIOR_H
 
-#include "TileBehavior.h"
+#include "iTileBehavior.h"
 
 class infectTilesBehavior : public iTileBehavior {
 public:
-    void doBehavior(tile& t) override {
-        // Logic to infect tiles around this tile
-    }
+    infectTilesBehavior() = default;
+    void doBehavior() override;
 };
 
 #endif // INFECTTILESBEHAVIOR_H

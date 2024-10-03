@@ -4,14 +4,10 @@
 
 #include "iTileBehavior.h"
 
-#include <memory>
-
-class tile; // Forward declaration
-
 class iTileBehavior {
 public:
     virtual ~iTileBehavior() = default;
-    virtual void doBehavior(tile& t) = 0;
+    virtual void doBehavior() {/*Default no-op implementation*/};
 };
 
 #endif // TILEBEHAVIOR_H

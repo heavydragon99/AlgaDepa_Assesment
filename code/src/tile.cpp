@@ -1,5 +1,4 @@
 #include "tile.h"
-#include "TileStateFactory.h"
 
 tile::tile(std::unique_ptr<iTileState> initialState) : state(std::move(initialState)) {}
 

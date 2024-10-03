@@ -2,16 +2,21 @@
 #define TILESTATERED_H
 
 #include "iTileState.h"
+#include "iTileBehavior.h"
 
-class tileStateRed : public iTileState
-{
+#include <memory>
+
+class tileStateRed : public iTileState {
 public:
-    tileStateRed();
-    void updateTile(tile &t) override;
+    tileStateRed(std::unique_ptr<iTileBehavior> aBehavior);
+    void updateTile(tile& t) override;
     char getColor() const override;
     void enter() override;
     void exit() override;
-    void forceBlue(tile &t) override;
+    void forceBlue(tile& t) override;
+
+private:
+    std::unique_ptr<iTileBehavior> mBehavior;
 };
 
 #endif // TILESTATERED_H

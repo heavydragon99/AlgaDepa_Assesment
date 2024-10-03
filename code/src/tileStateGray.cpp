@@ -1,15 +1,19 @@
 #include "tileStateGray.h"
-#include "tile.h"
-#include "tileStateBlue.h"
-#include "tileStateRed.h"
 
-tileStateGray::tileStateGray() { mCounter = 0; }
+#include "tile.h"
+#include "tileFactory.h"
+
+tileStateGray::tileStateGray(std::unique_ptr<iTileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
 void tileStateGray::updateTile(tile& t) {
-    // Transition to the next state
-    mCounter++;
-    if (mCounter == 3) {
-        t.setState(std::make_unique<tileStateRed>());
+    mBehavior->doBehavior();
+
+    mCounter++; // Increment the action counter
+    if (mCounter >= requiredActions) {
+        // Transition to the next state after 3 actions
+        tileFactory factory;
+
+        t.setState(factory.createNextState(getColor()));
     }
 }
 
@@ -23,4 +27,4 @@ void tileStateGray::exit() {
     // Code to execute when exiting the gray state
 }
 
-void tileStateGray::forceBlue(tile& t) { t.setState(std::make_unique<tileStateBlue>()); }
+void tileStateGray::forceBlue(tile& t) {}
