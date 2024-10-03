@@ -26,7 +26,7 @@ bool levelData::checkCollisions() {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
-    for (int i = 0; i < getPersonCount(); i++) {
+    for (int i = 0; i < mPeople.size(); i++) {
         if (mPeople[i]->getX() + artistWidth > mRows || mPeople[i]->getX() < 0) {
             return true;
         }
@@ -34,7 +34,7 @@ bool levelData::checkCollisions() {
             return true;
         }
 
-        for (int j = 0; j < getPersonCount(); j++) {
+        for (int j = 0; j < mPeople.size(); j++) {
             if (i == j)
                 continue;
 
@@ -71,11 +71,6 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     mRows = aGrid.rows;
     mCols = aGrid.cols;
 
-    // Fill mGridColor with all the different colors
-    for (const GridColor& color : aGrid.gridColors) {
-        mGridColor.push_back(color);
-    }
-
     // Create persons and add to mPeople
     for (const ParsedPerson& personIterator : aPersons) {
         std::unique_ptr<artist> person =
@@ -94,7 +89,7 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     }
 
     // Set weights for each node
-    setNodeWeights();
+    // setNodeWeights();
 
     // Connect neighbors
     connectNeighbors();
@@ -102,25 +97,25 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     std::cout << "Level data built successfully!" << std::endl;
 }
 
-void levelData::setNodeWeights() {
-    for (int row = 0; row < mRows; ++row) {
-        for (int col = 0; col < mCols; ++col) {
-            tileNode& currentNode = *mGrid[row * mCols + col].get();
-            float weight = calculateWeight(currentNode);
-            currentNode.setWeight(weight);
-        }
-    }
-}
+// void levelData::setNodeWeights() {
+//     for (int row = 0; row < mRows; ++row) {
+//         for (int col = 0; col < mCols; ++col) {
+//             tileNode& currentNode = *mGrid[row * mCols + col].get();
+//             float weight = calculateWeight(currentNode);
+//             currentNode.setWeight(weight);
+//         }
+//     }
+// }
 
-float levelData::calculateWeight(const tileNode& aNode) {
-    char color = aNode.getTile().getColor();
-    for (const GridColor& gridColor : mGridColor) {
-        if (gridColor.letter == color) {
-            return static_cast<float>(gridColor.weight);
-        }
-    }
-    return 1.0f; // Default weight
-}
+// float levelData::calculateWeight(const tileNode& aNode) {
+//     char color = aNode.getTile().getColor();
+//     for (const GridColor& gridColor : mGridColor) {
+//         if (gridColor.letter == color) {
+//             return static_cast<float>(gridColor.weight);
+//         }
+//     }
+//     return 1.0f; // Default weight
+// }
 
 void levelData::connectNeighbors() {
     for (int row = 0; row < mRows; ++row) {
@@ -146,27 +141,6 @@ int levelData::getCols() const { return mCols; }
 
 int levelData::getRows() const { return mRows; }
 
-int levelData::getX(int tileIndex) const { return tileIndex % mCols; }
-
-int levelData::getY(int tileIndex) const { return tileIndex / mCols; }
-
-int levelData::getTotalTiles() const { return mCols * mRows; }
-
-void levelData::getGridColor(int tileIndex, int& red, int& green, int& blue) const {
-    int row = getY(tileIndex);
-    int col = getX(tileIndex);
-    char color = mGrid[row * mCols + col].get()->getTile().getColor();
-    for (const GridColor& gridColor : mGridColor) {
-        if (gridColor.letter == color) {
-            red = gridColor.red;
-            green = gridColor.green;
-            blue = gridColor.blue;
-            return;
-        }
-    }
-    red = 255;
-    green = 255;
-    blue = 255;
-}
+const std::vector<std::unique_ptr<tileNode>>& levelData::getGrid() const { return mGrid; }
 
 const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }

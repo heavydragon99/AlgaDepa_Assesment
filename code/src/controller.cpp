@@ -10,23 +10,27 @@ controller::controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mGrid = aGrid;
 }
 
-void controller::createLevel() { mModel.createLevel(mPersons, mGrid); }
+void controller::createLevel() {
+    mModel = std::make_unique<model>();
+    mModel->createLevel(mPersons, mGrid);
+    mView = std::make_unique<view>(*mModel);
+    mView->setGridColor(mGrid.gridColors);
+}
 
 void controller::run() {
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
     // Render the data with the view class
-    view vw(mModel);
 
     bool quit = false;
 
     while (!quit) {
         auto frameStart = std::chrono::high_resolution_clock::now();
 
-        mModel.updateModel();
+        mModel->updateModel();
 
-        vw.handleEvents(quit);
-        vw.render();
+        mView->handleEvents(quit);
+        mView->render();
 
         auto frameTime = std::chrono::high_resolution_clock::now() - frameStart;
         int frameDuration = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();

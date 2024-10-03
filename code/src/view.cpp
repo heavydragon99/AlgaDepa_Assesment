@@ -67,10 +67,10 @@ void view::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
     int x, y;
     const levelData& levelData = mModel.getLevelData();
-    for (int i = 0; i < levelData.getTotalTiles(); i++) {
-        levelData.getGridColor(i, red, green, blue);
-        x = levelData.getX(i);
-        y = levelData.getY(i);
+    for (int i = 0; i < levelData.getGrid().size(); i++) {
+        getTileColor(levelData.getGrid().at(i).get()->getTile().getColor(), red, green, blue);
+        x = i % levelData.getCols();
+        y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         SDL_SetRenderDrawColor(mRenderer.get(), red, green, blue, 0xFF);
         SDL_RenderFillRect(mRenderer.get(), &fillRect);
@@ -132,4 +132,27 @@ void view::handleEvents(bool& quit) {
             }
         }
     }
+}
+
+void view::setGridColor(std::vector<GridColor> aGridColor)
+{
+        // Fill mGridColor with all the different colors
+    for (const GridColor& color : aGridColor) {
+        mGridColor.push_back(color);
+    }
+}
+
+void view::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
+    for (const GridColor& color : mGridColor) {
+        if (color.letter == aColor) {
+            aRed = color.red;
+            aGreen = color.green;
+            aBlue = color.blue;
+            return;
+        }
+    }
+    //default white
+    aRed = 255;
+    aGreen = 255;
+    aBlue = 255;
 }

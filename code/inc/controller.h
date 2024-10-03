@@ -3,6 +3,9 @@
 
 #include "model.h"
 #include "structs.h"
+#include "view.h"
+
+#include <vector>
 
 class controller {
 public:
@@ -12,7 +15,8 @@ public:
     void run();
 
 private:
-    model mModel;
+    std::unique_ptr<model> mModel;
+    std::unique_ptr<view> mView;
     std::vector<ParsedPerson> mPersons;
     ParsedGrid mGrid;
 };

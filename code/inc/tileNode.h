@@ -15,7 +15,7 @@ public:
     void addNeighbor(tileNode &aNeighbor);
     const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const;
     
-    tile &getTile() const;
+    const tile &getTile() const;
 
     void setWeight(float aWeight);
     float getWeight() const;
