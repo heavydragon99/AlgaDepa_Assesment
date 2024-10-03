@@ -1,31 +1,55 @@
 @startuml
 
 class fileHandler {
+    +std::vector<ParsedPerson> loadArtist(std::string aFilePath)
+    +ParsedGrid loadGrid(std::string aFilePath)
 }
 
-class fileReader {
-    +file* openOnlineFile(string url)
-    +file* openLocalFile(string path)
+class FileLoaderContext{
+    + std::unique_ptr<std::ifstream> loadFile(const std::string& path)
+}
+
+interface FileLoader{
+    virtual std::unique_ptr<std::ifstream> loadFile(const std::string& path) = 0
+}
+
+class URLFileLoader{
+    std::unique_ptr<std::ifstream> loadFile(const std::string& url) override
+}
+
+class LocalFileLoader{
+    std::unique_ptr<std::ifstream> loadFile(const std::string& url) override
 }
 
 class fileParser {
 }
 
-interface iArtistParser {
-
+class ArtistParserStrategy {
+    + std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
 }
 
-interface iTileParser {
-
+interface ArtistParser {
+    + std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
 }
 
-class artistCSVParser{ 
+class ArtistCSVParser{
+    + std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
 }
 
-class tileXMLParser {
+class GridParserStrategy{
+    ParsedGrid parseFile(LoadedFile& aLoadedFile)
 }
 
-class tileTXTParser {
+interface GridParser{
+    ParsedGrid parseFile(LoadedFile& aLoadedFile)
+}
+
+class GridXMLParser{
+    ParsedGrid parseFile(LoadedFile& aLoadedFile)
+}
+
+class GridTXTParser{
+    ParsedGrid parseFile(LoadedFile& aLoadedFile)
 }
 
 class controller{
@@ -141,14 +165,14 @@ class parsedArtist{
 
 ' vector<char> parsedTile()
 
-struct parsedGrid{
-    +int rows
-    +int cols
-    +std::vector<gridColor> colors
-    +std::vector<char> grid
+class parsedGrid{
+    int rows
+    int cols
+    std::vector<gridColor> colors
+    std::vector<char> grid
 }
 
-struct gridColor{
+class gridColor{
     +char letter
     +int red
     +int green
@@ -189,16 +213,23 @@ levelData <-- tileFactory
 levelData <-- personFactory
 
 ' filehandler
-fileHandler <-- fileReader
+fileHandler <-- FileLoaderContext
+FileLoaderContext <-- FileLoader
+FileLoader <|.. URLFileLoader
+FileLoader <|.. LocalFileLoader
 
 ' Parser
 fileHandler <-- fileParser
-fileParser <-- iArtistParser
-fileParser <-- iTileParser
+fileParser <-- ArtistParserStrategy
+fileParser <-- GridParserStrategy
 
-iArtistParser <|.. artistCSVParser
-iTileParser <|.. tileTXTParser
-iTileParser <|.. tileXMLParser
+ArtistParserStrategy <-- ArtistParser
+ArtistParser <|.. ArtistCSVParser
+
+GridParserStrategy <-- GridParser
+GridParser <|.. GridTXTParser
+GridParser <|.. GridXMLParser
+
 
 ' inputHandler
 inputHandler <-- mouse
