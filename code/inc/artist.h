@@ -19,7 +19,6 @@ public:
 
     void collidedWall();
 
-
 private:
     Location mLocation;
     float mVelX;
