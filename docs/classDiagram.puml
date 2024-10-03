@@ -21,9 +21,6 @@ class LocalFileLoader{
     std::unique_ptr<std::ifstream> loadFile(const std::string& url) override
 }
 
-class fileParser {
-}
-
 class ArtistParserStrategy {
     + std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
 }
@@ -52,11 +49,19 @@ class GridTXTParser{
     ParsedGrid parseFile(LoadedFile& aLoadedFile)
 }
 
+' class artistParserStrategy {
+'     +std::unique_ptr<ArtistParser> getParser(FileType fileType)
+'     +std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
+' }
+
 class controller{
 
 }
 
 class model{
+    +void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
+    +const levelData& getLevelData() const
+    +void updateModel()
 }
 
 class levelData{
@@ -65,15 +70,11 @@ class levelData{
 
     +void updateLevelData()
     +void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid)
-    +int getX(int tileIndex) const
-    +int getY(int tileIndex) const
-    +int getTotalTiles() const
     +void getGridColor(int tileIndex, int &red, int &green, int &blue) const
-    +int getPersonCount() const
-    +int getPersonX(int personIndex) const
-    +int getPersonY(int personIndex) const
+    +const std::vector<std::unique_ptr<tile>>& getGrid() const;
+    +const std::vector<std::unique_ptr<artist>>& getPeople() const;
 
-    -std::vector<std::unique_ptr<iPerson>> mPeople
+    -std::vector<std::unique_ptr<artist>> mPeople
     -std::vector<std::unique_ptr<tile>> mGrid
     -int mCols
     -int mRows
@@ -84,7 +85,7 @@ class tile{
     +tile(std::unique_ptr<iTileState> initialState)
     +~tile() = default
 
-    +void updateTile()
+    +void onCollide()
     +void setState(std::unique_ptr<iTileState> newState)
     +char getColor() const
 
@@ -92,7 +93,7 @@ class tile{
 }
 
 interface iTileState{
-    +void updateTile(tile* t)
+    +void onCollide(tile* t)
     +char getColor() const
     +void enter(tile* t)
     +void exit(tile* t)
@@ -113,21 +114,21 @@ class tileStateYellow{
 class tileStateWhite{
 }
 
-interface iPerson{
-    +virtual void updatePerson()
-
-    #float mX
-    #float mY
-    #float mVelX
-    #float mVelY
-}
-
-class visitor{
-    +void updatePerson() override
-}
-
 class artist{
-    +void updatePerson() override
+    ' +class location{
+    '     float x;
+    '     float y;
+    ' }
+    +artist(float aX, float aY, float aVelX, float aVelY)
+    +void updatePerson()
+    +void update()
+    +location getLocation() const
+    +void setLocation(location aLocation)
+    +void onCollide()
+
+    -location mLocation
+    -float mVelX
+    -float mVelY
 }
 
 class inputHandler{
@@ -148,10 +149,6 @@ class xboxController{
 class tileFactory{
     +static std::unique_ptr<tile> createTile(char color)
     -static tileColor charToTileColor(char color)
-}
-
-class personFactory{
-    +static std::unique_ptr<iPerson> createPerson(personType type, float x, float y, float velX, float velY)
 }
 
 class view{}
@@ -205,12 +202,9 @@ iTileState <|.. tileStateGray
 iTileState <|.. tileStateYellow
 iTileState <|.. tileStateWhite
 
-levelData <-- iPerson
-iPerson <-- visitor
-iPerson <-- artist
+levelData <-- artist
 
 levelData <-- tileFactory
-levelData <-- personFactory
 
 ' filehandler
 fileHandler <-- FileLoaderContext
@@ -219,9 +213,8 @@ FileLoader <|.. URLFileLoader
 FileLoader <|.. LocalFileLoader
 
 ' Parser
-fileHandler <-- fileParser
-fileParser <-- ArtistParserStrategy
-fileParser <-- GridParserStrategy
+fileHandler <-- ArtistParserStrategy
+fileHandler <-- GridParserStrategy
 
 ArtistParserStrategy <-- ArtistParser
 ArtistParser <|.. ArtistCSVParser
@@ -235,4 +228,5 @@ GridParser <|.. GridXMLParser
 inputHandler <-- mouse
 inputHandler <-- keyboard
 inputHandler <-- xboxController
+
 @enduml
