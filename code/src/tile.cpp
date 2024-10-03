@@ -1,7 +1,7 @@
 #include "tile.h"
 
 tile::tile(std::unique_ptr<iTileState> initialState) : state(std::move(initialState)) {
-    state->enter(*this);
+    state->enter();
 }
 
 void tile::updateTile() {
@@ -9,9 +9,9 @@ void tile::updateTile() {
 }
 
 void tile::setState(std::unique_ptr<iTileState> newState) {
-    state->exit(*this);
+    state->exit();
     state = std::move(newState);
-    state->enter(*this);
+    state->enter();
 }
 
 char tile::getColor() const {
