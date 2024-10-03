@@ -1,24 +1,26 @@
 #include "tileStateGray.h"
 #include "tile.h"
+#include "tileStateBlue.h"
 #include "tileStateRed.h"
 
-tileStateGray::tileStateGray() {
-    // Constructor implementation (if needed)
-}
+tileStateGray::tileStateGray() { mCounter = 0; }
 
 void tileStateGray::updateTile(tile& t) {
     // Transition to the next state
-    t.setState(std::make_unique<tileStateRed>());
+    mCounter++;
+    if (mCounter == 3) {
+        t.setState(std::make_unique<tileStateRed>());
+    }
 }
 
-char tileStateGray::getColor() const {
-    return 'G';
-}
+char tileStateGray::getColor() const { return 'G'; }
 
-void tileStateGray::enter(tile& t) {
+void tileStateGray::enter() {
     // Code to execute when entering the gray state
 }
 
-void tileStateGray::exit(tile& t) {
+void tileStateGray::exit() {
     // Code to execute when exiting the gray state
 }
+
+void tileStateGray::forceBlue(tile& t) { t.setState(std::make_unique<tileStateBlue>()); }

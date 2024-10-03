@@ -8,8 +8,9 @@ public:
     tileStateBlue();
     void updateTile(tile& t) override;
     char getColor() const override;
-    void enter(tile& t) override;
-    void exit(tile& t) override;
+    void enter() override;
+    void exit() override;
+    void forceBlue(tile& t) override;
 };
 
 #endif // TILESTATEBLUE_H

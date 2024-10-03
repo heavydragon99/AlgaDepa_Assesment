@@ -1,19 +1,13 @@
 #include "tile.h"
 
-tile::tile(std::unique_ptr<iTileState> initialState) : state(std::move(initialState)) {
-    state->enter(*this);
-}
+tile::tile(std::unique_ptr<iTileState> initialState) : state(std::move(initialState)) {}
 
-void tile::updateTile() {
-    state->updateTile(*this);
-}
+void tile::updateTile() { state->updateTile(*this); }
 
 void tile::setState(std::unique_ptr<iTileState> newState) {
-    state->exit(*this);
+    state->exit();
     state = std::move(newState);
-    state->enter(*this);
+    state->enter();
 }
 
-char tile::getColor() const {
-    return state->getColor();
-}
+char tile::getColor() const { return state->getColor(); }

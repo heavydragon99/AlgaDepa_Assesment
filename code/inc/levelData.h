@@ -21,17 +21,12 @@ public:
     int getCols() const;
     int getRows() const;
 
-    int getX(int tileIndex) const;
-    int getY(int tileIndex) const;
-    int getTotalTiles() const;
-    void getGridColor(int tileIndex, int& red, int& green, int& blue) const;
-
-    int getPersonCount() const { return mPeople.size(); }
+    const std::vector<std::unique_ptr<tileNode>>& getGrid() const;
     const std::vector<std::unique_ptr<artist>>& getPeople() const;
 
 private:
-    void setNodeWeights();
-    float calculateWeight(const tileNode& aNode);
+    // void setNodeWeights();
+    // float calculateWeight(const tileNode& aNode);
     void connectNeighbors();
 
     bool checkCollisions();
@@ -42,7 +37,6 @@ private:
     std::vector<std::unique_ptr<tileNode>> mGrid;
     int mCols;
     int mRows;
-    std::vector<GridColor> mGridColor;
 };
 
 #endif // LEVELDATA_H

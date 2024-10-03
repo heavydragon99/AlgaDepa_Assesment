@@ -5,8 +5,6 @@
 
 #include <vector>
 
-enum class personType { Artist, Visitor };
-
 struct ParsedPerson {
     float x;
     float y;
