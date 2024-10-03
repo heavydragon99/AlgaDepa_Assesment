@@ -1,6 +1,7 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
+#include "iObserver.h"
 #include "structs.h"
 #include "tileNode.h"
 
@@ -10,7 +11,7 @@
 class artist;
 class tile;
 
-class levelData {
+class levelData : public iObserver {
 public:
     levelData();
     ~levelData();
@@ -24,6 +25,8 @@ public:
     const std::vector<std::unique_ptr<tileNode>>& getGrid() const;
     const std::vector<std::unique_ptr<artist>>& getPeople() const;
 
+    void update(const std::pair<int, int>& tilePos, const std::string& action) override;
+
 private:
     // void setNodeWeights();
     // float calculateWeight(const tileNode& aNode);
@@ -31,6 +34,9 @@ private:
 
     bool checkCollisions(std::unique_ptr<artist>& aPerson);
     bool isColliding(const std::unique_ptr<artist>& aPerson1, const std::unique_ptr<artist>& aPerson2);
+
+    void addArtist(int aX, int aY);
+    void deleteArtist(int aX, int aY);
 
 private:
     std::vector<std::unique_ptr<artist>> mPeople;

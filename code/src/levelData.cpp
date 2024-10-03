@@ -168,3 +168,15 @@ int levelData::getRows() const { return mRows; }
 const std::vector<std::unique_ptr<tileNode>>& levelData::getGrid() const { return mGrid; }
 
 const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }
+
+void levelData::update(const std::pair<int, int>& tilePos, const std::string& action) {
+    {
+        if (action == "addArtist") {
+            // addArtistOnTile(tilePos);
+            std::cout << "Adding artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
+        } else if (action == "removeArtist") {
+            // removeArtistsOnTile(tilePos);
+            std::cout << "Removing artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
+        }
+    }
+}

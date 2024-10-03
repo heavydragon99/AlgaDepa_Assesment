@@ -4,5 +4,6 @@
 
 void addArtistBehavior::doBehavior() {
     // Code to infect tiles
-    std::cout << "Added artist!" << std::endl;
+        std::pair<int, int> temp{0, 0};
+    notify(temp, "addArtist");
 }

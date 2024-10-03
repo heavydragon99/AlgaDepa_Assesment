@@ -4,5 +4,6 @@
 
 void infectTilesBehavior::doBehavior() {
     // Code to infect tiles
-    std::cout << "Tiles have been infected!" << std::endl;
+    std::pair<int, int> temp{0, 0};
+    notify(temp, "infect");
 }

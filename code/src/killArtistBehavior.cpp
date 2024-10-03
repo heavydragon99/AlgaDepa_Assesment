@@ -4,5 +4,6 @@
 
 void killArtistBehavior::doBehavior() {
     // Code to kill player
-    std::cout << "Player has been killed!" << std::endl;
+        std::pair<int, int> temp{0, 0};
+    notify(temp, "removeArtist");
 }
