@@ -4,7 +4,17 @@
 #include "tileFactory.h"
 #include "tileNode.h"
 
+#include <cmath>
 #include <iostream>
+#include <unordered_set>
+#include <utility>
+
+// Hash function for std::pair<int, int> to use in unordered_set
+struct pair_hash {
+    template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& pair) const {
+        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
+    }
+};
 
 levelData::levelData() : mCols(0), mRows(0) {}
 
@@ -24,36 +34,54 @@ bool levelData::isColliding(const std::unique_ptr<artist>& person1, const std::u
     return false;
 }
 
-bool levelData::checkCollisions(std::unique_ptr<artist> &aPerson) {
+bool levelData::checkCollisions(std::unique_ptr<artist>& aPerson) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
-        const auto& loc = aPerson->getLocation();
-        if (loc.mX + artistWidth > mCols || loc.mX < 0 || loc.mY + artistHeight > mRows || loc.mY < 0) {
+    const auto& loc = aPerson->getLocation();
+    if (loc.mX + artistWidth > mCols || loc.mX < 0 || loc.mY + artistHeight > mRows || loc.mY < 0) {
+        return true;
+    }
+
+    for (const auto& otherPerson : mPeople) {
+        if (aPerson == otherPerson)
+            continue;
+
+        if (isColliding(aPerson, otherPerson)) {
             return true;
         }
-
-        for (const auto& otherPerson : mPeople) {
-            if (aPerson == otherPerson)
-                continue;
-
-            if (isColliding(aPerson, otherPerson)) {
-                return true;
-            }
-        }
+    }
     return false;
 }
 
 void levelData::updateLevelData() {
-    // Implement the update logic for the level data
+    std::unordered_set<std::pair<int, int>, pair_hash> collisionMap;
+    std::pair<int, int> intLocation;
 
     for (auto& person : mPeople) {
         artist::Location oldLocation = person->getLocation();
-        person->update();
+        artist::Location tile = person->update();
         if (checkCollisions(person)) {
             std::cout << "COLLISIONS" << std::endl;
             person->setLocation(oldLocation);
             person->collidedWall();
+        }
+
+        intLocation = {round(tile.mX), round(tile.mY)};
+        collisionMap.insert(intLocation);
+    }
+
+    // Iterate over the collisionMap and update the corresponding tileNode
+    for (const auto& loc : collisionMap) {
+        int x = loc.first;
+        int y = loc.second;
+
+        // Calculate the index of the tileNode in the vector
+        int index = y * mCols + x;
+
+        // Ensure the index is within bounds
+        if (index >= 0 && index < mGrid.size()) {
+            mGrid.at(index)->getTile().updateTile();
         }
     }
 }

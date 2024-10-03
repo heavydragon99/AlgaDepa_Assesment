@@ -13,7 +13,7 @@ artist::Location artist::update() {
     mLocation.mY += mVelY;
 
     if (std::floor(mLocation.mX) != std::floor(xOld) || std::floor(mLocation.mY) != std::floor(yOld)) {
-        return mLocation;
+        return {std::floor(mLocation.mX), std::floor(mLocation.mY)};
     }
     else{
         return {-1, -1};
