@@ -4,60 +4,84 @@
 #include "tileFactory.h"
 #include "tileNode.h"
 
+#include <cmath>
 #include <iostream>
+#include <unordered_set>
+#include <utility>
+
+// Hash function for std::pair<int, int> to use in unordered_set
+struct pair_hash {
+    template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& pair) const {
+        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
+    }
+};
 
 levelData::levelData() : mCols(0), mRows(0) {}
 
 levelData::~levelData() {}
 
-bool levelData::isColliding(std::unique_ptr<artist>& person1, std::unique_ptr<artist>& person2) {
+bool levelData::isColliding(const std::unique_ptr<artist>& person1, const std::unique_ptr<artist>& person2) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
-    if (person1->getX() + artistWidth >= person2->getX() && person1->getX() <= person2->getX() + artistWidth &&
-        person1->getY() + artistHeight >= person2->getY() && person1->getY() <= person2->getY() + artistHeight) {
+    const auto& loc1 = person1->getLocation();
+    const auto& loc2 = person2->getLocation();
 
+    if (loc1.mX + artistWidth >= loc2.mX && loc1.mX <= loc2.mX + artistWidth && loc1.mY + artistHeight >= loc2.mY &&
+        loc1.mY <= loc2.mY + artistHeight) {
         return true;
     }
     return false;
 }
 
-bool levelData::checkCollisions() {
+bool levelData::checkCollisions(std::unique_ptr<artist>& aPerson) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
-    for (int i = 0; i < mPeople.size(); i++) {
-        if (mPeople[i]->getX() + artistWidth > mRows || mPeople[i]->getX() < 0) {
-            return true;
-        }
-        if (mPeople[i]->getY() + artistHeight > mCols || mPeople[i]->getY() < 0) {
-            return true;
-        }
+    const auto& loc = aPerson->getLocation();
+    if (loc.mX + artistWidth > mCols || loc.mX < 0 || loc.mY + artistHeight > mRows || loc.mY < 0) {
+        return true;
+    }
 
-        for (int j = 0; j < mPeople.size(); j++) {
-            if (i == j)
-                continue;
+    for (const auto& otherPerson : mPeople) {
+        if (aPerson == otherPerson)
+            continue;
 
-            if (isColliding(mPeople[i], mPeople[j])) {
-                return true;
-            }
+        if (isColliding(aPerson, otherPerson)) {
+            return true;
         }
     }
     return false;
 }
 
 void levelData::updateLevelData() {
-    // Implement the update logic for the level data
+    std::unordered_set<std::pair<int, int>, pair_hash> collisionMap;
+    std::pair<int, int> intLocation;
 
     for (auto& person : mPeople) {
-        float personX = person->getX();
-        float personY = person->getY();
-        person->update();
-        if (checkCollisions()) {
+        artist::Location oldLocation = person->getLocation();
+        artist::Location tile = person->update();
+        if (checkCollisions(person)) {
             std::cout << "COLLISIONS" << std::endl;
-            person->setX(personX);
-            person->setY(personY);
-            person->collided();
+            person->setLocation(oldLocation);
+            person->collidedWall();
+        }
+
+        intLocation = {round(tile.mX), round(tile.mY)};
+        collisionMap.insert(intLocation);
+    }
+
+    // Iterate over the collisionMap and update the corresponding tileNode
+    for (const auto& loc : collisionMap) {
+        int x = loc.first;
+        int y = loc.second;
+
+        // Calculate the index of the tileNode in the vector
+        int index = y * mCols + x;
+
+        // Ensure the index is within bounds
+        if (index >= 0 && index < mGrid.size()) {
+            mGrid.at(index)->getTile().updateTile();
         }
     }
 }
@@ -73,8 +97,8 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
 
     // Create persons and add to mPeople
     for (const ParsedPerson& personIterator : aPersons) {
-        std::unique_ptr<artist> person =
-            std::make_unique<artist>(personIterator.x, personIterator.y, personIterator.vx, personIterator.vy);
+        artist::Location personLocation = {personIterator.x, personIterator.y};
+        std::unique_ptr<artist> person = std::make_unique<artist>(personLocation, personIterator.vx, personIterator.vy);
         mPeople.push_back(std::move(person));
     }
 
@@ -144,3 +168,15 @@ int levelData::getRows() const { return mRows; }
 const std::vector<std::unique_ptr<tileNode>>& levelData::getGrid() const { return mGrid; }
 
 const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }
+
+void levelData::update(const std::pair<int, int>& tilePos, const std::string& action) {
+    {
+        if (action == "addArtist") {
+            // addArtistOnTile(tilePos);
+            std::cout << "Adding artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
+        } else if (action == "removeArtist") {
+            // removeArtistsOnTile(tilePos);
+            std::cout << "Removing artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
+        }
+    }
+}

@@ -1,5 +1,15 @@
 @startuml
 
+skinparam backgroundColor #1e1e1e
+skinparam classBackgroundColor #2b2b2b
+skinparam classBorderColor #555555
+skinparam classFontColor #ffffff
+skinparam attributeFontColor #b3b3b3
+skinparam operationFontColor #b3b3b3
+skinparam arrowColor #ffffff
+skinparam noteBackgroundColor #333333
+skinparam noteFontColor #ffffff
+
 class fileHandler {
     +std::vector<ParsedPerson> loadArtist(std::string aFilePath)
     +ParsedGrid loadGrid(std::string aFilePath)
@@ -65,27 +75,41 @@ class model{
 }
 
 class levelData{
-    +levelData()
-    +~levelData()
-
     +void updateLevelData()
-    +void buildLevelData(std::vector<parsedPerson> aPersons, parsedGrid aGrid)
-    +void getGridColor(int tileIndex, int &red, int &green, int &blue) const
-    +const std::vector<std::unique_ptr<tile>>& getGrid() const;
-    +const std::vector<std::unique_ptr<artist>>& getPeople() const;
+    +void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
+    +int getCols() const
+    +int getRows() const
+    +const std::vector<std::unique_ptr<tileNode>>& getGrid() const
+    +const std::vector<std::unique_ptr<artist>>& getPeople() const
+    +void update(const std::pair<int, int>& tilePos, const std::string& action)
 
     -std::vector<std::unique_ptr<artist>> mPeople
-    -std::vector<std::unique_ptr<tile>> mGrid
+    -std::vector<std::unique_ptr<tileNode>> mGrid
     -int mCols
     -int mRows
-    -std::vector<gridColor> mGridColor
+
+    -void connectNeighbors()
+    -bool checkCollisions(std::unique_ptr<artist>& aPerson)
+    -bool isColliding(const std::unique_ptr<artist>& aPerson1, const std::unique_ptr<artist>& aPerson2)
 }
 
+class tileNode{
+    +tileNode(std::unique_ptr<tile> aTile)
+    +void addNeighbor(tileNode &aNeighbor)
+    +const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const
+    +tile &getTile() const
+    +void setWeight(float aWeight)
+    +float getWeight() const
+
+    -std::unique_ptr<tile> mTile
+    -std::vector<std::reference_wrapper<tileNode>> mNeighbors
+    -float mWeight
+}
 class tile{
     +tile(std::unique_ptr<iTileState> initialState)
     +~tile() = default
 
-    +void onCollide()
+    +void updateTile()
     +void setState(std::unique_ptr<iTileState> newState)
     +char getColor() const
 
@@ -93,42 +117,65 @@ class tile{
 }
 
 interface iTileState{
-    +void onCollide(tile* t)
+    +void updateTile(tile& t)
     +char getColor() const
-    +void enter(tile* t)
-    +void exit(tile* t)
+    +void enter()
+    +void exit()
+    +void forceBlue(tile& t)
 }
 
 class tileStateRed{
+    -std::unique_ptr<iTileBehavior> mBehavior
 }
 
 class tileStateBlue{
+    -std::unique_ptr<iTileBehavior> mBehavior
 }
 
 class tileStateGray{
+    -std::unique_ptr<iTileBehavior> mBehavior
+    -int mCounter
+    -static const int requiredActions
 }
 
 class tileStateYellow{
+    -std::unique_ptr<iTileBehavior> mBehavior
+    -int mCounter
+    -static const int requiredActions
 }
 
 class tileStateWhite{
+    -std::unique_ptr<iTileBehavior> mBehavior
+}
+
+interface iTileBehavior {
+    +void doBehavior()
+}
+
+class addArtistBehavior{
+}
+
+class infectTilesBehavior{
+}
+
+class killArtistBehavior{
 }
 
 class artist{
-    ' +class location{
-    '     float x;
-    '     float y;
-    ' }
-    +artist(float aX, float aY, float aVelX, float aVelY)
-    +void updatePerson()
-    +void update()
-    +location getLocation() const
-    +void setLocation(location aLocation)
-    +void onCollide()
+    +artist(Location aLocation, float aVelX, float aVelY)
+    +Location update()
+    +const Location& getLocation() const
+    +void setLocation(Location aLocation)
+    +void collidedWall()
 
-    -location mLocation
+    -Location mLocation
     -float mVelX
     -float mVelY
+
+    ' class Location {
+    '     +float mX
+    '     +float mY
+    ' }
 }
 
 class inputHandler{
@@ -142,13 +189,11 @@ class keyboard{
     ' use 3rd party library to get keyboard input and translate to generic data
 }
 
-class xboxController{
-    ' use 3rd party library to get xbox controller input and translate to generic data
-}
-
 class tileFactory{
     +static std::unique_ptr<tile> createTile(char color)
-    -static tileColor charToTileColor(char color)
+    +static std::unique_ptr<iTileState> createNextState(char currentColor)
+    -static TileColor charToTileColor(char color)
+    -static std::unique_ptr<iTileBehavior> createBehavior(TileColor aColor)
 }
 
 class view{}
@@ -194,7 +239,8 @@ view <-- model
 
 ' model
 model <-- levelData
-levelData <-- tile
+levelData <-- tileNode
+tileNode <-- tile
 tile <-- iTileState
 iTileState <|.. tileStateRed
 iTileState <|.. tileStateBlue
@@ -202,9 +248,22 @@ iTileState <|.. tileStateGray
 iTileState <|.. tileStateYellow
 iTileState <|.. tileStateWhite
 
+tileStateRed <-- iTileBehavior
+tileStateBlue <-- iTileBehavior
+tileStateGray <-- iTileBehavior
+tileStateYellow <-- iTileBehavior
+tileStateWhite <-- iTileBehavior
+
+iTileBehavior <|.. addArtistBehavior
+iTileBehavior <|.. infectTilesBehavior
+iTileBehavior <|.. killArtistBehavior
+
 levelData <-- artist
 
 levelData <-- tileFactory
+tileFactory <-- tile
+tileFactory <-- iTileState
+tileFactory <-- iTileBehavior
 
 ' filehandler
 fileHandler <-- FileLoaderContext
@@ -227,6 +286,5 @@ GridParser <|.. GridXMLParser
 ' inputHandler
 inputHandler <-- mouse
 inputHandler <-- keyboard
-inputHandler <-- xboxController
 
 @enduml

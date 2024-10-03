@@ -13,7 +13,7 @@ const std::vector<std::reference_wrapper<tileNode>> &tileNode::getNeighbors() co
     return mNeighbors;
 }
 
-const tile &tileNode::getTile() const
+tile &tileNode::getTile() const
 {
     return *mTile.get();
 }

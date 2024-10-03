@@ -1,20 +1,20 @@
 #include "tileStateBlue.h"
 
 #include "tile.h"
-#include "tileStateYellow.h"
+#include "tileFactory.h"
 
-tileStateBlue::tileStateBlue() {
-    // Constructor implementation (if needed)
-}
+tileStateBlue::tileStateBlue(std::unique_ptr<iTileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
 
 void tileStateBlue::updateTile(tile& t) {
-    // Transition to the next state
-    t.setState(std::make_unique<tileStateYellow>());
+    mBehavior->doBehavior();
+
+    // Transition to the next state after 3 actions
+    tileFactory factory;
+
+    t.setState(factory.createNextState(getColor()));
 }
 
-char tileStateBlue::getColor() const {
-    return 'B';
-}
+char tileStateBlue::getColor() const { return 'B'; }
 
 void tileStateBlue::enter() {
     // Code to execute when entering the blue state

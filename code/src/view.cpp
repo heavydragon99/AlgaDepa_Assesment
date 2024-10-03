@@ -79,17 +79,15 @@ void view::renderTile(int tileWidth, int tileHeight) {
 
 void view::renderPeople(int tileWidth, int tileHeight) {
     const levelData& levelData = mModel.getLevelData();
-    float personX, personY;
 
     for(const auto& personPtr : levelData.getPeople() ){
-        personX = personPtr->getX();
-        personY = personPtr->getY();
+        artist::Location personLocation = personPtr->getLocation();
 
-        int tileX = std::floor(personX);
-        int tileY = std::floor(personY);
+        int tileX = std::floor(personLocation.mX);
+        int tileY = std::floor(personLocation.mY);
 
-        float offsetX = personX - tileX;
-        float offsetY = personY - tileY;
+        float offsetX = personLocation.mX - tileX;
+        float offsetY = personLocation.mY - tileY;
 
         SDL_Rect fillRect = {static_cast<int>((tileX + offsetX) * tileWidth),
                              static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileWidth / 2}; // Ensure square tiles
