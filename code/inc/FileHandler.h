@@ -23,7 +23,7 @@ enum FileType { UNDEFINED, CSV, TXT, XML };
 // };
 
 struct LoadedFile {
-    std::unique_ptr<std::ifstream> openedFile = nullptr;
+    std::unique_ptr<std::ifstream> openedFile;
     FileType fileType = UNDEFINED;
 };
 

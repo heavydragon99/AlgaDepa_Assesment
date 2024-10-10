@@ -103,7 +103,7 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     }
 
     // Create tiles and add to mGrid
-    mGrid.reserve(mRows * mCols);
+    mGrid.resize(mRows * mCols);
     for (int row = 0; row < mRows; ++row) {
         for (int col = 0; col < mCols; ++col) {
             char color = aGrid.grid[row * mCols + col];
@@ -161,7 +161,7 @@ const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { retur
 void levelData::addArtist(const tile& aTile) {
     for (auto& tileNode : mGrid) {
         if (&tileNode->getTile() == &aTile) {
-            artist::Location location = {tileNode->getX(), tileNode->getY()};
+            artist::Location location = {static_cast<float>(tileNode->getX()), static_cast<float>(tileNode->getY())};
             float vx = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
             float vy = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
             std::unique_ptr<artist> person = std::make_unique<artist>(location, vx, vy);
@@ -171,9 +171,8 @@ void levelData::addArtist(const tile& aTile) {
 }
 
 void levelData::deleteArtist(const tile& aTile) {
-    for (auto &tileNode : mGrid) {
+    for (auto& tileNode : mGrid) {
         if (&tileNode->getTile() == &aTile) {
-
         }
     }
 }
