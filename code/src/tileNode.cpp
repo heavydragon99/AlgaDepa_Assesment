@@ -1,7 +1,7 @@
 #include "tileNode.h"
 
-tileNode::tileNode(std::unique_ptr<tile> aTile)
-    : mTile(std::move(aTile)) {}
+tileNode::tileNode(std::unique_ptr<tile> aTile, int aX, int aY)
+    : mTile(std::move(aTile)), mX(aX), mY(aY) {}
 
 void tileNode::addNeighbor(tileNode &aNeighbor)
 {
@@ -18,6 +18,10 @@ tile &tileNode::getTile() const
     return *mTile.get();
 }
 
-void tileNode::setWeight(float aWeight) { mWeight = aWeight; }
+void tileNode::setWeight(int aWeight) { mWeight = aWeight; }
 
-float tileNode::getWeight() const { return mWeight; }
+int tileNode::getWeight() const { return mWeight; }
+
+int tileNode::getX() const { return mX; }
+
+int tileNode::getY() const { return mY; }
