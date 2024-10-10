@@ -11,45 +11,51 @@
 #include "infectTilesBehavior.h"
 #include "killArtistBehavior.h"
 
-std::unique_ptr<tile> tileFactory::createTile(char color) {
+LevelData* TileFactory::mLevelData = nullptr;
+
+std::unique_ptr<Tile> TileFactory::createTile(char color) {
     TileColor tColor = charToTileColor(color);
-    std::unique_ptr<iTileBehavior> behavior = createBehavior(tColor);
+    std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
     switch (tColor) {
     case TileColor::Red:
-        return std::make_unique<tile>(std::make_unique<tileStateRed>(std::move(behavior)));
+        return std::make_unique<Tile>(std::make_unique<TileStateRed>(std::move(behavior)));
     case TileColor::Blue:
-        return std::make_unique<tile>(std::make_unique<tileStateBlue>(std::move(behavior)));
+        return std::make_unique<Tile>(std::make_unique<TileStateBlue>(std::move(behavior)));
     case TileColor::Yellow:
-        return std::make_unique<tile>(std::make_unique<tileStateYellow>(std::move(behavior)));
+        return std::make_unique<Tile>(std::make_unique<TileStateYellow>(std::move(behavior)));
     case TileColor::Gray:
-        return std::make_unique<tile>(std::make_unique<tileStateGray>(std::move(behavior)));
+        return std::make_unique<Tile>(std::make_unique<TileStateGray>(std::move(behavior)));
     case TileColor::White:
-        return std::make_unique<tile>(std::make_unique<tileStateWhite>(std::move(behavior)));
+        return std::make_unique<Tile>(std::make_unique<TileStateWhite>(std::move(behavior)));
     default:
         return nullptr;
     }
 }
 
-std::unique_ptr<iTileState> tileFactory::createNextState(char currentColor) {
+std::unique_ptr<ITileState> TileFactory::createNextState(char currentColor) {
     TileColor tColor = charToTileColor(currentColor);
-    std::unique_ptr<iTileBehavior> behavior = createBehavior(tColor);
+    std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
     switch (tColor) {
     case TileColor::Red:
-        return std::make_unique<tileStateBlue>(std::move(behavior));
+        return std::make_unique<TileStateBlue>(std::move(behavior));
     case TileColor::Blue:
-        return std::make_unique<tileStateYellow>(std::move(behavior));
+        return std::make_unique<TileStateYellow>(std::move(behavior));
     case TileColor::Yellow:
-        return std::make_unique<tileStateGray>(std::move(behavior));
+        return std::make_unique<TileStateGray>(std::move(behavior));
     case TileColor::Gray:
-        return std::make_unique<tileStateRed>(std::move(behavior));
+        return std::make_unique<TileStateRed>(std::move(behavior));
     case TileColor::White:
-        return std::make_unique<tileStateWhite>(std::move(behavior));
+        return std::make_unique<TileStateWhite>(std::move(behavior));
     default:
         return nullptr;
     }
 }
 
-TileColor tileFactory::charToTileColor(char color) {
+void TileFactory::setLevelData(LevelData* aLevelData) {
+    mLevelData = aLevelData;
+}
+
+TileColor TileFactory::charToTileColor(char color) {
     switch (color) {
     case 'R':
         return TileColor::Red;
@@ -66,18 +72,18 @@ TileColor tileFactory::charToTileColor(char color) {
     }
 }
 
-std::unique_ptr<iTileBehavior> tileFactory::createBehavior(TileColor aColor) {
+std::unique_ptr<ITileBehavior> TileFactory::createBehavior(TileColor aColor) {
     switch (aColor) {
     case TileColor::Red:
-        return std::make_unique<killArtistBehavior>();
+        return std::make_unique<KillArtistBehavior>(mLevelData);
     case TileColor::Blue:
-        return std::make_unique<infectTilesBehavior>();
+        return std::make_unique<InfectTilesBehavior>(mLevelData);
     case TileColor::Yellow:
-        return std::make_unique<addArtistBehavior>();
+        return std::make_unique<AddArtistBehavior>(mLevelData);
     case TileColor::Gray:
-        return std::make_unique<iTileBehavior>();
+        return std::make_unique<ITileBehavior>();
     case TileColor::White:
-        return std::make_unique<iTileBehavior>();
+        return std::make_unique<ITileBehavior>();
     default:
         return nullptr;
     }

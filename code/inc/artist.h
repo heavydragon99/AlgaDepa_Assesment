@@ -1,7 +1,7 @@
 #ifndef ARTIST_H
 #define ARTIST_H
 
-class artist {
+class Artist {
 public:
     struct Location {
         float mX;
@@ -9,8 +9,8 @@ public:
     };
 
 public:
-    artist(Location aLocation, float aVelX, float aVelY);
-    virtual ~artist() = default;
+    Artist(Location aLocation, float aVelX, float aVelY);
+    virtual ~Artist() = default;
 
     Location update();
 

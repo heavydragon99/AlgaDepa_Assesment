@@ -66,7 +66,7 @@ int main() {
     //     persons.push_back(person);
     // }
 
-    controller ctrl(persons, grid);
+    Controller ctrl(persons, grid);
     ctrl.createLevel();
     ctrl.run();
 

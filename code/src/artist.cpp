@@ -3,9 +3,9 @@
 #include <iostream>
 #include <cmath>
 
-artist::artist(Location aLocation, float aVelX, float aVelY) : mLocation(aLocation), mVelX(aVelX), mVelY(aVelY) {}
+Artist::Artist(Location aLocation, float aVelX, float aVelY) : mLocation(aLocation), mVelX(aVelX), mVelY(aVelY) {}
 
-artist::Location artist::update() {
+Artist::Location Artist::update() {
     int xOld = mLocation.mX;
     int yOld = mLocation.mY;
 
@@ -20,13 +20,13 @@ artist::Location artist::update() {
     }
 }
 
-const artist::Location& artist::getLocation() const { return mLocation; }
+const Artist::Location& Artist::getLocation() const { return mLocation; }
 
-void artist::setLocation(Location aLocation) {
+void Artist::setLocation(Location aLocation) {
     mLocation = aLocation;
 }
 
-void artist::collidedWall() {
+void Artist::collidedWall() {
     if (mVelX != 0) {
         mVelX = -mVelX;
     }

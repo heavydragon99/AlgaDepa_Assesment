@@ -6,16 +6,16 @@
 
 #include <vector>
 
-class model {
+class Model {
 public:
-    model();
+    Model();
     void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
-    const levelData& getLevelData() const;
+    const LevelData& getLevelData() const;
 
     void updateModel();
 
 private:
-    levelData mLevel;
+    LevelData mLevel;
 };
 
 #endif // MODEL_H

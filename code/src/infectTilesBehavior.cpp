@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-void infectTilesBehavior::doBehavior() {
+InfectTilesBehavior::InfectTilesBehavior(LevelData* aLevelData) : mLevelData(aLevelData) {}
+
+void InfectTilesBehavior::doBehavior(Tile& aTile) {
     // Code to infect tiles
-    std::pair<int, int> temp{0, 0};
-    notify(temp, "infect");
 }

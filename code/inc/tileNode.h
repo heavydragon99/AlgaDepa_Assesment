@@ -6,15 +6,15 @@
 #include <memory>
 #include <vector>
 
-class tileNode
+class TileNode
 {
 public:
-    tileNode(std::unique_ptr<tile> aTile, int aX, int aY);
+    TileNode(std::unique_ptr<Tile> aTile, int aX, int aY);
 
-    void addNeighbor(tileNode &aNeighbor);
-    const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const;
+    void addNeighbor(TileNode &aNeighbor);
+    const std::vector<std::reference_wrapper<TileNode>> &getNeighbors() const;
     
-    tile &getTile() const;
+    Tile &getTile() const;
 
     void setWeight(int aWeight);
     int getWeight() const;
@@ -23,8 +23,8 @@ public:
     int getY() const;
 
 private:
-    std::unique_ptr<tile> mTile;
-    std::vector<std::reference_wrapper<tileNode>> mNeighbors;
+    std::unique_ptr<Tile> mTile;
+    std::vector<std::reference_wrapper<TileNode>> mNeighbors;
 
     int mWeight;
 

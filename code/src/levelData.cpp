@@ -16,11 +16,11 @@ struct pair_hash {
     }
 };
 
-levelData::levelData() : mCols(0), mRows(0) {}
+LevelData::LevelData() : mCols(0), mRows(0) { TileFactory::setLevelData(this); }
 
-levelData::~levelData() {}
+LevelData::~LevelData() {}
 
-bool levelData::isColliding(const std::unique_ptr<artist>& person1, const std::unique_ptr<artist>& person2) {
+bool LevelData::isColliding(const std::unique_ptr<Artist>& person1, const std::unique_ptr<Artist>& person2) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
@@ -34,7 +34,7 @@ bool levelData::isColliding(const std::unique_ptr<artist>& person1, const std::u
     return false;
 }
 
-bool levelData::checkCollisions(std::unique_ptr<artist>& aPerson) {
+bool LevelData::checkCollisions(std::unique_ptr<Artist>& aPerson) {
     const float artistWidth = 0.5f;
     const float artistHeight = 0.5f;
 
@@ -54,13 +54,13 @@ bool levelData::checkCollisions(std::unique_ptr<artist>& aPerson) {
     return false;
 }
 
-void levelData::updateLevelData() {
+void LevelData::updateLevelData() {
     std::unordered_set<std::pair<int, int>, pair_hash> collisionMap;
     std::pair<int, int> intLocation;
 
     for (auto& person : mPeople) {
-        artist::Location oldLocation = person->getLocation();
-        artist::Location tile = person->update();
+        Artist::Location oldLocation = person->getLocation();
+        Artist::Location tile = person->update();
         if (checkCollisions(person)) {
             std::cout << "COLLISIONS" << std::endl;
             person->setLocation(oldLocation);
@@ -86,7 +86,7 @@ void levelData::updateLevelData() {
     }
 }
 
-void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
+void LevelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     // Clear existing data
     mPeople.clear();
     mGrid.clear();
@@ -97,18 +97,18 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
 
     // Create persons and add to mPeople
     for (const ParsedPerson& personIterator : aPersons) {
-        artist::Location personLocation = {personIterator.x, personIterator.y};
-        std::unique_ptr<artist> person = std::make_unique<artist>(personLocation, personIterator.vx, personIterator.vy);
+        Artist::Location personLocation = {personIterator.x, personIterator.y};
+        std::unique_ptr<Artist> person = std::make_unique<Artist>(personLocation, personIterator.vx, personIterator.vy);
         mPeople.push_back(std::move(person));
     }
 
     // Create tiles and add to mGrid
-    mGrid.reserve(mRows * mCols);
+    mGrid.resize(mRows * mCols);
     for (int row = 0; row < mRows; ++row) {
         for (int col = 0; col < mCols; ++col) {
             char color = aGrid.grid[row * mCols + col];
-            std::unique_ptr<tile> tile = tileFactory::createTile(color);
-            mGrid[row * mCols + col] = std::make_unique<tileNode>(std::move(tile), col, row);
+            std::unique_ptr<Tile> tile = TileFactory::createTile(color);
+            mGrid[row * mCols + col] = std::make_unique<TileNode>(std::move(tile), col, row);
         }
     }
 
@@ -130,10 +130,10 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     std::cout << "Level data built successfully!" << std::endl;
 }
 
-void levelData::connectNeighbors() {
+void LevelData::connectNeighbors() {
     for (int row = 0; row < mRows; ++row) {
         for (int col = 0; col < mCols; ++col) {
-            tileNode& currentNode = *mGrid[row * mCols + col].get();
+            TileNode& currentNode = *mGrid[row * mCols + col].get();
             if (row > 0) {
                 currentNode.addNeighbor(*mGrid[(row - 1) * mCols + col].get()); // Up
             }
@@ -150,30 +150,53 @@ void levelData::connectNeighbors() {
     }
 }
 
-int levelData::getCols() const { return mCols; }
+int LevelData::getCols() const { return mCols; }
 
-int levelData::getRows() const { return mRows; }
+int LevelData::getRows() const { return mRows; }
 
-const std::vector<std::unique_ptr<tileNode>>& levelData::getGrid() const { return mGrid; }
+const std::vector<std::unique_ptr<TileNode>>& LevelData::getGrid() const { return mGrid; }
 
-const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }
+const std::list<std::unique_ptr<Artist>>& LevelData::getPeople() const { return mPeople; }
 
-void levelData::addArtist(const tile& aTile) {
+void LevelData::addArtist(const Tile& aTile) {
+    if (mPeople.size() >= MAX_PEOPLE) {
+        return; // Do not add a new person if the limit is reached
+    }
+
     for (auto& tileNode : mGrid) {
         if (&tileNode->getTile() == &aTile) {
-            artist::Location location = {tileNode->getX(), tileNode->getY()};
-            float vx = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
-            float vy = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
-            std::unique_ptr<artist> person = std::make_unique<artist>(location, vx, vy);
+            Artist::Location location = {static_cast<float>(tileNode->getX()), static_cast<float>(tileNode->getY())};
+            float vx, vy;
+            if (rand() % 2 == 0) {
+                do {
+                    vx = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
+                } while (vx == 0.0f);
+                vy = 0.0f;
+            } else {
+                vx = 0.0f;
+                do {
+                    vy = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
+                } while (vy == 0.0f);
+            }
+            std::unique_ptr<Artist> person = std::make_unique<Artist>(location, vx, vy);
             mPeople.push_back(std::move(person));
         }
     }
 }
 
-void levelData::deleteArtist(const tile& aTile) {
-    for (auto &tileNode : mGrid) {
+void LevelData::deleteArtist(const Tile& aTile) {
+    for (auto& tileNode : mGrid) {
         if (&tileNode->getTile() == &aTile) {
-
+            int tileX = static_cast<int>(tileNode->getX());
+            int tileY = static_cast<int>(tileNode->getY());
+            for (auto it = mPeople.begin(); it != mPeople.end(); ++it) {
+                int personX = static_cast<int>((*it)->getLocation().mX);
+                int personY = static_cast<int>((*it)->getLocation().mY);
+                if (personX == tileX && personY == tileY) {
+                    mPeople.erase(it);
+                    break;
+                }
+            }
         }
     }
 }
