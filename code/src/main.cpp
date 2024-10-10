@@ -20,7 +20,7 @@ int main() {
     //     int weight;
     // };
 
-    //yay text
+    // yay text
     FileHandler fileHandler;
 
     ParsedGrid grid = fileHandler.loadGrid("grid.txt");

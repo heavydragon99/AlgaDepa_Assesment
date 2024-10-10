@@ -80,7 +80,7 @@ void view::renderTile(int tileWidth, int tileHeight) {
 void view::renderPeople(int tileWidth, int tileHeight) {
     const levelData& levelData = mModel.getLevelData();
 
-    for(const auto& personPtr : levelData.getPeople() ){
+    for (const auto& personPtr : levelData.getPeople()) {
         artist::Location personLocation = personPtr->getLocation();
 
         int tileX = std::floor(personLocation.mX);
@@ -90,8 +90,15 @@ void view::renderPeople(int tileWidth, int tileHeight) {
         float offsetY = personLocation.mY - tileY;
 
         SDL_Rect fillRect = {static_cast<int>((tileX + offsetX) * tileWidth),
-                             static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileWidth / 2}; // Ensure square tiles
-        SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
+                             static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileWidth / 2}; // Ensure
+                                                                                                              // square
+                                                                                                              // tiles
+        if (personPtr->getRed()) {
+            SDL_SetRenderDrawColor(mRenderer.get(), 255, 0, 255, 0xFF);
+        } else {
+            SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
+        }
+
         SDL_RenderFillRect(mRenderer.get(), &fillRect);
     }
 }
@@ -132,9 +139,8 @@ void view::handleEvents(bool& quit) {
     }
 }
 
-void view::setGridColor(std::vector<GridColor> aGridColor)
-{
-        // Fill mGridColor with all the different colors
+void view::setGridColor(std::vector<GridColor> aGridColor) {
+    // Fill mGridColor with all the different colors
     for (const GridColor& color : aGridColor) {
         mGridColor.push_back(color);
     }
@@ -149,7 +155,7 @@ void view::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
             return;
         }
     }
-    //default white
+    // default white
     aRed = 255;
     aGreen = 255;
     aBlue = 255;

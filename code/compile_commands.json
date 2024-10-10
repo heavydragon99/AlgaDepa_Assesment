@@ -2,21 +2,162 @@
   {
     "arguments": [
       "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
       "-I/home/seger/projects/dpa/code/inc",
+      "-I/usr/include/SDL2",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-g",
+      "-O0",
       "-std=gnu++23",
+      "-fvisibility=hidden",
+      "-fvisibility-inlines-hidden",
       "-c",
       "-o",
-      "CMakeFiles/depaAlgo.dir/src/ParseGrid.cpp.o",
-      "/home/seger/projects/dpa/code/src/ParseGrid.cpp"
+      "CMakeFiles/tinyxml2.dir/tinyxml2.cpp.o",
+      "/home/seger/projects/dpa/code/external/tinyxml2/tinyxml2.cpp"
     ],
-    "directory": "/home/seger/projects/dpa/code/build",
-    "file": "/home/seger/projects/dpa/code/src/ParseGrid.cpp",
-    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/ParseGrid.cpp.o"
+    "directory": "/home/seger/projects/dpa/code/build/external/tinyxml2",
+    "file": "/home/seger/projects/dpa/code/external/tinyxml2/tinyxml2.cpp",
+    "output": "/home/seger/projects/dpa/code/build/external/tinyxml2/CMakeFiles/tinyxml2.dir/tinyxml2.cpp.o"
   },
   {
     "arguments": [
       "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
       "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/model.cpp.o",
+      "/home/seger/projects/dpa/code/src/model.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/model.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/model.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/controller.cpp.o",
+      "/home/seger/projects/dpa/code/src/controller.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/controller.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/controller.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileStateBlue.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileStateBlue.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileStateBlue.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileStateBlue.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/addArtistBehavior.cpp.o",
+      "/home/seger/projects/dpa/code/src/addArtistBehavior.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/addArtistBehavior.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/addArtistBehavior.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/GridParserStrategy.cpp.o",
+      "/home/seger/projects/dpa/code/src/GridParserStrategy.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/GridParserStrategy.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/GridParserStrategy.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/killArtistBehavior.cpp.o",
+      "/home/seger/projects/dpa/code/src/killArtistBehavior.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/killArtistBehavior.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/killArtistBehavior.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
       "-std=gnu++23",
       "-c",
       "-o",
@@ -26,5 +167,279 @@
     "directory": "/home/seger/projects/dpa/code/build",
     "file": "/home/seger/projects/dpa/code/src/main.cpp",
     "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/main.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/levelData.cpp.o",
+      "/home/seger/projects/dpa/code/src/levelData.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/levelData.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/levelData.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/infectTilesBehavior.cpp.o",
+      "/home/seger/projects/dpa/code/src/infectTilesBehavior.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/infectTilesBehavior.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/infectTilesBehavior.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileStateGray.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileStateGray.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileStateGray.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileStateGray.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/artist.cpp.o",
+      "/home/seger/projects/dpa/code/src/artist.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/artist.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/artist.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/usr/include/SDL2",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-fvisibility=hidden",
+      "-fvisibility-inlines-hidden",
+      "-c",
+      "-o",
+      "CMakeFiles/xmltest.dir/xmltest.cpp.o",
+      "/home/seger/projects/dpa/code/external/tinyxml2/xmltest.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build/external/tinyxml2",
+    "file": "/home/seger/projects/dpa/code/external/tinyxml2/xmltest.cpp",
+    "output": "/home/seger/projects/dpa/code/build/external/tinyxml2/CMakeFiles/xmltest.dir/xmltest.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tile.cpp.o",
+      "/home/seger/projects/dpa/code/src/tile.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tile.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tile.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileNode.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileNode.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileNode.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileNode.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/FileHandler.cpp.o",
+      "/home/seger/projects/dpa/code/src/FileHandler.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/FileHandler.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/FileHandler.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileFactory.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileFactory.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileFactory.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileFactory.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileStateRed.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileStateRed.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileStateRed.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileStateRed.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileStateWhite.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileStateWhite.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileStateWhite.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileStateWhite.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/tileStateYellow.cpp.o",
+      "/home/seger/projects/dpa/code/src/tileStateYellow.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/tileStateYellow.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/tileStateYellow.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-DTINYXML2_DEBUG",
+      "-D_FILE_OFFSET_BITS=64",
+      "-I/home/seger/projects/dpa/code/inc",
+      "-I/home/seger/projects/dpa/code/external/tinyxml2",
+      "-isystem",
+      "/usr/include/SDL2",
+      "-g",
+      "-O0",
+      "-std=gnu++23",
+      "-c",
+      "-o",
+      "CMakeFiles/depaAlgo.dir/src/view.cpp.o",
+      "/home/seger/projects/dpa/code/src/view.cpp"
+    ],
+    "directory": "/home/seger/projects/dpa/code/build",
+    "file": "/home/seger/projects/dpa/code/src/view.cpp",
+    "output": "/home/seger/projects/dpa/code/build/CMakeFiles/depaAlgo.dir/src/view.cpp.o"
   }
 ]

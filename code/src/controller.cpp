@@ -5,7 +5,8 @@
 #include <iostream>
 #include <thread>
 
-controller::controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
+controller::controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
+    : mCollisionHandler(CollisionHandler(mModel.get())) {
     mPersons = aPersons;
     mGrid = aGrid;
 }
@@ -22,12 +23,16 @@ void controller::run() {
     const int frameDelay = 1000 / FPS;
     // Render the data with the view class
 
+    this->mCollisionHandler = CollisionHandler(mModel.get());
+
     bool quit = false;
 
     while (!quit) {
         auto frameStart = std::chrono::high_resolution_clock::now();
 
         mModel->updateModel();
+
+        mCollisionHandler.handleCollisions();
 
         mView->handleEvents(quit);
         mView->render();

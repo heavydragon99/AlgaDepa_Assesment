@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+#include "CollisionHandler.h"
 #include "model.h"
 #include "structs.h"
 #include "view.h"
@@ -19,6 +20,8 @@ private:
     std::unique_ptr<view> mView;
     std::vector<ParsedPerson> mPersons;
     ParsedGrid mGrid;
+
+    CollisionHandler mCollisionHandler;
 };
 
 #endif // CONTROLLER_H
