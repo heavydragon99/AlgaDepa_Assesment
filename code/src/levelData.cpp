@@ -20,69 +20,9 @@ LevelData::LevelData() : mCols(0), mRows(0) { TileFactory::setLevelData(this); }
 
 LevelData::~LevelData() {}
 
-bool LevelData::isColliding(const std::unique_ptr<Artist>& person1, const std::unique_ptr<Artist>& person2) {
-    const float artistWidth = 0.5f;
-    const float artistHeight = 0.5f;
-
-    const auto& loc1 = person1->getLocation();
-    const auto& loc2 = person2->getLocation();
-
-    if (loc1.mX + artistWidth >= loc2.mX && loc1.mX <= loc2.mX + artistWidth && loc1.mY + artistHeight >= loc2.mY &&
-        loc1.mY <= loc2.mY + artistHeight) {
-        return true;
-    }
-    return false;
-}
-
-bool LevelData::checkCollisions(std::unique_ptr<Artist>& aPerson) {
-    const float artistWidth = 0.5f;
-    const float artistHeight = 0.5f;
-
-    const auto& loc = aPerson->getLocation();
-    if (loc.mX + artistWidth > mCols || loc.mX < 0 || loc.mY + artistHeight > mRows || loc.mY < 0) {
-        return true;
-    }
-
-    for (const auto& otherPerson : mPeople) {
-        if (aPerson == otherPerson)
-            continue;
-
-        if (isColliding(aPerson, otherPerson)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void LevelData::updateLevelData() {
-    std::unordered_set<std::pair<int, int>, pair_hash> collisionMap;
-    std::pair<int, int> intLocation;
-
     for (auto& person : mPeople) {
-        Artist::Location oldLocation = person->getLocation();
         Artist::Location tile = person->update();
-        if (checkCollisions(person)) {
-            std::cout << "COLLISIONS" << std::endl;
-            person->setLocation(oldLocation);
-            person->collidedWall();
-        }
-
-        intLocation = {round(tile.mX), round(tile.mY)};
-        collisionMap.insert(intLocation);
-    }
-
-    // Iterate over the collisionMap and update the corresponding tileNode
-    for (const auto& loc : collisionMap) {
-        int x = loc.first;
-        int y = loc.second;
-
-        // Calculate the index of the tileNode in the vector
-        int index = y * mCols + x;
-
-        // Ensure the index is within bounds
-        if (index >= 0 && index < mGrid.size()) {
-            mGrid.at(index)->getTile().updateTile();
-        }
     }
 }
 
@@ -179,6 +119,7 @@ void LevelData::addArtist(const Tile& aTile) {
                 } while (vy == 0.0f);
             }
             std::unique_ptr<Artist> person = std::make_unique<Artist>(location, vx, vy);
+
             mPeople.push_back(std::move(person));
         }
     }

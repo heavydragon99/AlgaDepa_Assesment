@@ -33,3 +33,5 @@
 
 .vscode
 code/build
+
+code/.cache

@@ -11,7 +11,42 @@
 
 #include "structs.h"
 
+// Function to print all lines from an ifstream
+void printFileLines(std::ifstream& ifs) {
+    std::string line;
+    while (std::getline(ifs, line)) {
+        std::cout << line << std::endl;
+    }
+}
+
+void testFileLoading() {
+    FileLoaderContext loaderContext;
+
+    std::string localFilePath = "artists.csv"; // Replace with actual file path
+    std::string url = "https://firebasestorage.googleapis.com/v0/b/dpa-files.appspot.com/o/"
+                      "grid.txt?alt=media";
+
+    auto file = loaderContext.loadFile(localFilePath);
+    if (file && file->is_open()) {
+        std::cout << "Local file loaded successfully!" << std::endl;
+        printFileLines(*file);
+    } else {
+        std::cerr << "Failed to load local file." << std::endl;
+    }
+
+    // Load and print remote file
+    file = loaderContext.loadFile(url);
+    if (file && file->is_open()) {
+        std::cout << "Remote file downloaded and loaded successfully!" << std::endl;
+        printFileLines(*file);
+    } else {
+        std::cerr << "Failed to download or load remote file." << std::endl;
+    }
+}
+
 int main() {
+    // testFileLoading();
+    // return 0;
     // struct gridColor {
     //     char letter;
     //     int red;
@@ -20,10 +55,12 @@ int main() {
     //     int weight;
     // };
 
-    //yay text
+    // yay text
     FileHandler fileHandler;
 
-    ParsedGrid grid = fileHandler.loadGrid("grid.txt");
+    // std::string url = "https://firebasestorage.googleapis.com/v0/b/dpa-files.appspot.com/o/"
+    //                   "grid.txt?alt=media";
+    ParsedGrid grid = fileHandler.loadGrid("graph.xml");
     std::vector<ParsedPerson> persons = fileHandler.loadArtist("artists.csv");
     // grid.gridColors.push_back({'R', 255, 0, 0, 0});     // Red
     // grid.gridColors.push_back({'B', 0, 0, 255, 0});     // Blue
@@ -143,39 +180,6 @@ void testParseArtists() {
                   << std::endl;
     }
     return;
-}
-
-// Function to print all lines from an ifstream
-void printFileLines(std::ifstream& ifs) {
-    std::string line;
-    while (std::getline(ifs, line)) {
-        std::cout << line << std::endl;
-    }
-}
-
-void testFileLoading() {
-    FileLoaderContext loaderContext;
-
-    std::string localFilePath = "artists.csv"; // Replace with actual file path
-    std::string url = "https://firebasestorage.googleapis.com/v0/b/dpa-files.appspot.com/o/"
-                      "grid.txt?alt=media";
-
-    auto file = loaderContext.loadFile(localFilePath);
-    if (file && file->is_open()) {
-        std::cout << "Local file loaded successfully!" << std::endl;
-        // printFileLines(*file);
-    } else {
-        std::cerr << "Failed to load local file." << std::endl;
-    }
-
-    // Load and print remote file
-    file = loaderContext.loadFile(url);
-    if (file && file->is_open()) {
-        std::cout << "Remote file downloaded and loaded successfully!" << std::endl;
-        // printFileLines(*file);
-    } else {
-        std::cerr << "Failed to download or load remote file." << std::endl;
-    }
 }
 
 // Example usage
