@@ -94,7 +94,7 @@ void view::renderPeople(int tileWidth, int tileHeight) {
                                                                                                               // square
                                                                                                               // tiles
         if (personPtr->getRed()) {
-            SDL_SetRenderDrawColor(mRenderer.get(), 255, 0, 255, 0xFF);
+            SDL_SetRenderDrawColor(mRenderer.get(), 255, 0, 0, 0xFF);
         } else {
             SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
         }
