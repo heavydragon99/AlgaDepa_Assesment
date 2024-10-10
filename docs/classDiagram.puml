@@ -1,16 +1,17 @@
-@startuml
+@startuml classDiagram
 
-skinparam backgroundColor #1e1e1e
-skinparam classBackgroundColor #2b2b2b
-skinparam classBorderColor #555555
-skinparam classFontColor #ffffff
-skinparam attributeFontColor #b3b3b3
-skinparam operationFontColor #b3b3b3
-skinparam arrowColor #ffffff
-skinparam noteBackgroundColor #333333
-skinparam noteFontColor #ffffff
+' skinparam backgroundColor #1e1e1e
+' skinparam classBackgroundColor #2b2b2b
+' skinparam classBorderColor #555555
+' skinparam classFontColor #ffffff
+' skinparam attributeFontColor #b3b3b3
+' skinparam operationFontColor #b3b3b3
+' skinparam arrowColor #ffffff
+' skinparam noteBackgroundColor #333333
+' skinparam noteFontColor #ffffff
+skinparam groupInheritance 3
 
-class fileHandler {
+class FileHandler {
     +std::vector<ParsedPerson> loadArtist(std::string aFilePath)
     +ParsedGrid loadGrid(std::string aFilePath)
 }
@@ -68,91 +69,91 @@ class controller{
 
 }
 
-class model{
+class Model{
     +void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
-    +const levelData& getLevelData() const
+    +const LevelData& getLevelData() const
     +void updateModel()
 }
 
-class levelData{
+class LevelData{
     +void updateLevelData()
     +void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     +int getCols() const
     +int getRows() const
-    +const std::vector<std::unique_ptr<tileNode>>& getGrid() const
-    +const std::vector<std::unique_ptr<artist>>& getPeople() const
+    +const std::vector<std::unique_ptr<TileNode>>& getGrid() const
+    +const std::vector<std::unique_ptr<Artist>>& getPeople() const
     +void update(const std::pair<int, int>& tilePos, const std::string& action)
 
-    -std::vector<std::unique_ptr<artist>> mPeople
-    -std::vector<std::unique_ptr<tileNode>> mGrid
+    -std::vector<std::unique_ptr<Artist>> mPeople
+    -std::vector<std::unique_ptr<TileNode>> mGrid
     -int mCols
     -int mRows
 
     -void connectNeighbors()
-    -bool checkCollisions(std::unique_ptr<artist>& aPerson)
-    -bool isColliding(const std::unique_ptr<artist>& aPerson1, const std::unique_ptr<artist>& aPerson2)
+    -bool checkCollisions(std::unique_ptr<Artist>& aPerson)
+    -bool isColliding(const std::unique_ptr<Artist>& aPerson1, const std::unique_ptr<Artist>& aPerson2)
 }
 
-class tileNode{
-    +tileNode(std::unique_ptr<tile> aTile)
-    +void addNeighbor(tileNode &aNeighbor)
-    +const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const
-    +tile &getTile() const
+class TileNode{
+    +TileNode(std::unique_ptr<Tile> aTile)
+    +void addNeighbor(TileNode &aNeighbor)
+    +const std::vector<std::reference_wrapper<TileNode>> &getNeighbors() const
+    +Tile &getTile() const
     +void setWeight(float aWeight)
     +float getWeight() const
 
-    -std::unique_ptr<tile> mTile
-    -std::vector<std::reference_wrapper<tileNode>> mNeighbors
+    -std::unique_ptr<Tile> mTile
+    -std::vector<std::reference_wrapper<TileNode>> mNeighbors
     -float mWeight
 }
-class tile{
-    +tile(std::unique_ptr<iTileState> initialState)
-    +~tile() = default
+class Tile{
+    +Tile(std::unique_ptr<ITileState> initialState)
+    +~Tile() = default
 
     +void updateTile()
-    +void setState(std::unique_ptr<iTileState> newState)
+    +void setState(std::unique_ptr<ITileState> newState)
     +char getColor() const
 
-    -std::unique_ptr<iTileState> state
+    -std::unique_ptr<ITileState> state
 }
 
-interface iTileState{
-    +void updateTile(tile& t)
+interface ITileState{
+    +void updateTile(Tile& t)
     +char getColor() const
     +void enter()
     +void exit()
-    +void forceBlue(tile& t)
+    +void forceBlue(Tile& t)
 }
 
-class tileStateRed{
-    -std::unique_ptr<iTileBehavior> mBehavior
+class TileStateRed{
+    -std::unique_ptr<ITileBehavior> mBehavior
 }
 
-class tileStateBlue{
-    -std::unique_ptr<iTileBehavior> mBehavior
+class TileStateBlue{
+    -std::unique_ptr<ITileBehavior> mBehavior
 }
 
-class tileStateGray{
-    -std::unique_ptr<iTileBehavior> mBehavior
+class TileStateGray{
+    -std::unique_ptr<ITileBehavior> mBehavior
     -int mCounter
     -static const int requiredActions
 }
 
-class tileStateYellow{
-    -std::unique_ptr<iTileBehavior> mBehavior
+class TileStateYellow{
+    -std::unique_ptr<ITileBehavior> mBehavior
     -int mCounter
     -static const int requiredActions
 }
 
-class tileStateWhite{
-    -std::unique_ptr<iTileBehavior> mBehavior
+class TileStateWhite{
+    -std::unique_ptr<ITileBehavior> mBehavior
 }
 
-interface iTileBehavior {
+interface ITileBehavior {
     +void doBehavior()
 }
 
-class addArtistBehavior{
+class AddArtistBehavior{
 }
 
 class infectTilesBehavior{
@@ -161,8 +162,8 @@ class infectTilesBehavior{
 class killArtistBehavior{
 }
 
-class artist{
-    +artist(Location aLocation, float aVelX, float aVelY)
+class Artist{
+    +Artist(Location aLocation, float aVelX, float aVelY)
     +Location update()
     +const Location& getLocation() const
     +void setLocation(Location aLocation)
@@ -190,10 +191,10 @@ class keyboard{
 }
 
 class tileFactory{
-    +static std::unique_ptr<tile> createTile(char color)
-    +static std::unique_ptr<iTileState> createNextState(char currentColor)
+    +static std::unique_ptr<Tile> createTile(char color)
+    +static std::unique_ptr<ITileState> createNextState(char currentColor)
     -static TileColor charToTileColor(char color)
-    -static std::unique_ptr<iTileBehavior> createBehavior(TileColor aColor)
+    -static std::unique_ptr<ITileBehavior> createBehavior(TileColor aColor)
 }
 
 class view{}
@@ -231,49 +232,51 @@ class parsedGridColor{
 }
 
 
-controller <-- fileHandler
-controller <-- model
+controller <-- FileHandler
+controller <-- Model
 controller <-- inputHandler
 controller <-- view
-view <-- model
+view <-- Model
 
-' model
-model <-- levelData
-levelData <-- tileNode
-tileNode <-- tile
-tile <-- iTileState
-iTileState <|.. tileStateRed
-iTileState <|.. tileStateBlue
-iTileState <|.. tileStateGray
-iTileState <|.. tileStateYellow
-iTileState <|.. tileStateWhite
+' Model
+Model <-- LevelData
+LevelData <-- TileNode
+TileNode <-- Tile
+Tile <-- ITileState
+ITileState <|.. TileStateRed
+ITileState <|.. TileStateBlue
+ITileState <|.. TileStateGray
+ITileState <|.. TileStateYellow
+ITileState <|.. TileStateWhite
+ITileState <-- tileFactory
 
-tileStateRed <-- iTileBehavior
-tileStateBlue <-- iTileBehavior
-tileStateGray <-- iTileBehavior
-tileStateYellow <-- iTileBehavior
-tileStateWhite <-- iTileBehavior
+TileStateRed <-- ITileBehavior
+TileStateBlue <-- ITileBehavior
+TileStateGray <-- ITileBehavior
+TileStateYellow <-- ITileBehavior
+TileStateWhite <-- ITileBehavior
 
-iTileBehavior <|.. addArtistBehavior
-iTileBehavior <|.. infectTilesBehavior
-iTileBehavior <|.. killArtistBehavior
+ITileBehavior <|.. AddArtistBehavior
+ITileBehavior <|.. infectTilesBehavior
+ITileBehavior <|.. killArtistBehavior
+ITileBehavior -- LevelData
 
-levelData <-- artist
+LevelData <-- Artist
 
-levelData <-- tileFactory
-tileFactory <-- tile
-tileFactory <-- iTileState
-tileFactory <-- iTileBehavior
+LevelData <-- tileFactory
+tileFactory <-- Tile
+tileFactory <-- ITileState
+tileFactory <-- ITileBehavior
 
-' filehandler
-fileHandler <-- FileLoaderContext
+' FileHandler
+FileHandler <-- FileLoaderContext
 FileLoaderContext <-- FileLoader
 FileLoader <|.. URLFileLoader
 FileLoader <|.. LocalFileLoader
 
 ' Parser
-fileHandler <-- ArtistParserStrategy
-fileHandler <-- GridParserStrategy
+FileHandler <-- ArtistParserStrategy
+FileHandler <-- GridParserStrategy
 
 ArtistParserStrategy <-- ArtistParser
 ArtistParser <|.. ArtistCSVParser

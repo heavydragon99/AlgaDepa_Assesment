@@ -1,20 +1,22 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#include "iObserver.h"
+#define MAX_PEOPLE 100
+
 #include "structs.h"
 #include "tileNode.h"
 
+#include <list>
 #include <memory>
 #include <vector>
 
-class artist;
-class tile;
+class Artist;
+class Tile;
 
-class levelData : public iObserver {
+class LevelData {
 public:
-    levelData();
-    ~levelData();
+    LevelData();
+    ~LevelData();
 
     void updateLevelData();
     void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
@@ -22,25 +24,25 @@ public:
     int getCols() const;
     int getRows() const;
 
-    const std::vector<std::unique_ptr<tileNode>>& getGrid() const;
-    const std::vector<std::unique_ptr<artist>>& getPeople() const;
+    const std::vector<std::unique_ptr<TileNode>>& getGrid() const;
+    const std::list<std::unique_ptr<Artist>>& getPeople() const;
 
-    void update(const std::pair<int, int>& tilePos, const std::string& action) override;
-
+    void addArtist(const Tile& aTile);
+    void deleteArtist(const Tile& aTile);
 private:
-    // void setNodeWeights();
-    // float calculateWeight(const tileNode& aNode);
+    void setNodeWeights();
+    float calculateWeight(const TileNode& aNode);
     void connectNeighbors();
 
-    bool checkCollisions(std::unique_ptr<artist>& aPerson);
-    bool isColliding(const std::unique_ptr<artist>& aPerson1, const std::unique_ptr<artist>& aPerson2);
+    bool checkCollisions(std::unique_ptr<Artist>& aPerson);
+    bool isColliding(const std::unique_ptr<Artist>& aPerson1, const std::unique_ptr<Artist>& aPerson2);
 
     void addArtist(int aX, int aY);
     void deleteArtist(int aX, int aY);
 
 private:
-    std::vector<std::unique_ptr<artist>> mPeople;
-    std::vector<std::unique_ptr<tileNode>> mGrid;
+    std::list<std::unique_ptr<Artist>> mPeople;
+    std::vector<std::unique_ptr<TileNode>> mGrid;
     int mCols;
     int mRows;
 };

@@ -5,17 +5,17 @@
 
 #include <memory>
 
-class tile {
+class Tile {
 public:
-    tile(std::unique_ptr<iTileState> initialState);
-    ~tile() = default;
+    Tile(std::unique_ptr<ITileState> initialState);
+    ~Tile() = default;
 
     void updateTile();
-    void setState(std::unique_ptr<iTileState> newState);
+    void setState(std::unique_ptr<ITileState> newState);
     char getColor() const;
 
 private:
-    std::unique_ptr<iTileState> state;
+    std::unique_ptr<ITileState> state;
 };
 
 #endif // TILE_H

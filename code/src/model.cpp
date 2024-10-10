@@ -1,11 +1,11 @@
 #include "model.h"
 
-model::model() {}
+Model::Model() {}
 
-void model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
+void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mLevel.buildLevelData(aPersons, aGrid);
 }
 
-const levelData& model::getLevelData() const { return mLevel; }
+const LevelData& Model::getLevelData() const { return mLevel; }
 
-void model::updateModel() { mLevel.updateLevelData(); }
+void Model::updateModel() { mLevel.updateLevelData(); }

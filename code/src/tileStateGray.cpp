@@ -3,28 +3,28 @@
 #include "tile.h"
 #include "tileFactory.h"
 
-tileStateGray::tileStateGray(std::unique_ptr<iTileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
+TileStateGray::TileStateGray(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
-void tileStateGray::updateTile(tile& t) {
-    mBehavior->doBehavior();
+void TileStateGray::updateTile(Tile& t) {
+    mBehavior->doBehavior(t);
 
     mCounter++; // Increment the action counter
     if (mCounter >= requiredActions) {
         // Transition to the next state after 3 actions
-        tileFactory factory;
+        TileFactory factory;
 
         t.setState(factory.createNextState(getColor()));
     }
 }
 
-char tileStateGray::getColor() const { return 'G'; }
+char TileStateGray::getColor() const { return 'G'; }
 
-void tileStateGray::enter() {
+void TileStateGray::enter() {
     // Code to execute when entering the gray state
 }
 
-void tileStateGray::exit() {
+void TileStateGray::exit() {
     // Code to execute when exiting the gray state
 }
 
-void tileStateGray::forceBlue(tile& t) {}
+void TileStateGray::forceBlue(Tile& t) {}

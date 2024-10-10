@@ -6,17 +6,17 @@
 
 #include <memory>
 
-class tileStateBlue : public iTileState {
+class TileStateBlue : public ITileState {
 public:
-    tileStateBlue(std::unique_ptr<iTileBehavior> aBehavior);
-    void updateTile(tile& t) override;
+    TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior);
+    void updateTile(Tile& t) override;
     char getColor() const override;
     void enter() override;
     void exit() override;
-    void forceBlue(tile& t) override;
+    void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<iTileBehavior> mBehavior;
+    std::unique_ptr<ITileBehavior> mBehavior;
 };
 
 #endif // TILESTATEBLUE_H

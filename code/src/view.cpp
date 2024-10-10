@@ -6,7 +6,7 @@
 #include <iostream>
 #include <thread>
 
-view::view(model& aModel)
+View::View(Model& aModel)
     : mModel(aModel), mWindow(nullptr, SDL_DestroyWindow), mRenderer(nullptr, SDL_DestroyRenderer), mScaleFactor(1.0f) {
     if (!initSDL()) {
         std::cerr << "Failed to initialize SDL" << std::endl;
@@ -14,9 +14,9 @@ view::view(model& aModel)
     initializeWindow();
 }
 
-view::~view() { SDL_Quit(); }
+View::~View() { SDL_Quit(); }
 
-bool view::initSDL() {
+bool View::initSDL() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return false;
@@ -25,7 +25,7 @@ bool view::initSDL() {
     return true;
 }
 
-void view::initializeWindow() {
+void View::initializeWindow() {
     // Get screen dimensions
     SDL_DisplayMode displayMode;
     SDL_GetCurrentDisplayMode(0, &displayMode);
@@ -37,7 +37,7 @@ void view::initializeWindow() {
     int maxWindowHeight = static_cast<int>(screenHeight * scalePercent);
 
     // Get level data
-    const levelData& levelData = mModel.getLevelData();
+    const LevelData& levelData = mModel.getLevelData();
     int cols = levelData.getCols();
     int rows = levelData.getRows();
 
@@ -63,10 +63,10 @@ void view::initializeWindow() {
     mScaleFactor = static_cast<float>(tileSize) / renderSize;
 }
 
-void view::renderTile(int tileWidth, int tileHeight) {
+void View::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
     int x, y;
-    const levelData& levelData = mModel.getLevelData();
+    const LevelData& levelData = mModel.getLevelData();
     for (int i = 0; i < levelData.getGrid().size(); i++) {
         getTileColor(levelData.getGrid().at(i).get()->getTile().getColor(), red, green, blue);
         x = i % levelData.getCols();
@@ -77,11 +77,11 @@ void view::renderTile(int tileWidth, int tileHeight) {
     }
 }
 
-void view::renderPeople(int tileWidth, int tileHeight) {
-    const levelData& levelData = mModel.getLevelData();
+void View::renderPeople(int tileWidth, int tileHeight) {
+    const LevelData& levelData = mModel.getLevelData();
 
     for(const auto& personPtr : levelData.getPeople() ){
-        artist::Location personLocation = personPtr->getLocation();
+        Artist::Location personLocation = personPtr->getLocation();
 
         int tileX = std::floor(personLocation.mX);
         int tileY = std::floor(personLocation.mY);
@@ -96,12 +96,12 @@ void view::renderPeople(int tileWidth, int tileHeight) {
     }
 }
 
-void view::render() {
+void View::render() {
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
     SDL_RenderClear(mRenderer.get());
 
     // Get level data
-    const levelData& levelData = mModel.getLevelData();
+    const LevelData& levelData = mModel.getLevelData();
 
     // Get window size
     int windowWidth, windowHeight;
@@ -119,7 +119,7 @@ void view::render() {
     SDL_RenderPresent(mRenderer.get());
 }
 
-void view::handleEvents(bool& quit) {
+void View::handleEvents(bool& quit) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -132,7 +132,7 @@ void view::handleEvents(bool& quit) {
     }
 }
 
-void view::setGridColor(std::vector<GridColor> aGridColor)
+void View::setGridColor(std::vector<GridColor> aGridColor)
 {
         // Fill mGridColor with all the different colors
     for (const GridColor& color : aGridColor) {
@@ -140,7 +140,7 @@ void view::setGridColor(std::vector<GridColor> aGridColor)
     }
 }
 
-void view::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
+void View::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
     for (const GridColor& color : mGridColor) {
         if (color.letter == aColor) {
             aRed = color.red;

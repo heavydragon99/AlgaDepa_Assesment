@@ -9,11 +9,11 @@
 #define personSize renderSize * 0.5
 #define scalePercent 0.8
 
-class view
+class View
 {
 public:
-    view(model &aModel);
-    ~view();
+    View(Model &aModel);
+    ~View();
     void render();
     void handleEvents(bool &quit);
     void setGridColor(std::vector<GridColor> aGridColor);
@@ -26,7 +26,7 @@ private:
     void getTileColor(char aColor, int &aRed, int &aGreen, int &aBlue);
 
 private:
-    model &mModel;
+    Model &mModel;
     std::unique_ptr<SDL_Window, void (*)(SDL_Window *)> mWindow;
     std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)> mRenderer;
     float mScaleFactor;

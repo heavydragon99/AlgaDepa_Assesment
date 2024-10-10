@@ -1,23 +1,27 @@
 #include "tileNode.h"
 
-tileNode::tileNode(std::unique_ptr<tile> aTile)
-    : mTile(std::move(aTile)) {}
+TileNode::TileNode(std::unique_ptr<Tile> aTile, int aX, int aY)
+    : mTile(std::move(aTile)), mX(aX), mY(aY) {}
 
-void tileNode::addNeighbor(tileNode &aNeighbor)
+void TileNode::addNeighbor(TileNode &aNeighbor)
 {
     mNeighbors.push_back(aNeighbor);
 }
 
-const std::vector<std::reference_wrapper<tileNode>> &tileNode::getNeighbors() const
+const std::vector<std::reference_wrapper<TileNode>> &TileNode::getNeighbors() const
 {
     return mNeighbors;
 }
 
-tile &tileNode::getTile() const
+Tile &TileNode::getTile() const
 {
     return *mTile.get();
 }
 
-void tileNode::setWeight(float aWeight) { mWeight = aWeight; }
+void TileNode::setWeight(int aWeight) { mWeight = aWeight; }
 
-float tileNode::getWeight() const { return mWeight; }
+int TileNode::getWeight() const { return mWeight; }
+
+int TileNode::getX() const { return mX; }
+
+int TileNode::getY() const { return mY; }
