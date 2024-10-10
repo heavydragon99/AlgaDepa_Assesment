@@ -103,43 +103,32 @@ void levelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
     }
 
     // Create tiles and add to mGrid
-    mGrid.resize(mRows * mCols);
+    mGrid.reserve(mRows * mCols);
     for (int row = 0; row < mRows; ++row) {
         for (int col = 0; col < mCols; ++col) {
             char color = aGrid.grid[row * mCols + col];
             std::unique_ptr<tile> tile = tileFactory::createTile(color);
-            mGrid[row * mCols + col] = std::make_unique<tileNode>(std::move(tile));
+            mGrid[row * mCols + col] = std::make_unique<tileNode>(std::move(tile), col, row);
         }
     }
 
     // Set weights for each node
-    // setNodeWeights();
+    for (auto& tileNode : mGrid) {
+        int weight = 0;
+        char color = tileNode->getTile().getColor();
+        for (const GridColor& gridColor : aGrid.gridColors) {
+            if (gridColor.letter == color) {
+                weight = gridColor.weight;
+            }
+        }
+        tileNode->setWeight(weight);
+    }
 
     // Connect neighbors
     connectNeighbors();
 
     std::cout << "Level data built successfully!" << std::endl;
 }
-
-// void levelData::setNodeWeights() {
-//     for (int row = 0; row < mRows; ++row) {
-//         for (int col = 0; col < mCols; ++col) {
-//             tileNode& currentNode = *mGrid[row * mCols + col].get();
-//             float weight = calculateWeight(currentNode);
-//             currentNode.setWeight(weight);
-//         }
-//     }
-// }
-
-// float levelData::calculateWeight(const tileNode& aNode) {
-//     char color = aNode.getTile().getColor();
-//     for (const GridColor& gridColor : mGridColor) {
-//         if (gridColor.letter == color) {
-//             return static_cast<float>(gridColor.weight);
-//         }
-//     }
-//     return 1.0f; // Default weight
-// }
 
 void levelData::connectNeighbors() {
     for (int row = 0; row < mRows; ++row) {
@@ -169,14 +158,22 @@ const std::vector<std::unique_ptr<tileNode>>& levelData::getGrid() const { retur
 
 const std::vector<std::unique_ptr<artist>>& levelData::getPeople() const { return mPeople; }
 
-void levelData::update(const std::pair<int, int>& tilePos, const std::string& action) {
-    {
-        if (action == "addArtist") {
-            // addArtistOnTile(tilePos);
-            std::cout << "Adding artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
-        } else if (action == "removeArtist") {
-            // removeArtistsOnTile(tilePos);
-            std::cout << "Removing artist on tile: " << tilePos.first << ", " << tilePos.second << std::endl;
+void levelData::addArtist(const tile& aTile) {
+    for (auto& tileNode : mGrid) {
+        if (&tileNode->getTile() == &aTile) {
+            artist::Location location = {tileNode->getX(), tileNode->getY()};
+            float vx = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
+            float vy = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
+            std::unique_ptr<artist> person = std::make_unique<artist>(location, vx, vy);
+            mPeople.push_back(std::move(person));
+        }
+    }
+}
+
+void levelData::deleteArtist(const tile& aTile) {
+    for (auto &tileNode : mGrid) {
+        if (&tileNode->getTile() == &aTile) {
+
         }
     }
 }
