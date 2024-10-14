@@ -231,6 +231,22 @@ class parsedGridColor{
     int weight;
 }
 
+class PathFinder{
+    +bool findPath(const LevelData& aLevelData, const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd)
+    +void setAlgorithm(Algorithms aAlgorithm)
+
+    -void reset()
+
+    -std::vector<std::pair<int, int>> mPath
+    -std::vector<std::pair<int, int>> mVisited
+
+}
+
+enum Algorithms{
+    Dijkstra,
+    Breathfirst
+}
+
 
 controller <-- FileHandler
 controller <-- Model
@@ -240,6 +256,9 @@ view <-- Model
 
 ' Model
 Model <-- LevelData
+Model <-- PathFinder
+PathFinder -- LevelData
+
 LevelData <-- TileNode
 TileNode <-- Tile
 Tile <-- ITileState
