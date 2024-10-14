@@ -29,6 +29,7 @@ public:
 
     void addArtist(const Tile& aTile);
     void deleteArtist(const Tile& aTile);
+    void infectTiles(const Tile& aTile);
 private:
     void setNodeWeights();
     float calculateWeight(const TileNode& aNode);

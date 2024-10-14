@@ -10,10 +10,8 @@ void TileStateGray::updateTile(Tile& t) {
 
     mCounter++; // Increment the action counter
     if (mCounter >= requiredActions) {
-        // Transition to the next state after 3 actions
-        TileFactory factory;
-
-        t.setState(factory.createNextState(getColor()));
+        // Transition to the next state after required amount of actions
+        t.setState(TileFactory::createNextState(getColor()));
     }
 }
 
@@ -27,4 +25,4 @@ void TileStateGray::exit() {
     // Code to execute when exiting the gray state
 }
 
-void TileStateGray::forceBlue(Tile& t) {}
+void TileStateGray::forceBlue(Tile& t) { t.setState(TileFactory::createBlueState()); }

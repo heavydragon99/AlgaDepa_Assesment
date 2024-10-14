@@ -3,15 +3,16 @@
 #include "tile.h"
 #include "tileFactory.h"
 
-TileStateBlue::TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
+TileStateBlue::TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
 void TileStateBlue::updateTile(Tile& t) {
     mBehavior->doBehavior(t);
+    mCounter++;
 
-    // Transition to the next state after 3 actions
-    TileFactory factory;
-
-    t.setState(factory.createNextState(getColor()));
+    if (mCounter >= 3) {
+        // Transition to the next state after 3 actions
+        t.setState(TileFactory::createNextState(getColor()));
+    }
 }
 
 char TileStateBlue::getColor() const { return 'B'; }
@@ -24,6 +25,4 @@ void TileStateBlue::exit() {
     // Code to execute when exiting the blue state
 }
 
-void TileStateBlue::forceBlue(Tile& t) {
-    // Do nothing
-}
+void TileStateBlue::forceBlue(Tile& t) { t.setState(TileFactory::createBlueState()); }
