@@ -42,7 +42,9 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
         break;
     }
 
-    return false;
+    setTileNodes();
+
+    return true;
 }
 
 void PathFinder::setAlgorithm(Algorithms aAlgorithm) { mAlgorithm = aAlgorithm; }
