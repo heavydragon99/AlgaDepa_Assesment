@@ -5,12 +5,10 @@
 
 TileStateRed::TileStateRed(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
 
-
 void TileStateRed::updateTile(Tile& t) {
     mBehavior->doBehavior(t);
 
-    TileFactory factory;
-    t.setState(factory.createNextState(getColor()));
+    t.setState(TileFactory::createNextState(getColor()));
 }
 
 char TileStateRed::getColor() const { return 'R'; }
@@ -23,4 +21,4 @@ void TileStateRed::exit() {
     // Code to execute when exiting the red state
 }
 
-void TileStateRed::forceBlue(Tile& t) { }
+void TileStateRed::forceBlue(Tile& t) { t.setState(TileFactory::createBlueState()); }

@@ -51,6 +51,12 @@ std::unique_ptr<ITileState> TileFactory::createNextState(char currentColor) {
     }
 }
 
+std::unique_ptr<ITileState> TileFactory::createBlueState() {
+    TileColor tColor = charToTileColor('B');
+    std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
+    return std::make_unique<TileStateBlue>(std::move(behavior));
+}
+
 void TileFactory::setLevelData(LevelData* aLevelData) {
     mLevelData = aLevelData;
 }

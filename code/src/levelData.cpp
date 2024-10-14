@@ -167,16 +167,20 @@ void LevelData::addArtist(const Tile& aTile) {
         if (&tileNode->getTile() == &aTile) {
             Artist::Location location = {static_cast<float>(tileNode->getX()), static_cast<float>(tileNode->getY())};
             float vx, vy;
-            if (rand() % 2 == 0) {
+             if (rand() % 2 == 0) {
+                int randomValue;
                 do {
-                    vx = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
-                } while (vx == 0.0f);
+                    randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
+                } while (randomValue == 0);
+                vx = static_cast<float>(randomValue) / 10.0f;
                 vy = 0.0f;
             } else {
-                vx = 0.0f;
+                int randomValue;
                 do {
-                    vy = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2.0f - 1.0f;
-                } while (vy == 0.0f);
+                    randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
+                } while (randomValue == 0);
+                vx = 0.0f;
+                vy = static_cast<float>(randomValue) / 10.0f;
             }
             std::unique_ptr<Artist> person = std::make_unique<Artist>(location, vx, vy);
             mPeople.push_back(std::move(person));
@@ -196,6 +200,26 @@ void LevelData::deleteArtist(const Tile& aTile) {
                     mPeople.erase(it);
                     break;
                 }
+            }
+        }
+    }
+}
+
+void LevelData::infectTiles(const Tile& aTile) {
+    for (auto& tileNode : mGrid) {
+        if (&tileNode->getTile() == &aTile) {
+            int neighborCount = tileNode->getNeighbors().size();
+            if (neighborCount == 1){
+                tileNode->getNeighbors().at(0).get().getTile().forceBlue();
+            } else if (neighborCount >= 2){
+                int firstIndex = rand() % neighborCount;
+                int secondIndex;
+                do {
+                    secondIndex = rand() % neighborCount;
+                } while (secondIndex == firstIndex);
+
+                tileNode->getNeighbors().at(firstIndex).get().getTile().forceBlue();
+                tileNode->getNeighbors().at(secondIndex).get().getTile().forceBlue();
             }
         }
     }

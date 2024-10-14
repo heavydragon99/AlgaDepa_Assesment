@@ -17,6 +17,8 @@ public:
 
 private:
     std::unique_ptr<ITileBehavior> mBehavior;
+    int mCounter;
+    static const int requiredActions = 3;
 };
 
 #endif // TILESTATEBLUE_H
