@@ -72,13 +72,17 @@ public:
         static std::set<std::tuple<Artist*, TileNode*>> previousCollisions;
         std::set<std::tuple<Artist*, TileNode*>> currentCollision;
 
-        for (Artist& personItr : mModel->getLevelData().getPeople()) {
-            Artist* person = &personItr; // Get the raw pointer to the artist
+        int amountOfArists = mModel->getLevelData().getPeople().size();
+
+        for (int iArtist = 0; iArtist < amountOfArists; iArtist++) {
+            Artist* person = &mModel->getLevelData().getPeople()[iArtist];
+            Artist& personRef = mModel->getLevelData().getPeople()[iArtist];
+            ; // Get the raw pointer to the artist
 
             for (TileNode& tileItr : mModel->getLevelData().getGrid()) {
                 TileNode* tile = &tileItr; // Get the raw pointer to the tileNode
 
-                if (isColliding(personItr, tileItr)) { // Your collision detection logic
+                if (isColliding(personRef, tileItr)) { // Your collision detection logic
                     std::tuple<Artist*, TileNode*> collisionKey = std::make_tuple(person, tile);
 
                     // Check if this collision is new
@@ -91,6 +95,7 @@ public:
                     currentCollision.insert(collisionKey);
                 }
             }
+            amountOfArists = mModel->getLevelData().getPeople().size();
         }
 
         // Update the previous collisions with the current ones

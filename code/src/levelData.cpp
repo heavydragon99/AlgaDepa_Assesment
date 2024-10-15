@@ -96,12 +96,12 @@ int LevelData::getRows() const { return mRows; }
 
 std::vector<TileNode>& LevelData::getGrid() { return mGrid; }
 
-std::list<Artist>& LevelData::getPeople() { return mPeople; }
+std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 
 void LevelData::addArtist(const Tile& aTile) {
-    if (mPeople.size() >= MAX_PEOPLE) {
-        return; // Do not add a new person if the limit is reached
-    }
+    // if (mPeople.size() >= MAX_PEOPLE) {
+    //     return; // Do not add a new person if the limit is reached
+    // }
 
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {
@@ -112,7 +112,7 @@ void LevelData::addArtist(const Tile& aTile) {
                 do {
                     randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
                 } while (randomValue == 0);
-                vx = static_cast<float>(randomValue) / 10.0f;
+                vx = static_cast<float>(randomValue) / 5.0f;
                 vy = 0.0f;
             } else {
                 int randomValue;
@@ -120,7 +120,7 @@ void LevelData::addArtist(const Tile& aTile) {
                     randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
                 } while (randomValue == 0);
                 vx = 0.0f;
-                vy = static_cast<float>(randomValue) / 10.0f;
+                vy = static_cast<float>(randomValue) / 5.0f;
             }
             Artist person(location, vx, vy);
 
@@ -130,7 +130,7 @@ void LevelData::addArtist(const Tile& aTile) {
 }
 
 void LevelData::deleteArtist(const Tile& aTile) {
-    return; // added to fix runtime error
+    // return; // added to fix runtime error
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {
             int tileX = static_cast<int>(tileNode.getX());

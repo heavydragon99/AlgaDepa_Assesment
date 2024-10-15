@@ -1,11 +1,11 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#define MAX_PEOPLE 100
+#define MAX_PEOPLE 2000
 
+#include "artist.h"
 #include "structs.h"
 #include "tileNode.h"
-#include "artist.h"
 
 #include <list>
 #include <memory>
@@ -25,7 +25,7 @@ public:
     int getRows() const;
 
     std::vector<TileNode>& getGrid();
-    std::list<Artist>& getPeople();
+    std::vector<Artist>& getPeople();
 
     void addArtist(const Tile& aTile);
     void deleteArtist(const Tile& aTile);
@@ -43,7 +43,7 @@ private:
     void deleteArtist(int aX, int aY);
 
 private:
-    std::list<Artist> mPeople;
+    std::vector<Artist> mPeople;
     std::vector<TileNode> mGrid;
     int mCols;
     int mRows;
