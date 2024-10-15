@@ -22,6 +22,12 @@ public:
     int getX() const;
     int getY() const;
 
+    void setIsPath(bool aIsPath);
+    bool isPath() const;
+
+    void setIsVisited(bool aIsVisited);
+    bool isVisited() const;
+
 private:
     std::unique_ptr<Tile> mTile;
     std::vector<std::reference_wrapper<TileNode>> mNeighbors;
@@ -30,6 +36,9 @@ private:
 
     int mX;
     int mY;
+
+    bool mIsPath;
+    bool mIsVisited;
 };
 
 #endif // TILENODE_H

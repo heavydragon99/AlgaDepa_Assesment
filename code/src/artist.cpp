@@ -36,12 +36,12 @@ void Artist::collidedWall() {
 }
 
 void Artist::collidedOtherArtist() {
-    if (mVelX != 0) {
-        mVelX = -mVelX;
-    }
-    if (mVelY != 0) {
-        mVelY = -mVelY;
-    }
+    // if (mVelX != 0) {
+    //     mVelX = -mVelX;
+    // }
+    // if (mVelY != 0) {
+    //     mVelY = -mVelY;
+    // }
 
     this->triggerRed();
 }
