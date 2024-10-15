@@ -5,9 +5,12 @@
 
 TileStateGray::TileStateGray(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
-void TileStateGray::updateTile(Tile& t) {
-    mBehavior->doBehavior(t);
+std::unique_ptr<ITileState> TileStateGray::clone() const { return std::make_unique<TileStateGray>(mBehavior->clone()); }
 
+void TileStateGray::updateTile(Tile& t) {
+    if (mBehavior != nullptr) {
+        mBehavior->doBehavior(t);
+    }
     mCounter++; // Increment the action counter
     if (mCounter >= requiredActions) {
         // Transition to the next state after required amount of actions

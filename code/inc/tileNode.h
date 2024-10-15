@@ -11,6 +11,12 @@ public:
     TileNode() = default; // Added so vector can be resized
     TileNode(std::unique_ptr<Tile> aTile, int aX, int aY);
 
+    // Copy constructor
+    TileNode(const TileNode& other);
+
+    // Copy assignment operator
+    TileNode& operator=(const TileNode& other);
+
     void addNeighbor(TileNode& aNeighbor);
     const std::vector<std::reference_wrapper<TileNode>>& getNeighbors() const;
 

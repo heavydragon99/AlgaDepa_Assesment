@@ -5,12 +5,12 @@
 
 #include "structs.h"
 #include "tileNode.h"
+#include "artist.h"
 
 #include <list>
 #include <memory>
 #include <vector>
 
-class Artist;
 class Tile;
 
 class LevelData {

@@ -5,8 +5,14 @@
 
 TileStateWhite::TileStateWhite(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
 
+std::unique_ptr<ITileState> TileStateWhite::clone() const {
+    return std::make_unique<TileStateWhite>(mBehavior->clone());
+}
+
 void TileStateWhite::updateTile(Tile& t) {
-    mBehavior->doBehavior(t);
+    if (mBehavior != nullptr) {
+        mBehavior->doBehavior(t);
+    }
 
     t.setState(TileFactory::createNextState(getColor()));
 }

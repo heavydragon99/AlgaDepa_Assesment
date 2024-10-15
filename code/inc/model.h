@@ -3,8 +3,9 @@
 
 #include "levelData.h"
 #include "structs.h"
+#include "Memento.h"
 
-#include <vector>
+#include <memory>
 
 class Model {
 public:
@@ -14,8 +15,11 @@ public:
 
     void updateModel();
 
+    Memento saveToMemento() const;
+    void restoreFromMemento(Memento&& memento);
+
 private:
-    LevelData mLevel;
+    std::unique_ptr<LevelData> mLevel;
 };
 
 #endif // MODEL_H
