@@ -3,20 +3,29 @@
 TileNode::TileNode(std::unique_ptr<Tile> aTile, int aX, int aY)
     : mTile(std::move(aTile)), mX(aX), mY(aY), mIsPath(false), mIsVisited(false) {}
 
-void TileNode::addNeighbor(TileNode &aNeighbor)
-{
-    mNeighbors.push_back(aNeighbor);
+TileNode::TileNode(const TileNode& other)
+    : mTile(std::make_unique<Tile>(*other.mTile)), mX(other.mX), mY(other.mY), mWeight(other.mWeight),
+      mIsPath(other.mIsPath), mIsVisited(other.mIsVisited), mNeighbors(other.mNeighbors) {}
+
+TileNode& TileNode::operator=(const TileNode& other) {
+    if (this == &other) {
+        return *this;
+    }
+    mTile = std::make_unique<Tile>(*other.mTile);
+    mX = other.mX;
+    mY = other.mY;
+    mWeight = other.mWeight;
+    mIsPath = other.mIsPath;
+    mIsVisited = other.mIsVisited;
+    mNeighbors = other.mNeighbors;
+    return *this;
 }
 
-const std::vector<std::reference_wrapper<TileNode>> &TileNode::getNeighbors() const
-{
-    return mNeighbors;
-}
+void TileNode::addNeighbor(TileNode& aNeighbor) { mNeighbors.push_back(aNeighbor); }
 
-Tile &TileNode::getTile() const
-{
-    return *mTile.get();
-}
+const std::vector<std::reference_wrapper<TileNode>>& TileNode::getNeighbors() const { return mNeighbors; }
+
+Tile& TileNode::getTile() const { return *mTile.get(); }
 
 void TileNode::setWeight(int aWeight) { mWeight = aWeight; }
 

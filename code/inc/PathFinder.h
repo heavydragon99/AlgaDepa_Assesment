@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <vector>
+#include <memory> // Include for smart pointers
 
 class LevelData; // Forward declaration
 
@@ -10,23 +11,22 @@ class PathFinder {
 public:
     enum Algorithms { Dijkstra, Breathfirst };
 
-    private:
-    struct PathFinderNode
-    {
+private:
+    struct PathFinderNode {
         int mX;
         int mY;
         int mGCost;
-        PathFinderNode* mParent;
+        std::shared_ptr<PathFinderNode> mParent;
+
+        PathFinderNode(int x, int y, int gCost, std::shared_ptr<PathFinderNode> parent)
+            : mX(x), mY(y), mGCost(gCost), mParent(parent) {}
     };
 
-    struct PathFinderNodeCompare
-    {
-        bool operator()(const PathFinderNode* lhs, const PathFinderNode* rhs) const
-        {
+    struct PathFinderNodeCompare {
+        bool operator()(const std::shared_ptr<PathFinderNode>& lhs, const std::shared_ptr<PathFinderNode>& rhs) const {
             return lhs->mGCost > rhs->mGCost;
         }
     };
-    
 
 public:
     PathFinder();

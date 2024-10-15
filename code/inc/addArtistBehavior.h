@@ -8,6 +8,7 @@
 class AddArtistBehavior : public ITileBehavior{
 public:
     AddArtistBehavior(LevelData* aLevelData);
+    std::unique_ptr<ITileBehavior> clone() const override;
     void doBehavior(Tile& aTile) override;
 
     private:

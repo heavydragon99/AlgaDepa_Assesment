@@ -10,6 +10,12 @@ public:
     Tile(std::unique_ptr<ITileState> initialState);
     ~Tile() = default;
 
+    // Copy constructor
+    Tile(const Tile& other);
+
+    // Copy assignment operator
+    Tile& operator=(const Tile& other);
+
     void updateTile();
     void forceBlue();
     void setState(std::unique_ptr<ITileState> newState);

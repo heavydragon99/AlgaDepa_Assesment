@@ -61,8 +61,10 @@ class GridTXTParser{
 }
 
 ' class artistParserStrategy {
-'     +std::unique_ptr<ArtistParser> getParser(FileType fileType)
-'     +std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
+    '     +std::unique_ptr<ArtistParser> getParser(FileType fileType)
+    '     +std::vector<ParsedPerson> parseFile(LoadedFile& aLoadedFile)
+    '
+    '
 ' }
 
 class controller{
@@ -73,6 +75,11 @@ class Model{
     +void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     +const LevelData& getLevelData() const
     +void updateModel()
+    +void usePreviousMemento();
+    +void useNextMemento();
+
+    -Memento saveToMemento() const;
+    -void restoreFromMemento(Memento&& memento);
 }
 
 class LevelData{
@@ -106,6 +113,7 @@ class TileNode{
     -std::vector<std::reference_wrapper<TileNode>> mNeighbors
     -float mWeight
 }
+
 class Tile{
     +Tile(std::unique_ptr<ITileState> initialState)
     +~Tile() = default
@@ -174,8 +182,9 @@ class Artist{
     -float mVelY
 
     ' class Location {
-    '     +float mX
-    '     +float mY
+        '     +float mX
+        '     +float mY
+        '
     ' }
 }
 
@@ -247,6 +256,24 @@ enum Algorithms{
     Breathfirst
 }
 
+class Memento {
+    +Memento(std::unique_ptr<LevelData> state)
+    +std::unique_ptr<LevelData> getState()
+
+    -std::unique_ptr<LevelData> mState
+}
+
+class MementoManager {
+    +MementoManager()
+    +void addMemento(Memento memento)
+    +Memento getMemento(int index)
+    +Memento getPreviousMemento()
+    +Memento getNextMemento()
+
+    -std::vector<Memento> mMementos
+    -int mCurrentIndex
+}
+
 
 controller <-- FileHandler
 controller <-- Model
@@ -255,7 +282,7 @@ controller <-- view
 view <-- Model
 
 ' Model
-Model <-- LevelData
+Model *-- "1" LevelData
 Model <-- PathFinder
 PathFinder -- LevelData
 
@@ -281,6 +308,10 @@ ITileBehavior <|.. killArtistBehavior
 ITileBehavior -- LevelData
 
 LevelData <-- Artist
+
+Model *-- "1" MementoManager
+LevelData "1" --* Memento
+MementoManager *-- "0..*" Memento
 
 LevelData <-- tileFactory
 tileFactory <-- Tile

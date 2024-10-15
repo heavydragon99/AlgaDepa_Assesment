@@ -14,7 +14,7 @@ public:
 
     Location update();
 
-    const Location& getLocation() const;
+    Location& getLocation();
     void setLocation(Location aLocation);
 
     void collidedWall();

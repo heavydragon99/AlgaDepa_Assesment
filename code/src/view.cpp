@@ -66,9 +66,9 @@ void View::initializeWindow() {
 void View::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
     int x, y;
-    const LevelData& levelData = mModel.getLevelData();
+    LevelData& levelData = mModel.getLevelData();
     for (int i = 0; i < levelData.getGrid().size(); i++) {
-        getTileColor(levelData.getGrid().at(i).get()->getTile().getColor(), red, green, blue);
+        getTileColor(levelData.getGrid().at(i).getTile().getColor(), red, green, blue);
         x = i % levelData.getCols();
         y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
@@ -78,10 +78,10 @@ void View::renderTile(int tileWidth, int tileHeight) {
 }
 
 void View::renderPeople(int tileWidth, int tileHeight) {
-    const LevelData& levelData = mModel.getLevelData();
+    LevelData& levelData = mModel.getLevelData();
 
-    for (const auto& personPtr : levelData.getPeople()) {
-        Artist::Location personLocation = personPtr->getLocation();
+    for (Artist& personItr : levelData.getPeople()) {
+        Artist::Location personLocation = personItr.getLocation();
 
         int tileX = std::floor(personLocation.mX);
         int tileY = std::floor(personLocation.mY);
@@ -93,7 +93,7 @@ void View::renderPeople(int tileWidth, int tileHeight) {
                              static_cast<int>((tileY + offsetY) * tileHeight), tileWidth / 2, tileWidth / 2}; // Ensure
                                                                                                               // square
                                                                                                               // tiles
-        if (personPtr->getRed()) {
+        if (personItr.getRed()) {
             SDL_SetRenderDrawColor(mRenderer.get(), 255, 0, 0, 0xFF);
         } else {
             SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);

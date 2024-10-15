@@ -20,7 +20,7 @@ Artist::Location Artist::update() {
     }
 }
 
-const Artist::Location& Artist::getLocation() const { return mLocation; }
+Artist::Location& Artist::getLocation() { return mLocation; }
 
 void Artist::setLocation(Location aLocation) { mLocation = aLocation; }
 
