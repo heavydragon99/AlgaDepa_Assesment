@@ -1,21 +1,35 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include "Memento.h"
+#include "MementoManager.h"
 #include "levelData.h"
 #include "structs.h"
 
-#include <vector>
+#include <memory>
+#include <chrono>
 
-class model {
+class Model {
 public:
-    model();
+    Model();
     void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
-    const levelData& getLevelData() const;
+    LevelData& getLevelData();
 
     void updateModel();
 
+    void usePreviousMemento();
+    void useNextMemento();
+
 private:
-    levelData mLevel;
+    Memento saveToMemento() const;
+    void restoreFromMemento(Memento&& memento);
+
+private:
+    std::unique_ptr<LevelData> mLevel;
+    std::unique_ptr<MementoManager> mMementoManager;
+    std::chrono::time_point<std::chrono::steady_clock> mLastUpdateTime;
+    static constexpr std::chrono::seconds UPDATE_INTERVAL{1}; // Define the interval here
 };
+
 
 #endif // MODEL_H

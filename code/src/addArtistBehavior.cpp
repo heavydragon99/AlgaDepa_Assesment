@@ -2,8 +2,13 @@
 
 #include <iostream>
 
-void addArtistBehavior::doBehavior() {
+AddArtistBehavior::AddArtistBehavior(LevelData* aLevelData) : mLevelData(aLevelData) {}
+
+std::unique_ptr<ITileBehavior> AddArtistBehavior::clone() const {
+    return std::make_unique<AddArtistBehavior>(*this);
+}
+
+void AddArtistBehavior::doBehavior(Tile& aTile) {
     // Code to infect tiles
-        std::pair<int, int> temp{0, 0};
-    notify(temp, "addArtist");
+    mLevelData->addArtist(aTile);
 }

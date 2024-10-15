@@ -1,16 +1,19 @@
 #ifndef ITILESTATE_H
 #define ITILESTATE_H
 
-class tile;
+#include <memory>
 
-class iTileState {
+class Tile;
+
+class ITileState {
 public:
-    virtual ~iTileState() = default;
-    virtual void updateTile(tile& t) = 0;
+    virtual ~ITileState() = default;
+    virtual std::unique_ptr<ITileState> clone() const = 0;
+    virtual void updateTile(Tile& t) = 0;
     virtual char getColor() const = 0;
     virtual void enter() = 0;
     virtual void exit() = 0;
-    virtual void forceBlue(tile& t) = 0;
+    virtual void forceBlue(Tile& t) = 0;
    
 };
 

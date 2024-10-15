@@ -9,16 +9,16 @@
 
 #include <vector>
 
-class controller {
+class Controller {
 public:
-    controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
 
     void createLevel();
     void run();
 
 private:
-    std::unique_ptr<model> mModel;
-    std::unique_ptr<view> mView;
+    std::unique_ptr<Model> mModel;
+    std::unique_ptr<View> mView;
     std::vector<ParsedPerson> mPersons;
     ParsedGrid mGrid;
 

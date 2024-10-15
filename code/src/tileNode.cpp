@@ -1,27 +1,44 @@
 #include "tileNode.h"
 
-tileNode::tileNode(std::unique_ptr<tile> aTile, int aX, int aY)
-    : mTile(std::move(aTile)), mX(aX), mY(aY) {}
+TileNode::TileNode(std::unique_ptr<Tile> aTile, int aX, int aY)
+    : mTile(std::move(aTile)), mX(aX), mY(aY), mIsPath(false), mIsVisited(false) {}
 
-void tileNode::addNeighbor(tileNode &aNeighbor)
-{
-    mNeighbors.push_back(aNeighbor);
+TileNode::TileNode(const TileNode& other)
+    : mTile(std::make_unique<Tile>(*other.mTile)), mX(other.mX), mY(other.mY), mWeight(other.mWeight),
+      mIsPath(other.mIsPath), mIsVisited(other.mIsVisited), mNeighbors(other.mNeighbors) {}
+
+TileNode& TileNode::operator=(const TileNode& other) {
+    if (this == &other) {
+        return *this;
+    }
+    mTile = std::make_unique<Tile>(*other.mTile);
+    mX = other.mX;
+    mY = other.mY;
+    mWeight = other.mWeight;
+    mIsPath = other.mIsPath;
+    mIsVisited = other.mIsVisited;
+    mNeighbors = other.mNeighbors;
+    return *this;
 }
 
-const std::vector<std::reference_wrapper<tileNode>> &tileNode::getNeighbors() const
-{
-    return mNeighbors;
-}
+void TileNode::addNeighbor(TileNode& aNeighbor) { mNeighbors.push_back(aNeighbor); }
 
-tile &tileNode::getTile() const
-{
-    return *mTile.get();
-}
+const std::vector<std::reference_wrapper<TileNode>>& TileNode::getNeighbors() const { return mNeighbors; }
 
-void tileNode::setWeight(int aWeight) { mWeight = aWeight; }
+Tile& TileNode::getTile() const { return *mTile.get(); }
 
-int tileNode::getWeight() const { return mWeight; }
+void TileNode::setWeight(int aWeight) { mWeight = aWeight; }
 
-int tileNode::getX() const { return mX; }
+int TileNode::getWeight() const { return mWeight; }
 
-int tileNode::getY() const { return mY; }
+int TileNode::getX() const { return mX; }
+
+int TileNode::getY() const { return mY; }
+
+void TileNode::setIsPath(bool aIsPath) { mIsPath = aIsPath; }
+
+bool TileNode::isPath() const { return mIsPath; }
+
+void TileNode::setIsVisited(bool aIsVisited) { mIsVisited = aIsVisited; }
+
+bool TileNode::isVisited() const { return mIsVisited; }

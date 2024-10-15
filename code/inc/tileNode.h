@@ -6,15 +6,21 @@
 #include <memory>
 #include <vector>
 
-class tileNode
-{
+class TileNode {
 public:
-    tileNode(std::unique_ptr<tile> aTile, int aX, int aY);
+    TileNode() = default; // Added so vector can be resized
+    TileNode(std::unique_ptr<Tile> aTile, int aX, int aY);
 
-    void addNeighbor(tileNode &aNeighbor);
-    const std::vector<std::reference_wrapper<tileNode>> &getNeighbors() const;
-    
-    tile &getTile() const;
+    // Copy constructor
+    TileNode(const TileNode& other);
+
+    // Copy assignment operator
+    TileNode& operator=(const TileNode& other);
+
+    void addNeighbor(TileNode& aNeighbor);
+    const std::vector<std::reference_wrapper<TileNode>>& getNeighbors() const;
+
+    Tile& getTile() const;
 
     void setWeight(int aWeight);
     int getWeight() const;
@@ -22,14 +28,23 @@ public:
     int getX() const;
     int getY() const;
 
+    void setIsPath(bool aIsPath);
+    bool isPath() const;
+
+    void setIsVisited(bool aIsVisited);
+    bool isVisited() const;
+
 private:
-    std::unique_ptr<tile> mTile;
-    std::vector<std::reference_wrapper<tileNode>> mNeighbors;
+    std::unique_ptr<Tile> mTile;
+    std::vector<std::reference_wrapper<TileNode>> mNeighbors;
 
     int mWeight;
 
     int mX;
     int mY;
+
+    bool mIsPath;
+    bool mIsVisited;
 };
 
 #endif // TILENODE_H

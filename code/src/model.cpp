@@ -1,11 +1,26 @@
 #include "model.h"
 
-model::model() {}
+Model::Model() : mLevel(std::make_unique<LevelData>()), mMementoManager(std::make_unique<MementoManager>()) {}
 
-void model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
-    mLevel.buildLevelData(aPersons, aGrid);
+void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
+    mLevel->buildLevelData(aPersons, aGrid);
 }
 
-const levelData& model::getLevelData() const { return mLevel; }
+LevelData& Model::getLevelData() { return *mLevel; }
 
-void model::updateModel() { mLevel.updateLevelData(); }
+void Model::updateModel() {
+    auto now = std::chrono::steady_clock::now();
+    if (now - mLastUpdateTime >= UPDATE_INTERVAL) {
+        mMementoManager->addMemento(saveToMemento());
+        mLastUpdateTime = now;
+    }
+    mLevel->updateLevelData();
+}
+
+Memento Model::saveToMemento() const { return Memento(std::make_unique<LevelData>(*mLevel)); }
+
+void Model::restoreFromMemento(Memento&& memento) { mLevel = std::move(memento.getState()); }
+
+void Model::usePreviousMemento() { restoreFromMemento(mMementoManager->getPreviousMemento()); }
+
+void Model::useNextMemento() { restoreFromMemento(mMementoManager->getNextMemento()); }

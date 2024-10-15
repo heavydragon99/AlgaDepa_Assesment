@@ -3,23 +3,29 @@
 #include "tile.h"
 #include "tileFactory.h"
 
-tileStateWhite::tileStateWhite(std::unique_ptr<iTileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
+TileStateWhite::TileStateWhite(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
 
-void tileStateWhite::updateTile(tile& t) {
-    mBehavior->doBehavior();
-
-    tileFactory factory;
-    t.setState(factory.createNextState(getColor()));
+std::unique_ptr<ITileState> TileStateWhite::clone() const {
+    auto clonedBehavior = mBehavior ? mBehavior->clone() : nullptr;
+    return std::make_unique<TileStateWhite>(std::move(clonedBehavior));
 }
 
-char tileStateWhite::getColor() const { return 'W'; }
+void TileStateWhite::updateTile(Tile& t) {
+    if (mBehavior != nullptr) {
+        mBehavior->doBehavior(t);
+    }
 
-void tileStateWhite::enter() {
+    t.setState(TileFactory::createNextState(getColor()));
+}
+
+char TileStateWhite::getColor() const { return 'W'; }
+
+void TileStateWhite::enter() {
     // Code to execute when entering the white state
 }
 
-void tileStateWhite::exit() {
+void TileStateWhite::exit() {
     // Code to execute when exiting the white state
 }
 
-void tileStateWhite::forceBlue(tile& t) {  }
+void TileStateWhite::forceBlue(Tile& t) { t.setState(TileFactory::createBlueState()); }

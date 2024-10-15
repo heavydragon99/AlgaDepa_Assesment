@@ -5,17 +5,24 @@
 
 #include <memory>
 
-class tile {
+class Tile {
 public:
-    tile(std::unique_ptr<iTileState> initialState);
-    ~tile() = default;
+    Tile(std::unique_ptr<ITileState> initialState);
+    ~Tile() = default;
+
+    // Copy constructor
+    Tile(const Tile& other);
+
+    // Copy assignment operator
+    Tile& operator=(const Tile& other);
 
     void updateTile();
-    void setState(std::unique_ptr<iTileState> newState);
+    void forceBlue();
+    void setState(std::unique_ptr<ITileState> newState);
     char getColor() const;
 
 private:
-    std::unique_ptr<iTileState> state;
+    std::unique_ptr<ITileState> mState;
 };
 
 #endif // TILE_H

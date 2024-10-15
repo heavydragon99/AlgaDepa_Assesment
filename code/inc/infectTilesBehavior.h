@@ -3,12 +3,16 @@
 #define INFECTTILESBEHAVIOR_H
 
 #include "iTileBehavior.h"
-#include "iSubject.h"
+#include "levelData.h"
 
-class infectTilesBehavior : public iTileBehavior, public iSubject {
+class InfectTilesBehavior : public ITileBehavior{
 public:
-    infectTilesBehavior() = default;
-    void doBehavior() override;
+    InfectTilesBehavior(LevelData* aLevelData);
+    std::unique_ptr<ITileBehavior> clone() const override;
+    void doBehavior(Tile& aTile) override;
+
+    private:
+    LevelData* mLevelData;
 };
 
 #endif // INFECTTILESBEHAVIOR_H

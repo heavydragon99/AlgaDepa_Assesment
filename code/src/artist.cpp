@@ -4,9 +4,9 @@
 #include <cmath>
 #include <iostream>
 
-artist::artist(Location aLocation, float aVelX, float aVelY) : mLocation(aLocation), mVelX(aVelX), mVelY(aVelY) {}
+Artist::Artist(Location aLocation, float aVelX, float aVelY) : mLocation(aLocation), mVelX(aVelX), mVelY(aVelY) {}
 
-artist::Location artist::update() {
+Artist::Location Artist::update() {
     int xOld = mLocation.mX;
     int yOld = mLocation.mY;
 
@@ -20,11 +20,11 @@ artist::Location artist::update() {
     }
 }
 
-const artist::Location& artist::getLocation() const { return mLocation; }
+Artist::Location& Artist::getLocation() { return mLocation; }
 
-void artist::setLocation(Location aLocation) { mLocation = aLocation; }
+void Artist::setLocation(Location aLocation) { mLocation = aLocation; }
 
-void artist::collidedWall() {
+void Artist::collidedWall() {
     if (mVelX != 0) {
         mVelX = -mVelX;
     }
@@ -35,18 +35,18 @@ void artist::collidedWall() {
     this->triggerRed();
 }
 
-void artist::collidedOtherArtist() {
-    if (mVelX != 0) {
-        mVelX = -mVelX;
-    }
-    if (mVelY != 0) {
-        mVelY = -mVelY;
-    }
+void Artist::collidedOtherArtist() {
+    // if (mVelX != 0) {
+    //     mVelX = -mVelX;
+    // }
+    // if (mVelY != 0) {
+    //     mVelY = -mVelY;
+    // }
 
     this->triggerRed();
 }
 
-bool artist::getRed() {
+bool Artist::getRed() {
     if (SDL_GetTicks() < mEndOfRedTime) {
         return true;
     } else {
@@ -54,4 +54,4 @@ bool artist::getRed() {
     }
 }
 
-void artist::triggerRed(int mRedTimeInMs) { mEndOfRedTime = SDL_GetTicks() + mRedTimeInMs; }
+void Artist::triggerRed(int mRedTimeInMs) { mEndOfRedTime = SDL_GetTicks() + mRedTimeInMs; }

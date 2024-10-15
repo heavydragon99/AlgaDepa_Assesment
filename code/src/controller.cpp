@@ -5,20 +5,20 @@
 #include <iostream>
 #include <thread>
 
-controller::controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
+Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     : mCollisionHandler(CollisionHandler(mModel.get())) {
     mPersons = aPersons;
     mGrid = aGrid;
 }
 
-void controller::createLevel() {
-    mModel = std::make_unique<model>();
+void Controller::createLevel() {
+    mModel = std::make_unique<Model>();
     mModel->createLevel(mPersons, mGrid);
-    mView = std::make_unique<view>(*mModel);
+    mView = std::make_unique<View>(*mModel);
     mView->setGridColor(mGrid.gridColors);
 }
 
-void controller::run() {
+void Controller::run() {
     Input& input = Input::getInstance();
 
     const int FPS = 60;

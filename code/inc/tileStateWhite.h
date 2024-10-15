@@ -6,17 +6,18 @@
 
 #include <memory>
 
-class tileStateWhite : public iTileState {
+class TileStateWhite : public ITileState {
 public:
-    tileStateWhite(std::unique_ptr<iTileBehavior> aBehavior);
-    void updateTile(tile& t) override;
+    TileStateWhite(std::unique_ptr<ITileBehavior> aBehavior);
+    std::unique_ptr<ITileState> clone() const override;
+    void updateTile(Tile& t) override;
     char getColor() const override;
     void enter() override;
     void exit() override;
-    void forceBlue(tile& t) override;
+    void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<iTileBehavior> mBehavior;
+    std::unique_ptr<ITileBehavior> mBehavior;
 };
 
 #endif // TILESTATEWHITE_H

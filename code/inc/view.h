@@ -7,10 +7,11 @@
 #include "Renderer.h"
 #include "model.h"
 
-class view {
+class View {
 public:
-    view(model& aModel);
-    ~view();
+    View(Model& aModel);
+    ~View();
+
     void render();
     void handleEvents(bool& quit);
     void setGridColor(std::vector<GridColor> aGridColor);
@@ -21,7 +22,8 @@ private:
     void getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue);
 
 private:
-    model& mModel;
+    Model& mModel;
+
     std::vector<GridColor> mGridColor;
 
     Renderer mRenderer;

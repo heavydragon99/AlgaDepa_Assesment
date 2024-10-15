@@ -6,17 +6,17 @@
 #include <iostream>
 #include <thread>
 
-view::view(model& aModel)
+View::View(Model& aModel)
     : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()) {}
 
-view::~view() {}
+View::~View() {}
 
-void view::renderTile(int tileWidth, int tileHeight) {
+void View::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
     int x, y;
-    const levelData& levelData = mModel.getLevelData();
+    LevelData& levelData = mModel.getLevelData();
     for (int i = 0; i < levelData.getGrid().size(); i++) {
-        getTileColor(levelData.getGrid().at(i).get()->getTile().getColor(), red, green, blue);
+        getTileColor(levelData.getGrid().at(i).getTile().getColor(), red, green, blue);
         x = i % levelData.getCols();
         y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
@@ -24,11 +24,11 @@ void view::renderTile(int tileWidth, int tileHeight) {
     }
 }
 
-void view::renderPeople(int tileWidth, int tileHeight) {
-    const levelData& levelData = mModel.getLevelData();
+void View::renderPeople(int tileWidth, int tileHeight) {
+    LevelData& levelData = mModel.getLevelData();
 
-    for (const auto& personPtr : levelData.getPeople()) {
-        artist::Location personLocation = personPtr->getLocation();
+    for (Artist& personItr : levelData.getPeople()) {
+        Artist::Location personLocation = personItr.getLocation();
 
         int tileX = std::floor(personLocation.mX);
         int tileY = std::floor(personLocation.mY);
@@ -41,7 +41,7 @@ void view::renderPeople(int tileWidth, int tileHeight) {
                                                                                                               // square
         Color color = {0, 0, 0};
 
-        if (personPtr->getRed()) {
+        if (personItr.getRed()) {
             color = Color(255, 0, 0);
         }
 
@@ -49,11 +49,11 @@ void view::renderPeople(int tileWidth, int tileHeight) {
     }
 }
 
-void view::render() {
+void View::render() {
     mRenderer.clear();
 
     // Get level data
-    const levelData& levelData = mModel.getLevelData();
+    const LevelData& levelData = mModel.getLevelData();
 
     // Get window size
     int windowWidth = mRenderer.getWindowWidth();
@@ -71,7 +71,7 @@ void view::render() {
     mRenderer.show();
 }
 
-void view::handleEvents(bool& quit) {
+void View::handleEvents(bool& quit) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -84,14 +84,14 @@ void view::handleEvents(bool& quit) {
     }
 }
 
-void view::setGridColor(std::vector<GridColor> aGridColor) {
+void View::setGridColor(std::vector<GridColor> aGridColor) {
     // Fill mGridColor with all the different colors
     for (const GridColor& color : aGridColor) {
         mGridColor.push_back(color);
     }
 }
 
-void view::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
+void View::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
     for (const GridColor& color : mGridColor) {
         if (color.letter == aColor) {
             aRed = color.red;

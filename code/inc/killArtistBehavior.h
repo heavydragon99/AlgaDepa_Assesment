@@ -3,12 +3,16 @@
 #define KILLPLAYERBEHAVIOR_H
 
 #include "iTileBehavior.h"
-#include "iSubject.h"
+#include "levelData.h"
 
-class killArtistBehavior : public iTileBehavior, public iSubject {
+class KillArtistBehavior : public ITileBehavior {
 public:
-    killArtistBehavior() = default;
-    void doBehavior() override;
+    KillArtistBehavior(LevelData* aLevelData);
+    std::unique_ptr<ITileBehavior> clone() const override;
+    void doBehavior(Tile& aTile) override;
+
+    private:
+    LevelData* mLevelData;
 };;
 
 #endif // KILLPLAYERBEHAVIOR_H

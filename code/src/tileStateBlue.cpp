@@ -3,27 +3,30 @@
 #include "tile.h"
 #include "tileFactory.h"
 
-tileStateBlue::tileStateBlue(std::unique_ptr<iTileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
+TileStateBlue::TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
-void tileStateBlue::updateTile(tile& t) {
-    mBehavior->doBehavior();
-
-    // Transition to the next state after 3 actions
-    tileFactory factory;
-
-    t.setState(factory.createNextState(getColor()));
+std::unique_ptr<ITileState> TileStateBlue::clone() const {
+    return std::make_unique<TileStateBlue>(mBehavior->clone());
 }
 
-char tileStateBlue::getColor() const { return 'B'; }
+void TileStateBlue::updateTile(Tile& t) {
+    mBehavior->doBehavior(t);
+    mCounter++;
 
-void tileStateBlue::enter() {
+    if (mCounter >= 3) {
+        // Transition to the next state after 3 actions
+        t.setState(TileFactory::createNextState(getColor()));
+    }
+}
+
+char TileStateBlue::getColor() const { return 'B'; }
+
+void TileStateBlue::enter() {
     // Code to execute when entering the blue state
 }
 
-void tileStateBlue::exit() {
+void TileStateBlue::exit() {
     // Code to execute when exiting the blue state
 }
 
-void tileStateBlue::forceBlue(tile& t) {
-    // Do nothing
-}
+void TileStateBlue::forceBlue(Tile& t) { t.setState(TileFactory::createBlueState()); }

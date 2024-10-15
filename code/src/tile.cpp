@@ -1,13 +1,25 @@
 #include "tile.h"
 
-tile::tile(std::unique_ptr<iTileState> initialState) : state(std::move(initialState)) {}
+Tile::Tile(std::unique_ptr<ITileState> initialState) : mState(std::move(initialState)) {}
 
-void tile::updateTile() { state->updateTile(*this); }
+Tile::Tile(const Tile& other) : mState(other.mState ? other.mState->clone() : nullptr) {}
 
-void tile::setState(std::unique_ptr<iTileState> newState) {
-    state->exit();
-    state = std::move(newState);
-    state->enter();
+Tile& Tile::operator=(const Tile& other) {
+    if (this == &other) {
+        return *this;
+    }
+    mState = other.mState ? other.mState->clone() : nullptr;
+    return *this;
 }
 
-char tile::getColor() const { return state->getColor(); }
+void Tile::updateTile() { mState->updateTile(*this); }
+
+void Tile::forceBlue() { mState->forceBlue(*this); }
+
+void Tile::setState(std::unique_ptr<ITileState> newState) {
+    mState->exit();
+    mState = std::move(newState);
+    mState->enter();
+}
+
+char Tile::getColor() const { return mState->getColor(); }
