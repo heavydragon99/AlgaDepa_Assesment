@@ -5,7 +5,10 @@
 
 TileStateGray::TileStateGray(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
-std::unique_ptr<ITileState> TileStateGray::clone() const { return std::make_unique<TileStateGray>(mBehavior->clone()); }
+std::unique_ptr<ITileState> TileStateGray::clone() const {
+    auto clonedBehavior = mBehavior ? mBehavior->clone() : nullptr;
+    return std::make_unique<TileStateGray>(std::move(clonedBehavior));
+}
 
 void TileStateGray::updateTile(Tile& t) {
     if (mBehavior != nullptr) {
