@@ -13,13 +13,14 @@ include_directories(inc)
 # Find all source files in the src directory
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-# Set build type to Debug by default
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug)
-endif()
+# Add an option to set the build type to Debug
+option(DEBUG_BUILD "Build with debug information" OFF)
 
-# Specify compiler flags for debug configuration
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+# Specify compiler flags for debug configuration if DEBUG_BUILD is ON
+if(DEBUG_BUILD)
+  set(CMAKE_BUILD_TYPE Debug)
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+endif()
 
 # Find SDL2
 find_package(SDL2 REQUIRED)
@@ -34,3 +35,10 @@ add_subdirectory(external/tinyxml2)
 add_executable(depaAlgo ${SOURCES})
 
 target_link_libraries(depaAlgo PRIVATE tinyxml2 CURL::libcurl ${SDL2_LIBRARIES})
+
+# Add a custom target to run Valgrind
+add_custom_target(valgrind
+    COMMAND valgrind --leak-check=full --track-origins=yes --show-reachable=yes $<TARGET_FILE:depaAlgo>
+    DEPENDS depaAlgo
+    COMMENT "Running Valgrind to check for memory leaks"
+)
