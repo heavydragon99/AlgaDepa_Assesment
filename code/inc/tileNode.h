@@ -6,15 +6,15 @@
 #include <memory>
 #include <vector>
 
-class TileNode
-{
+class TileNode {
 public:
+    TileNode() = default; // Added so vector can be resized
     TileNode(std::unique_ptr<Tile> aTile, int aX, int aY);
 
-    void addNeighbor(TileNode &aNeighbor);
-    const std::vector<std::reference_wrapper<TileNode>> &getNeighbors() const;
-    
-    Tile &getTile() const;
+    void addNeighbor(TileNode& aNeighbor);
+    const std::vector<std::reference_wrapper<TileNode>>& getNeighbors() const;
+
+    Tile& getTile() const;
 
     void setWeight(int aWeight);
     int getWeight() const;

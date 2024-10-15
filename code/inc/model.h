@@ -10,7 +10,7 @@ class Model {
 public:
     Model();
     void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
-    const LevelData& getLevelData() const;
+    LevelData& getLevelData();
 
     void updateModel();
 
