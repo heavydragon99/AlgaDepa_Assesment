@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "CollisionHandler.h"
+#include "Input.h"
 #include "model.h"
 #include "structs.h"
 #include "view.h"
