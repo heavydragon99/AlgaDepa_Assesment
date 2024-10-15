@@ -13,10 +13,15 @@ struct Color {
 
 class Renderer {
 public:
-    Renderer();
+    Renderer(int aRows, int aCols);
     ~Renderer();
 
+    void show();
+    void clear();
+
     void drawSquare(int x, int y, int width, int height, Color color);
+    int getWindowWidth();
+    int getWindowHeight();
 
 private:
     bool initSDL();
@@ -26,4 +31,7 @@ private:
     std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer*)> mRenderer;
 
     float mScaleFactor;
+
+    int mRows;
+    int mCols;
 };

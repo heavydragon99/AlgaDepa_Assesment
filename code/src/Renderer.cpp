@@ -2,8 +2,12 @@
 
 #include <iostream>
 
-Renderer::Renderer()
+Renderer::Renderer(int aRows, int aCols)
     : mWindow(nullptr, SDL_DestroyWindow), mRenderer(nullptr, SDL_DestroyRenderer), mScaleFactor(1.0f) {
+
+    this->mRows = aRows;
+    this->mCols = aCols;
+
     if (!initSDL()) {
         std::cerr << "Failed to initialize SDL" << std::endl;
     }
@@ -11,6 +15,23 @@ Renderer::Renderer()
 }
 
 Renderer::~Renderer() { SDL_Quit(); }
+
+void Renderer::show() { SDL_RenderPresent(mRenderer.get()); }
+
+void Renderer::clear() { SDL_RenderClear(mRenderer.get()); }
+
+int Renderer::getWindowWidth() {
+    int windowWidth, windowHeight;
+    SDL_GetWindowSize(mWindow.get(), &windowWidth, &windowHeight);
+
+    return windowWidth;
+}
+int Renderer::getWindowHeight() {
+    int windowWidth, windowHeight;
+    SDL_GetWindowSize(mWindow.get(), &windowWidth, &windowHeight);
+
+    return windowHeight;
+}
 
 bool Renderer::initSDL() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -38,7 +59,7 @@ void Renderer::initializeWindow() {
     // int rows = levelData.getRows();
     //
     // // Calculate the window size to maintain the aspect ratio and ensure tiles are squares
-    // int tileSize = std::min(maxWindowWidth / cols, maxWindowHeight / rows);
+    int tileSize = std::min(maxWindowWidth / mCols, maxWindowHeight / mRows);
     int windowWidth = 600;
     int windowHeight = 600;
 
@@ -56,7 +77,7 @@ void Renderer::initializeWindow() {
     }
 
     // Set the initial scale factor
-    // mScaleFactor = static_cast<float>(tileSize) / renderSize;
+    mScaleFactor = static_cast<float>(tileSize) / renderSize;
 }
 
 void Renderer::drawSquare(int x, int y, int width, int height, Color color) {

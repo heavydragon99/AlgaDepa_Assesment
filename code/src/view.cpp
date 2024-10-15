@@ -6,9 +6,10 @@
 #include <iostream>
 #include <thread>
 
-view::view(model& aModel) : mModel(aModel) {}
+view::view(model& aModel)
+    : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()) {}
 
-view::~view() { SDL_Quit(); }
+view::~view() {}
 
 void view::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
@@ -20,8 +21,6 @@ void view::renderTile(int tileWidth, int tileHeight) {
         y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
-        // SDL_SetRenderDrawColor(mRenderer.get(), red, green, blue, 0xFF);
-        // SDL_RenderFillRect(mRenderer.get(), &fillRect);
     }
 }
 
@@ -45,25 +44,20 @@ void view::renderPeople(int tileWidth, int tileHeight) {
         if (personPtr->getRed()) {
             color = Color(255, 0, 0);
         }
-        // else {
-        //     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
-        // }
 
-        // SDL_RenderFillRect(mRenderer.get(), &fillRect);
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, color);
     }
 }
 
 void view::render() {
-    // SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0xFF);
-    // SDL_RenderClear(mRenderer.get());
+    mRenderer.clear();
 
     // Get level data
     const levelData& levelData = mModel.getLevelData();
 
     // Get window size
-    int windowWidth, windowHeight;
-    SDL_GetWindowSize(mWindow.get(), &windowWidth, &windowHeight);
+    int windowWidth = mRenderer.getWindowWidth();
+    int windowHeight = mRenderer.getWindowHeight();
 
     // Calculate tile width and height
     int tileSize = std::min(windowWidth / levelData.getCols(), windowHeight / levelData.getRows());
@@ -74,7 +68,7 @@ void view::render() {
     // Render people
     renderPeople(tileSize, tileSize);
 
-    SDL_RenderPresent(mRenderer.get());
+    mRenderer.show();
 }
 
 void view::handleEvents(bool& quit) {
