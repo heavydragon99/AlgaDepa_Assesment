@@ -23,14 +23,20 @@ void View::renderTile(int tileWidth, int tileHeight) {
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
 
         if (levelData.getGrid().at(i).isVisited()) {
-            std::cout << "PATH gevonden" << std::endl;
             SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
-            mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
+            mRenderer.drawSquareRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
         }
         if (levelData.getGrid().at(i).isPath()) {
-            std::cout << "PATH gevonden" << std::endl;
-            SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
-            mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(0, 0, 0));
+            // Calculate new dimensions
+            int newTileWidth = static_cast<int>(tileWidth * 0.7);
+            int newTileHeight = static_cast<int>(tileHeight * 0.7);
+
+            // Calculate new starting positions to center the smaller square
+            int newX = x * tileWidth + (tileWidth - newTileWidth) / 2;
+            int newY = y * tileHeight + (tileHeight - newTileHeight) / 2;
+
+            SDL_Rect smallSquare = {newX, newY, newTileWidth, newTileHeight}; // Ensure square tiles
+            mRenderer.drawSquare(smallSquare.x, smallSquare.y, smallSquare.w, smallSquare.h, Color(0, 0, 0));
         }
     }
 }

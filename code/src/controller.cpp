@@ -80,15 +80,16 @@ void Controller::handleUserInput() {
         Point tileLocation = input.MousePosition();
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
-        if (mPathfindingStart || mPathfindingEnd) {
+        if (mPathfindingStart) {
             mPathfindingStart.reset();
             mPathfindingEnd.reset();
         }
-        mPathfindingStart->first = tileLocation.x;
-        mPathfindingStart->second = tileLocation.y;
+        mPathfindingStart = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "Start: " << mPathfindingStart->first << ", " << mPathfindingStart->second << std::endl;
         if (mPathfindingStart && mPathfindingEnd) {
             mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
+            mPathfindingStart.reset();
+            mPathfindingEnd.reset();
         }
     }
 
@@ -96,15 +97,16 @@ void Controller::handleUserInput() {
         Point tileLocation = input.MousePosition();
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
-        if (mPathfindingStart || mPathfindingEnd) {
+        if (mPathfindingEnd) {
             mPathfindingStart.reset();
             mPathfindingEnd.reset();
         }
-        mPathfindingEnd->first = tileLocation.x;
-        mPathfindingEnd->second = tileLocation.y;
+        mPathfindingEnd = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "End: " << mPathfindingEnd->first << ", " << mPathfindingEnd->second << std::endl;
         if (mPathfindingStart && mPathfindingEnd) {
             mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
+            mPathfindingStart.reset();
+            mPathfindingEnd.reset();
         }
     }
 }
