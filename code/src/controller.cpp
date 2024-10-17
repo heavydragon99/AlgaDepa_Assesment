@@ -21,8 +21,8 @@ void Controller::createLevel() {
 void Controller::run() {
     Input& input = Input::getInstance();
 
-    // const int FPS = 60;
-    // const int frameDelay = 1000 / FPS;
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;
     // Render the data with the view class
 
     this->mCollisionHandler = CollisionHandler(mModel.get());
@@ -32,7 +32,7 @@ void Controller::run() {
     while (!quit) {
         input.update();
 
-        // auto frameStart = std::chrono::high_resolution_clock::now();
+        auto frameStart = std::chrono::high_resolution_clock::now();
 
         mModel->updateModel();
 
@@ -50,11 +50,11 @@ void Controller::run() {
 
         mView->render();
 
-        // auto frameTime = std::chrono::high_resolution_clock::now() - frameStart;
-        // int frameDuration = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
-        //
-        // if (frameDelay > frameDuration) {
-        //     std::this_thread::sleep_for(std::chrono::milliseconds(frameDelay - frameDuration));
-        // }
+        auto frameTime = std::chrono::high_resolution_clock::now() - frameStart;
+        int frameDuration = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
+
+        if (frameDelay > frameDuration) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(frameDelay - frameDuration));
+        }
     }
 }
