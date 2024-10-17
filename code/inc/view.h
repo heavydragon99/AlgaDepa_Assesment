@@ -15,6 +15,7 @@ public:
     void render();
     void handleEvents(bool& quit);
     void setGridColor(std::vector<GridColor> aGridColor);
+    int getTileSize() const;
 
 private:
     void renderTile(int tileWidth, int tileHeight);
@@ -27,6 +28,8 @@ private:
     std::vector<GridColor> mGridColor;
 
     Renderer mRenderer;
+
+    int mTileSize;
 };
 
 #endif // VIEW_H

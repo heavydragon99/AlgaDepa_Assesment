@@ -5,18 +5,13 @@
 
 TileStateBlue::TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)), mCounter(0) {}
 
-std::unique_ptr<ITileState> TileStateBlue::clone() const {
-    return std::make_unique<TileStateBlue>(mBehavior->clone());
-}
+std::unique_ptr<ITileState> TileStateBlue::clone() const { return std::make_unique<TileStateBlue>(mBehavior->clone()); }
 
 void TileStateBlue::updateTile(Tile& t) {
-    mBehavior->doBehavior(t);
-    mCounter++;
-
-    if (mCounter >= 3) {
-        // Transition to the next state after 3 actions
-        t.setState(TileFactory::createNextState(getColor()));
+        if (mBehavior != nullptr) {
+        mBehavior->doBehavior(t);
     }
+    t.setState(TileFactory::createNextState(getColor()));
 }
 
 char TileStateBlue::getColor() const { return 'B'; }

@@ -20,6 +20,7 @@ public:
     void clear();
 
     void drawSquare(int x, int y, int width, int height, Color color);
+    void drawSquareRect(int x, int y, int width, int height, Color color);
     int getWindowWidth();
     int getWindowHeight();
 
