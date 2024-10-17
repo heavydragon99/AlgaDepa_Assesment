@@ -21,6 +21,17 @@ void View::renderTile(int tileWidth, int tileHeight) {
         y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
+
+        if (levelData.getGrid().at(i).isVisited()) {
+            std::cout << "PATH gevonden" << std::endl;
+            SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
+            mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
+        }
+        if (levelData.getGrid().at(i).isPath()) {
+            std::cout << "PATH gevonden" << std::endl;
+            SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
+            mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(0, 0, 0));
+        }
     }
 }
 
