@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "CollisionHandler.h"
+#include "Command.h"
 #include "Input.h"
 #include "model.h"
 #include "structs.h"
@@ -23,6 +24,9 @@ private:
     ParsedGrid mGrid;
 
     CollisionHandler mCollisionHandler;
+    InputHandler mInputHandler;
+
+    void checkInputs();
 };
 
 #endif // CONTROLLER_H
