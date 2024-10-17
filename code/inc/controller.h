@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "CollisionHandler.h"
+#include "Command.h"
 #include "Input.h"
 #include "model.h"
 #include "structs.h"
@@ -33,6 +34,9 @@ private:
 
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;
+    InputHandler mInputHandler;
+
+    void checkInputs();
 };
 
 #endif // CONTROLLER_H
