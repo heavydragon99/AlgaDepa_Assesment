@@ -1,4 +1,5 @@
 #include "FileHandler.h"
+#include "PollingTUI.h"
 #include "Quadtree.h"
 #include "controller.h"
 
@@ -45,6 +46,12 @@
 // }
 
 int main() {
+    PollingTUI tui;
+
+    while (true) {
+        tui.update();
+        SDL_Delay(50);
+    }
 
     // yay text
     FileHandler fileHandler;
