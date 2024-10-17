@@ -19,6 +19,8 @@ void Controller::createLevel() {
 }
 
 void Controller::run() {
+    Input& input = Input::getInstance();
+
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
     // Render the data with the view class
@@ -28,6 +30,8 @@ void Controller::run() {
     bool quit = false;
 
     while (!quit) {
+        input.update();
+
         auto frameStart = std::chrono::high_resolution_clock::now();
 
         mModel->updateModel();
@@ -35,6 +39,15 @@ void Controller::run() {
         mCollisionHandler.handleCollisions();
 
         mView->handleEvents(quit);
+
+        if (input.GetKeyDown(Key::Key_W)) {
+            std::cout << "W pressed once" << std::endl;
+        }
+
+        if (input.GetKey(Key::Key_Space)) {
+            std::cout << "Space is held" << std::endl;
+        }
+
         mView->render();
 
         auto frameTime = std::chrono::high_resolution_clock::now() - frameStart;

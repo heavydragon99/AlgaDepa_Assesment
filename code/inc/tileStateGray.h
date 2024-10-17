@@ -10,6 +10,7 @@ class TileStateGray : public ITileState
 {
 public:
     TileStateGray(std::unique_ptr<ITileBehavior> aBehavior);
+    std::unique_ptr<ITileState> clone() const override;
     void updateTile(Tile &t) override;
     char getColor() const override;
     void enter() override;

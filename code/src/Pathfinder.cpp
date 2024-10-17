@@ -5,12 +5,10 @@
 #include <queue>
 #include <set>
 #include <unordered_map>
-#include <memory> // Include for smart pointers
 
-PathFinder::PathFinder() : mAlgorithm(Algorithms::Dijkstra) {}
+PathFinder::PathFinder() : mAlgorithm(Algorithms::Dijkstra), mLevelData(nullptr), mGCost(0), mSteps(0) {}
 
-bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart,
-                          const std::pair<int, int>& aEnd) {
+bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd) {
     mLevelData = const_cast<LevelData*>(aLevelData);
     mStart = aStart;
     mEnd = aEnd;
@@ -26,8 +24,8 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
         std::cerr << "Invalid start or end position" << std::endl;
         return false;
     }
-    if (mLevelData->getGrid()[start]->getTile().getColor() == 'W' ||
-        mLevelData->getGrid()[end]->getTile().getColor() == 'W') {
+    if (mLevelData->getGrid()[start].getTile().getColor() == 'W' ||
+        mLevelData->getGrid()[end].getTile().getColor() == 'W') {
         std::cerr << "Start or end position is a white tile" << std::endl;
         return false;
     }
@@ -47,13 +45,15 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     return true;
 }
 
-void PathFinder::setAlgorithm(Algorithms aAlgorithm) { mAlgorithm = aAlgorithm; }
+void PathFinder::setAlgorithm(Algorithms aAlgorithm) {
+    mAlgorithm = aAlgorithm;
+}
 
 void PathFinder::reset() {
     // Reset the state of the grid
     for (auto& node : mLevelData->getGrid()) {
-        node->setIsPath(false);
-        node->setIsVisited(false);
+        node.setIsPath(false);
+        node.setIsVisited(false);
     }
 
     mPath.clear();
@@ -64,17 +64,17 @@ void PathFinder::reset() {
 
 // Dijkstra's Algorithm
 void PathFinder::dijkstra() {
-    std::priority_queue<std::unique_ptr<PathFinderNode>, std::vector<std::unique_ptr<PathFinderNode>>, PathFinderNodeCompare> openList;
+    std::priority_queue<std::shared_ptr<PathFinderNode>, std::vector<std::shared_ptr<PathFinderNode>>, PathFinderNodeCompare> openList;
     std::set<std::pair<int, int>> closedList;
 
     int cols = mLevelData->getCols();
 
     // Initialize the start node
-    std::unique_ptr<PathFinderNode> startNode = std::make_unique<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
-    openList.push(std::move(startNode));
+    auto startNode = std::make_shared<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
+    openList.push(startNode);
 
     while (!openList.empty()) {
-        std::unique_ptr<PathFinderNode> currentNode = std::move(const_cast<std::unique_ptr<PathFinderNode>&>(openList.top()));
+        auto currentNode = openList.top();
         openList.pop();
 
         std::pair<int, int> currentPos = {currentNode->mX, currentNode->mY};
@@ -85,7 +85,7 @@ void PathFinder::dijkstra() {
         if (currentPos == mEnd) {
             mGCost = currentNode->mGCost;
             // Reconstruct path
-            PathFinderNode* parentNode = currentNode.get();
+            auto parentNode = currentNode;
             while (parentNode != nullptr) {
                 mSteps++;
                 mPath.push_back({parentNode->mX, parentNode->mY});
@@ -97,7 +97,7 @@ void PathFinder::dijkstra() {
         closedList.insert(currentPos);
 
         // Explore neighbors
-        for (auto& neighbor : mLevelData->getGrid()[currentId]->getNeighbors()) {
+        for (auto& neighbor : mLevelData->getGrid()[currentId].getNeighbors()) {
             int neighborX = neighbor.get().getX();
             int neighborY = neighbor.get().getY();
             std::pair<int, int> neighborPos = {neighborX, neighborY};
@@ -108,9 +108,9 @@ void PathFinder::dijkstra() {
             }
 
             int tentativeG = currentNode->mGCost + neighbor.get().getWeight();
-            std::unique_ptr<PathFinderNode> neighborNode = std::make_unique<PathFinderNode>(neighborX, neighborY, tentativeG, currentNode.get());
+            auto neighborNode = std::make_shared<PathFinderNode>(neighborX, neighborY, tentativeG, currentNode);
 
-            openList.push(std::move(neighborNode));
+            openList.push(neighborNode);
         }
     }
 }
@@ -148,7 +148,7 @@ void PathFinder::breathfirst() {
         }
 
         // Explore neighbors
-        for (auto& neighbor : mLevelData->getGrid()[currentIndex]->getNeighbors()) {
+        for (auto& neighbor : mLevelData->getGrid()[currentIndex].getNeighbors()) {
             int neighborIndex = neighbor.get().getY() * columns + neighbor.get().getX();
             if (!visitedNodes[neighborIndex]) {
                 visitedNodes[neighborIndex] = true;
@@ -163,12 +163,12 @@ void PathFinder::setTileNodes() {
     // Mark the path nodes
     for (auto& path : mPath) {
         int index = path.second * mLevelData->getCols() + path.first;
-        mLevelData->getGrid()[index]->setIsPath(true);
+        mLevelData->getGrid()[index].setIsPath(true);
     }
 
     // Mark the visited nodes
     for (auto& visited : mVisited) {
         int index = visited.second * mLevelData->getCols() + visited.first;
-        mLevelData->getGrid()[index]->setIsVisited(true);
+        mLevelData->getGrid()[index].setIsVisited(true);
     }
 }

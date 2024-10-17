@@ -5,6 +5,10 @@
 
 TileStateRed::TileStateRed(std::unique_ptr<ITileBehavior> aBehavior) : mBehavior(std::move(aBehavior)) {}
 
+std::unique_ptr<ITileState> TileStateRed::clone() const {
+    return std::make_unique<TileStateRed>(mBehavior->clone());
+}
+
 void TileStateRed::updateTile(Tile& t) {
     mBehavior->doBehavior(t);
 

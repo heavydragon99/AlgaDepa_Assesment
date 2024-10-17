@@ -8,6 +8,7 @@
 class InfectTilesBehavior : public ITileBehavior{
 public:
     InfectTilesBehavior(LevelData* aLevelData);
+    std::unique_ptr<ITileBehavior> clone() const override;
     void doBehavior(Tile& aTile) override;
 
     private:
