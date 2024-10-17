@@ -11,7 +11,9 @@ std::unique_ptr<ITileState> TileStateYellow::clone() const {
 }
 
 void TileStateYellow::updateTile(Tile& t) {
-    mBehavior->doBehavior(t);
+        if (mBehavior != nullptr) {
+        mBehavior->doBehavior(t);
+    }
 
     mCounter++; // Increment the action counter
     if (mCounter >= requiredActions) {
