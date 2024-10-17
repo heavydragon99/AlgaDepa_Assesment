@@ -40,6 +40,7 @@ private:
     void setTileNodes();
 
     std::vector<std::pair<int, int>> mPath;
+    std::vector<std::vector<std::pair<int, int>>> mAllPaths;
     std::vector<std::pair<int, int>> mVisited;
     Algorithms mAlgorithm;
 
