@@ -1,9 +1,10 @@
-#include "controller.h"
-#include "view.h"
-
 #include <chrono>
 #include <iostream>
 #include <thread>
+
+#include "Command.h"
+#include "controller.h"
+#include "view.h"
 
 Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     : mCollisionHandler(CollisionHandler(mModel.get())) {
@@ -18,8 +19,35 @@ void Controller::createLevel() {
     mView->setGridColor(mGrid.gridColors);
 }
 
-void Controller::run() {
+void Controller::checkInputs() {
     Input& input = Input::getInstance();
+
+    input.update();
+
+    std::vector<Uint8> downKeys = input.getDownKeys();
+
+    for (int i = 0; i < downKeys.size(); i++) {
+        mInputHandler.handleInput(downKeys[i]);
+    }
+}
+
+void Controller::run() {
+    bool pause = true;
+
+    // Example input codes:
+    // const int KEY_UP = 1;
+    // const int KEY_DOWN = 2;
+    // const int KEY_JUMP = 3;
+
+    // Bind inputs to commands
+    // inputHandler.setCommand(KEY_UP, std::make_unique<MoveUpCommand>());
+    // inputHandler.setCommand(KEY_DOWN, std::make_unique<MoveDownCommand>());
+    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseCommand>(pause));
+
+    // Simulate input events
+    // inputHandler.handleInput(KEY_UP);   // Output: Character moves up.
+    // inputHandler.handleInput(KEY_DOWN); // Output: Character moves down.
+    // inputHandler.handleInput(KEY_JUMP); // Output: Character jumps.
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
@@ -30,23 +58,24 @@ void Controller::run() {
     bool quit = false;
 
     while (!quit) {
-        input.update();
-
         auto frameStart = std::chrono::high_resolution_clock::now();
 
-        mModel->updateModel();
+        this->checkInputs();
+
+        if (!pause)
+            mModel->updateModel();
 
         mCollisionHandler.handleCollisions();
 
         mView->handleEvents(quit);
 
-        if (input.GetKeyDown(Key::Key_W)) {
-            std::cout << "W pressed once" << std::endl;
-        }
-
-        if (input.GetKey(Key::Key_Space)) {
-            std::cout << "Space is held" << std::endl;
-        }
+        // if (input.GetKeyDown(Key::Key_W)) {
+        //     std::cout << "W pressed once" << std::endl;
+        // }
+        //
+        // if (input.GetKey(Key::Key_Space)) {
+        //     std::cout << "Space is held" << std::endl;
+        // }
 
         mView->render();
 
