@@ -7,7 +7,7 @@
 #include <thread>
 
 View::View(Model& aModel)
-    : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()) {}
+    : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()), mTileSize(0) {}
 
 View::~View() {}
 
@@ -60,13 +60,13 @@ void View::render() {
     int windowHeight = mRenderer.getWindowHeight();
 
     // Calculate tile width and height
-    int tileSize = std::min(windowWidth / levelData.getCols(), windowHeight / levelData.getRows());
+    mTileSize = std::min(windowWidth / levelData.getCols(), windowHeight / levelData.getRows());
 
     // Render grid
-    renderTile(tileSize, tileSize);
+    renderTile(mTileSize, mTileSize);
 
     // Render people
-    renderPeople(tileSize, tileSize);
+    renderPeople(mTileSize, mTileSize);
 
     mRenderer.show();
 }
@@ -90,6 +90,8 @@ void View::setGridColor(std::vector<GridColor> aGridColor) {
         mGridColor.push_back(color);
     }
 }
+
+int View::getTileSize() const { return mTileSize; }
 
 void View::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
     for (const GridColor& color : mGridColor) {

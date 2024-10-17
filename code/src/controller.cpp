@@ -21,40 +21,90 @@ void Controller::createLevel() {
 void Controller::run() {
     Input& input = Input::getInstance();
 
-    const int FPS = 60;
-    const int frameDelay = 1000 / FPS;
-    // Render the data with the view class
+    const int frameDelayView = 1000 / mFPSView;
 
     this->mCollisionHandler = CollisionHandler(mModel.get());
 
     bool quit = false;
 
+    auto lastFrameTimeView = std::chrono::high_resolution_clock::now();
+    auto lastFrameTimeLogic = std::chrono::high_resolution_clock::now();
+
     while (!quit) {
-        input.update();
+        auto currentFrameTime = std::chrono::high_resolution_clock::now();
+        int frameDelayLogic = 1000 / mCurrentFPSLogic;
 
-        auto frameStart = std::chrono::high_resolution_clock::now();
-
-        mModel->updateModel();
-
-        mCollisionHandler.handleCollisions();
-
-        mView->handleEvents(quit);
-
-        if (input.GetKeyDown(Key::Key_W)) {
-            std::cout << "W pressed once" << std::endl;
+        // Update logic at variable FPS
+        auto frameTimeRest = currentFrameTime - lastFrameTimeLogic;
+        int frameDurationLogic = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeRest).count();
+        if (frameDurationLogic >= frameDelayLogic) {
+            mModel->updateModel();
+            mCollisionHandler.handleCollisions();
+            lastFrameTimeLogic = currentFrameTime;
         }
 
-        if (input.GetKey(Key::Key_Space)) {
-            std::cout << "Space is held" << std::endl;
+        // Render view at 60 FPS
+        auto frameTimeView = currentFrameTime - lastFrameTimeView;
+        int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
+        if (frameDurationView >= frameDelayView) {
+            mView->handleEvents(quit);
+            mView->render();
+            handleUserInput();
+            lastFrameTimeView = currentFrameTime;
         }
+    }
+}
 
-        mView->render();
+void Controller::handleUserInput() {
+    Input& input = Input::getInstance();
+    input.update();
 
-        auto frameTime = std::chrono::high_resolution_clock::now() - frameStart;
-        int frameDuration = std::chrono::duration_cast<std::chrono::milliseconds>(frameTime).count();
+    if (input.GetKeyDown(Key::Key_Space)) {
+        mModel->startStopSimulation();
+    }
 
-        if (frameDelay > frameDuration) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(frameDelay - frameDuration));
+    if (input.GetKeyDown(Key::Key_Up)) {
+        mCurrentFPSLogic++;
+        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
+    }
+    if (input.GetKeyDown(Key::Key_Down)) {
+        mCurrentFPSLogic = std::max(1, mCurrentFPSLogic - 1); // Ensure FPS doesn't go below 1
+        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
+    }
+
+    if (input.GetKeyDown(Key::Key_D)) {
+        mModel->setPathfindingAlgorithm();
+    }
+
+    if (input.GetMouseButtonDown(MouseButton::LEFT)) {
+        Point tileLocation = input.MousePosition();
+        tileLocation.x = tileLocation.x / mView->getTileSize();
+        tileLocation.y = tileLocation.y / mView->getTileSize();
+        if (mPathfindingStart || mPathfindingEnd) {
+            mPathfindingStart.reset();
+            mPathfindingEnd.reset();
+        }
+        mPathfindingStart->first = tileLocation.x;
+        mPathfindingStart->second = tileLocation.y;
+        std::cout << "Start: " << mPathfindingStart->first << ", " << mPathfindingStart->second << std::endl;
+        if (mPathfindingStart && mPathfindingEnd) {
+            mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
+        }
+    }
+
+    if (input.GetMouseButtonDown(MouseButton::RIGHT)) {
+        Point tileLocation = input.MousePosition();
+        tileLocation.x = tileLocation.x / mView->getTileSize();
+        tileLocation.y = tileLocation.y / mView->getTileSize();
+        if (mPathfindingStart || mPathfindingEnd) {
+            mPathfindingStart.reset();
+            mPathfindingEnd.reset();
+        }
+        mPathfindingEnd->first = tileLocation.x;
+        mPathfindingEnd->second = tileLocation.y;
+        std::cout << "End: " << mPathfindingEnd->first << ", " << mPathfindingEnd->second << std::endl;
+        if (mPathfindingStart && mPathfindingEnd) {
+            mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
         }
     }
 }
