@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "Command.h"
+#include "PollingTUI.h"
 #include "controller.h"
 #include "view.h"
 
@@ -34,6 +35,8 @@ void Controller::checkInputs() {
 void Controller::run() {
     bool pause = true;
 
+    PollingTUI tui(mInputHandler);
+
     // Example input codes:
     // const int KEY_UP = 1;
     // const int KEY_DOWN = 2;
@@ -43,6 +46,11 @@ void Controller::run() {
     // inputHandler.setCommand(KEY_UP, std::make_unique<MoveUpCommand>());
     // inputHandler.setCommand(KEY_DOWN, std::make_unique<MoveDownCommand>());
     mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseCommand>(pause));
+    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());
+    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());
+    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>());
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());
+    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());
 
     // Simulate input events
     // inputHandler.handleInput(KEY_UP);   // Output: Character moves up.
@@ -59,6 +67,8 @@ void Controller::run() {
 
     while (!quit) {
         auto frameStart = std::chrono::high_resolution_clock::now();
+
+        tui.update();
 
         this->checkInputs();
 

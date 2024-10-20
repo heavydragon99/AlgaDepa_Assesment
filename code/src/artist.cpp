@@ -32,7 +32,7 @@ void Artist::collidedWall() {
         mVelY = -mVelY;
     }
 
-    this->triggerRed();
+    // this->triggerRed();
 }
 
 void Artist::collidedOtherArtist() {
@@ -47,11 +47,12 @@ void Artist::collidedOtherArtist() {
 }
 
 bool Artist::getRed() {
-    if (SDL_GetTicks() < mEndOfRedTime) {
+    if (mIsRed) {
+        mIsRed = false;
         return true;
     } else {
         return false;
     }
 }
 
-void Artist::triggerRed(int mRedTimeInMs) { mEndOfRedTime = SDL_GetTicks() + mRedTimeInMs; }
+void Artist::triggerRed() { mIsRed = true; }

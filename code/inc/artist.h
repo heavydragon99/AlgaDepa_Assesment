@@ -22,14 +22,14 @@ public:
 
     bool getRed();
 
-    void triggerRed(int mRedTimeInMs = 500);
+    void triggerRed();
 
 private:
     Location mLocation;
     float mVelX;
     float mVelY;
 
-    unsigned long mEndOfRedTime = 0;
+    bool mIsRed = false;
 };
 
 #endif // ARTIST_H

@@ -99,9 +99,9 @@ std::vector<TileNode>& LevelData::getGrid() { return mGrid; }
 std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 
 void LevelData::addArtist(const Tile& aTile) {
-    // if (mPeople.size() >= MAX_PEOPLE) {
-    //     return; // Do not add a new person if the limit is reached
-    // }
+    if (mPeople.size() >= MAX_PEOPLE) {
+        return; // Do not add a new person if the limit is reached
+    }
 
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {

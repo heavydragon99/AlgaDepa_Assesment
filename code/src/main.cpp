@@ -46,12 +46,12 @@
 // }
 
 int main() {
-    PollingTUI tui;
-
-    while (true) {
-        tui.update();
-        SDL_Delay(50);
-    }
+    // PollingTUI tui;
+    //
+    // while (true) {
+    //     tui.update();
+    //     SDL_Delay(50);
+    // }
 
     // yay text
     FileHandler fileHandler;

@@ -7,11 +7,16 @@
 #include <thread>
 #include <unistd.h>
 
+#include "SDL.h"
+
+#include "Command.h"
+#include "InputStructs.h"
+
 enum MenuState { MainMenu = 0, ChooseShortcutToChange, SetKeyForShortcut };
 
 class PollingTUI {
 public:
-    PollingTUI() {
+    PollingTUI(InputHandler& aInputHandler) : mInputHandler(aInputHandler) {
         // Initialize terminal settings
         setNonBlockingInput();
     }
@@ -42,6 +47,8 @@ public:
 
 private:
     MenuState mMenuState = MenuState::MainMenu;
+    InputHandler& mInputHandler;
+    int mChosenShortcut = 0;
 
     void mainMenu() {
         // Display the polled data
@@ -66,27 +73,17 @@ private:
 
     void chooseShortcutToChange() {
         // Display the polled data
-        moveCursor(2, 2);
+        int curLine = 2;
+        moveCursor(2, curLine += 2);
         std::cout << "Enter the number correlating to the action" << std::endl;
 
-        moveCursor(2, 4);
-        std::cout << "(1) beweging artists play/pause, currently mapped to: Space" << std::endl;
+        int commandID = 0;
 
-        moveCursor(2, 6);
-        std::cout << "(2) herschik het vakje waar de muispointer zich bevindt, currently mapped to: Enter" << std::endl;
-
-        moveCursor(2, 8);
-        std::cout << "(3) bestand openen, currently mapped to: o" << std::endl;
-
-        moveCursor(2, 10);
-        std::cout << "(4) render artists, currently mapped to: a" << std::endl;
-
-        moveCursor(2, 12);
-        std::cout << "(5) terug in de tijd gaan  x-ticks (bepaal x zelf), currently mapped to: Key_Left" << std::endl;
-
-        moveCursor(2, 14);
-        std::cout << "(6) vooruit in de tijd gaan x-ticks (bepaal x zelf), currently mapped to: Key_Right" << std::endl;
-
+        for (const auto& [key, command] : mInputHandler.getRegistrations()) {
+            moveCursor(2, curLine += 2);
+            std::cout << "(" << (commandID += 1) << ") " << command->getName()
+                      << " is binded to: " << keyToString((Key)key) << std::endl;
+        }
         /*
          *
          *   Spatie: beweging artists    play/pause
@@ -106,6 +103,7 @@ private:
                 int chosenShortcut = ch - '1' + 1;
                 std::cout << "selected Option: " << chosenShortcut << std::endl;
                 mMenuState = MenuState::SetKeyForShortcut;
+                mChosenShortcut = chosenShortcut;
             }
         }
     }
@@ -113,7 +111,7 @@ private:
     void setKeyForShortcut() {
         static std::string newKeyBind = "";
 
-        moveCursor(2, 2);
+        moveCursor(2, 0);
         std::cout << "Press new key to change shortcut" << std::endl;
 
         char ch;
@@ -123,20 +121,36 @@ private:
 
             if (ch == '\n') {
                 std::cout << "newKeyBind: " << newKeyBind << std::endl;
+
+                int commandID = 0;
+                for (const auto& [key, command] : mInputHandler.getRegistrations()) {
+                    commandID += 1;
+                    if (commandID == mChosenShortcut) {
+                        Command* commandCopy = command->clone();
+
+                        mInputHandler.removeCommand(key);
+
+                        mInputHandler.setCommand(stringToKeyID(newKeyBind), std::unique_ptr<Command>(commandCopy));
+                        mInputHandler.printCommands();
+                        SDL_Delay(10000);
+                    }
+                }
+
+                mMenuState = MenuState::MainMenu;
                 newKeyBind = "";
+                mChosenShortcut = 0;
 
             } else if (ch == '\b' || ch == 127) {
-                // else if (ch == '\b') {
-                // std::cout << "JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
                 if (newKeyBind.size() > 0)
                     newKeyBind.resize(newKeyBind.size() - 1);
-            }
-
-            else {
+            } else {
                 newKeyBind += ch;
             }
         }
+        moveCursor(2, 5);
         std::cout << newKeyBind << std::endl;
+        moveCursor(2 + newKeyBind.size(), 5);
+        std::cout.flush();
     }
 
     // Disable input buffering for non-blocking input
