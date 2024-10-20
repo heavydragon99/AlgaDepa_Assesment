@@ -82,7 +82,7 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
-            tui.update();
+            // tui.update();
             mView->render();
             handleUserInput();
             lastFrameTimeView = currentFrameTime;
@@ -96,7 +96,7 @@ void Controller::handleUserInput() {
     if (!pause)
         mModel->updateModel();
 
-    mCollisionHandler.handleCollisions();
+    // mCollisionHandler.handleCollisions();
 
     if (input.GetKeyDown(Key::Key_Space)) {
         mModel->startStopSimulation();

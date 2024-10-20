@@ -12,7 +12,15 @@ Tile& Tile::operator=(const Tile& other) {
     return *this;
 }
 
-void Tile::updateTile() { mState->updateTile(*this); }
+void Tile::updateTile() {
+
+    if (!mUpdated)
+        mState->updateTile(*this);
+
+    mUpdated = true;
+}
+
+void Tile::resetUpdate() { mUpdated = false; }
 
 void Tile::forceBlue() { mState->forceBlue(*this); }
 

@@ -24,12 +24,24 @@ Artist::Location& Artist::getLocation() { return mLocation; }
 
 void Artist::setLocation(Location aLocation) { mLocation = aLocation; }
 
-void Artist::collidedWall() {
+void Artist::collidedWall(bool aTop) {
     if (mVelX != 0) {
-        mVelX = -mVelX;
+        if (!aTop) {
+            mVelX = abs(mVelX);
+        }
+
+        if (aTop) {
+            mVelX = -abs(mVelX);
+        }
     }
     if (mVelY != 0) {
-        mVelY = -mVelY;
+        if (!aTop) {
+            mVelY = abs(mVelY);
+        }
+
+        if (aTop) {
+            mVelY = -abs(mVelY);
+        }
     }
 
     // this->triggerRed();
@@ -46,13 +58,8 @@ void Artist::collidedOtherArtist() {
     this->triggerRed();
 }
 
-bool Artist::getRed() {
-    if (mIsRed) {
-        mIsRed = false;
-        return true;
-    } else {
-        return false;
-    }
-}
+void Artist::resetRed() { mIsRed = false; }
+
+bool Artist::getRed() { return mIsRed; }
 
 void Artist::triggerRed() { mIsRed = true; }

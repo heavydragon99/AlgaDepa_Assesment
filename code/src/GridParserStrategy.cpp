@@ -55,11 +55,8 @@ ParsedGrid GridTXTParser::parseFile(std::ifstream& aFileStream) {
     gridBuffer.reserve(rows * cols); // Preallocate buffer size
 
     do {
-        for (char ch : line) {
-            if (ch != '\n') {             // Ignore linefeed character '\n' (this is implicit in
-                                          // getline)
-                gridBuffer.push_back(ch); // Include underscores and any other valid characters
-            }
+        for (int i = 0; i < line.size() - 1; i++) {
+            gridBuffer.push_back(line[i]);
         }
     } while (std::getline(aFileStream, line));
 

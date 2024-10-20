@@ -48,6 +48,7 @@ public:
         ofs.close();
 
         // Try opening the downloaded file as an ifstream
+        std::cout << "Try opening the downloaded file as an ifstream" << tempFilename << std::endl;
         auto fileStream = std::make_unique<std::ifstream>(tempFilename, std::ios::binary);
         if (!fileStream->is_open()) {
             std::cerr << "Failed to open downloaded file: " << tempFilename << std::endl;
@@ -78,8 +79,10 @@ public:
         std::unique_ptr<FileLoader> loader;
 
         if (isURL(path)) {
+            std::cout << path << " is a URL" << std::endl;
             loader = std::make_unique<URLFileLoader>();
         } else {
+            std::cout << path << " is not a URL" << std::endl;
             loader = std::make_unique<LocalFileLoader>();
         }
 

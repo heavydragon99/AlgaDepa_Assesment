@@ -2128,6 +2128,9 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o: /home/seger/projects/dpa/code/src/
 CMakeFiles/depaAlgo.dir/src/Quadtree.cpp.o: /home/seger/projects/dpa/code/src/Quadtree.cpp \
   /home/seger/projects/dpa/code/inc/Quadtree.h \
   /home/seger/projects/dpa/code/inc/artist.h \
+  /home/seger/projects/dpa/code/inc/iTileState.h \
+  /home/seger/projects/dpa/code/inc/tile.h \
+  /home/seger/projects/dpa/code/inc/tileNode.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -3409,6 +3412,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o: /home/seger/projects/dpa/code/src/
   /home/seger/projects/dpa/code/inc/PathFinder.h \
   /home/seger/projects/dpa/code/inc/Point.h \
   /home/seger/projects/dpa/code/inc/PollingTUI.h \
+  /home/seger/projects/dpa/code/inc/Quadtree.h \
   /home/seger/projects/dpa/code/inc/Renderer.h \
   /home/seger/projects/dpa/code/inc/artist.h \
   /home/seger/projects/dpa/code/inc/controller.h \

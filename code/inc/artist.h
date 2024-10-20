@@ -17,12 +17,13 @@ public:
     Location& getLocation();
     void setLocation(Location aLocation);
 
-    void collidedWall();
+    void collidedWall(bool aTop);
     void collidedOtherArtist();
 
     bool getRed();
 
     void triggerRed();
+    void resetRed();
 
 private:
     Location mLocation;

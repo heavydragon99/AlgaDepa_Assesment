@@ -5,6 +5,39 @@
 
 FileHandler::FileHandler() {}
 
+bool isLikelyXML(std::unique_ptr<std::ifstream>& file, int threshold = 10) {
+    if (!file->is_open()) {
+        std::cerr << "Error: File stream is not open." << std::endl;
+        return false;
+    }
+
+    std::string line;
+    int tagCount = 0;
+
+    while (std::getline(*file, line)) {
+        // Count opening tags
+        size_t pos = 0;
+        while ((pos = line.find('<', pos)) != std::string::npos) {
+            size_t endPos = line.find('>', pos);
+            if (endPos != std::string::npos) {
+                // Check if it is an opening tag
+                if (line[pos + 1] != '/') {
+                    tagCount++;
+                }
+                pos = endPos + 1;
+            } else {
+                break; // Malformed line, no closing tag found
+            }
+        }
+    }
+
+    file->clear();
+    file->seekg(0);
+
+    // Determine if the file is likely XML based on the tag count
+    return tagCount >= threshold;
+}
+
 std::vector<ParsedPerson> FileHandler::loadArtist(std::string aFilePath) {
 
     FileLoaderContext fileLoader;
@@ -27,6 +60,13 @@ ParsedGrid FileHandler::loadGrid(std::string aFilePath) {
 
     LoadedFile loadedFile;
     loadedFile.fileType = getFileType(aFilePath);
+    if (loadedFile.fileType == UNDEFINED) {
+        if (isLikelyXML(filePointer)) {
+            loadedFile.fileType = FileType::XML;
+        } else {
+            loadedFile.fileType = FileType::TXT;
+        }
+    }
     loadedFile.openedFile = std::move(filePointer);
 
     GridParserStrategy gridParser;

@@ -21,8 +21,12 @@ public:
     void setState(std::unique_ptr<ITileState> newState);
     char getColor() const;
 
+    void resetUpdate();
+
 private:
     std::unique_ptr<ITileState> mState;
+
+    bool mUpdated = false;
 };
 
 #endif // TILE_H
