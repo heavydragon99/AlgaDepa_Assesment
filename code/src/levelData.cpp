@@ -110,17 +110,17 @@ void LevelData::addArtist(const Tile& aTile) {
             if (rand() % 2 == 0) {
                 int randomValue;
                 do {
-                    randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
+                    randomValue = rand() % 41 - 20; // Generates a number between -20 and 20
                 } while (randomValue == 0);
-                vx = static_cast<float>(randomValue) / 5.0f;
+                vx = static_cast<float>(randomValue) / 100.0f; // Converts to a float between -0.2 and 0.2
                 vy = 0.0f;
             } else {
                 int randomValue;
                 do {
-                    randomValue = rand() % 21 - 10; // Generates a number between -10 and 10
+                    randomValue = rand() % 41 - 20; // Generates a number between -20 and 20
                 } while (randomValue == 0);
                 vx = 0.0f;
-                vy = static_cast<float>(randomValue) / 5.0f;
+                vy = static_cast<float>(randomValue) / 100.0f; // Converts to a float between -0.2 and 0.2
             }
             Artist person(location, vx, vy);
 

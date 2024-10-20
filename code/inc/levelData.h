@@ -1,7 +1,7 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#define MAX_PEOPLE 20000
+#define MAX_PEOPLE 200
 
 #include "artist.h"
 #include "structs.h"

@@ -5,6 +5,7 @@ external/tinyxml2/CMakeFiles/tinyxml2.dir/tinyxml2.cpp.o
  /home/seger/projects/dpa/code/external/tinyxml2/tinyxml2.cpp
  /home/seger/projects/dpa/code/external/tinyxml2/tinyxml2.h
  /usr/include/alloca.h
+ /usr/include/assert.h
  /usr/include/bits/atomic_wide_counter.h
  /usr/include/bits/byteswap.h
  /usr/include/bits/endian.h

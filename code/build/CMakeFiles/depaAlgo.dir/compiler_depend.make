@@ -24,6 +24,7 @@ CMakeFiles/depaAlgo.dir/src/FileHandler.cpp.o: /home/seger/projects/dpa/code/src
   /usr/include/asm/sockios.h \
   /usr/include/asm/unistd.h \
   /usr/include/asm/unistd_64.h \
+  /usr/include/assert.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/confname.h \
@@ -340,6 +341,7 @@ CMakeFiles/depaAlgo.dir/src/GridParserStrategy.cpp.o: /home/seger/projects/dpa/c
   /usr/include/asm/sockios.h \
   /usr/include/asm/unistd.h \
   /usr/include/asm/unistd_64.h \
+  /usr/include/assert.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/confname.h \
@@ -1996,14 +1998,11 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/14.2.1/bits/stl_iterator_base_types.h \
   /usr/include/c++/14.2.1/bits/stl_list.h \
-  /usr/include/c++/14.2.1/bits/stl_multiset.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
   /usr/include/c++/14.2.1/bits/stl_queue.h \
   /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h \
   /usr/include/c++/14.2.1/bits/stl_relops.h \
-  /usr/include/c++/14.2.1/bits/stl_set.h \
   /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
-  /usr/include/c++/14.2.1/bits/stl_tree.h \
   /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
   /usr/include/c++/14.2.1/bits/stl_vector.h \
   /usr/include/c++/14.2.1/bits/streambuf.tcc \
@@ -2015,6 +2014,7 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/bits/uniform_int_dist.h \
   /usr/include/c++/14.2.1/bits/unique_ptr.h \
   /usr/include/c++/14.2.1/bits/unordered_map.h \
+  /usr/include/c++/14.2.1/bits/unordered_set.h \
   /usr/include/c++/14.2.1/bits/uses_allocator.h \
   /usr/include/c++/14.2.1/bits/uses_allocator_args.h \
   /usr/include/c++/14.2.1/bits/utility.h \
@@ -2063,7 +2063,6 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/pstl/glue_memory_defs.h \
   /usr/include/c++/14.2.1/pstl/pstl_config.h \
   /usr/include/c++/14.2.1/queue \
-  /usr/include/c++/14.2.1/set \
   /usr/include/c++/14.2.1/span \
   /usr/include/c++/14.2.1/stdexcept \
   /usr/include/c++/14.2.1/streambuf \
@@ -2074,6 +2073,7 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
   /usr/include/c++/14.2.1/unordered_map \
+  /usr/include/c++/14.2.1/unordered_set \
   /usr/include/c++/14.2.1/utility \
   /usr/include/c++/14.2.1/variant \
   /usr/include/c++/14.2.1/vector \
@@ -3406,6 +3406,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o: /home/seger/projects/dpa/code/src/
   /home/seger/projects/dpa/code/inc/InputStructs.h \
   /home/seger/projects/dpa/code/inc/Memento.h \
   /home/seger/projects/dpa/code/inc/MementoManager.h \
+  /home/seger/projects/dpa/code/inc/PathFinder.h \
   /home/seger/projects/dpa/code/inc/Point.h \
   /home/seger/projects/dpa/code/inc/PollingTUI.h \
   /home/seger/projects/dpa/code/inc/Renderer.h \
@@ -3674,6 +3675,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/bits/stl_multiset.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
   /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/14.2.1/bits/stl_relops.h \
   /usr/include/c++/14.2.1/bits/stl_set.h \
   /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
   /usr/include/c++/14.2.1/bits/stl_tree.h \
@@ -3771,6 +3773,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o: /home/seger/projects/dpa/code/src/
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
   /usr/include/c++/14.2.1/unordered_map \
+  /usr/include/c++/14.2.1/utility \
   /usr/include/c++/14.2.1/variant \
   /usr/include/c++/14.2.1/vector \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
@@ -4830,6 +4833,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o: /home/seger/projects/dpa/code/src/main.c
   /home/seger/projects/dpa/code/inc/InputStructs.h \
   /home/seger/projects/dpa/code/inc/Memento.h \
   /home/seger/projects/dpa/code/inc/MementoManager.h \
+  /home/seger/projects/dpa/code/inc/PathFinder.h \
   /home/seger/projects/dpa/code/inc/Point.h \
   /home/seger/projects/dpa/code/inc/PollingTUI.h \
   /home/seger/projects/dpa/code/inc/Quadtree.h \
@@ -5113,6 +5117,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o: /home/seger/projects/dpa/code/src/main.c
   /usr/include/c++/14.2.1/bits/stl_multiset.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
   /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/14.2.1/bits/stl_relops.h \
   /usr/include/c++/14.2.1/bits/stl_set.h \
   /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
   /usr/include/c++/14.2.1/bits/stl_tree.h \
@@ -5210,6 +5215,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o: /home/seger/projects/dpa/code/src/main.c
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
   /usr/include/c++/14.2.1/unordered_map \
+  /usr/include/c++/14.2.1/utility \
   /usr/include/c++/14.2.1/variant \
   /usr/include/c++/14.2.1/vector \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
@@ -5389,6 +5395,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o: /home/seger/projects/dpa/code/src/main.c
 CMakeFiles/depaAlgo.dir/src/model.cpp.o: /home/seger/projects/dpa/code/src/model.cpp \
   /home/seger/projects/dpa/code/inc/Memento.h \
   /home/seger/projects/dpa/code/inc/MementoManager.h \
+  /home/seger/projects/dpa/code/inc/PathFinder.h \
   /home/seger/projects/dpa/code/inc/artist.h \
   /home/seger/projects/dpa/code/inc/iTileState.h \
   /home/seger/projects/dpa/code/inc/levelData.h \
@@ -5560,6 +5567,7 @@ CMakeFiles/depaAlgo.dir/src/model.cpp.o: /home/seger/projects/dpa/code/src/model
   /usr/include/c++/14.2.1/bits/stl_list.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
   /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/14.2.1/bits/stl_relops.h \
   /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
   /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
   /usr/include/c++/14.2.1/bits/stl_vector.h \
@@ -5629,6 +5637,7 @@ CMakeFiles/depaAlgo.dir/src/model.cpp.o: /home/seger/projects/dpa/code/src/model
   /usr/include/c++/14.2.1/tuple \
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
+  /usr/include/c++/14.2.1/utility \
   /usr/include/c++/14.2.1/variant \
   /usr/include/c++/14.2.1/vector \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
@@ -7930,6 +7939,7 @@ CMakeFiles/depaAlgo.dir/src/tileStateYellow.cpp.o: /home/seger/projects/dpa/code
 CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.cpp \
   /home/seger/projects/dpa/code/inc/Memento.h \
   /home/seger/projects/dpa/code/inc/MementoManager.h \
+  /home/seger/projects/dpa/code/inc/PathFinder.h \
   /home/seger/projects/dpa/code/inc/Renderer.h \
   /home/seger/projects/dpa/code/inc/artist.h \
   /home/seger/projects/dpa/code/inc/iTileState.h \
@@ -8168,6 +8178,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
   /usr/include/c++/14.2.1/bits/stl_list.h \
   /usr/include/c++/14.2.1/bits/stl_pair.h \
   /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h \
+  /usr/include/c++/14.2.1/bits/stl_relops.h \
   /usr/include/c++/14.2.1/bits/stl_tempbuf.h \
   /usr/include/c++/14.2.1/bits/stl_uninitialized.h \
   /usr/include/c++/14.2.1/bits/stl_vector.h \
@@ -8257,6 +8268,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
   /usr/include/c++/14.2.1/tuple \
   /usr/include/c++/14.2.1/type_traits \
   /usr/include/c++/14.2.1/typeinfo \
+  /usr/include/c++/14.2.1/utility \
   /usr/include/c++/14.2.1/variant \
   /usr/include/c++/14.2.1/vector \
   /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h \
@@ -8429,8 +8441,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /home/seger/projects/dpa/code/src/model.cpp:
 
-/usr/include/c++/14.2.1/unordered_set:
-
 /home/seger/projects/dpa/code/inc/tileFactory.h:
 
 /home/seger/projects/dpa/code/src/levelData.cpp:
@@ -8455,6 +8465,8 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/c++/14.2.1/stop_token:
 
+/usr/include/c++/14.2.1/set:
+
 /usr/include/c++/14.2.1/semaphore:
 
 /usr/include/c++/14.2.1/ratio:
@@ -8462,6 +8474,8 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/include/c++/14.2.1/iomanip:
 
 /usr/include/c++/14.2.1/chrono:
+
+/usr/include/c++/14.2.1/bits/stl_multiset.h:
 
 /usr/include/c++/14.2.1/bits/std_thread.h:
 
@@ -8504,10 +8518,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /home/seger/projects/dpa/code/inc/CollisionHandler.h:
 
 /home/seger/projects/dpa/code/src/controller.cpp:
-
-/usr/include/c++/14.2.1/bits/unordered_set.h:
-
-/home/seger/projects/dpa/code/inc/addArtistBehavior.h:
 
 /home/seger/projects/dpa/code/src/addArtistBehavior.cpp:
 
@@ -8572,6 +8582,8 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/include/bits/posix1_lim.h:
 
 /usr/include/wchar.h:
+
+/usr/include/assert.h:
 
 /usr/include/SDL2/SDL_joystick.h:
 
@@ -8731,6 +8743,12 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512bitalgvlintrin.h:
 
+/usr/include/c++/14.2.1/bits/stl_set.h:
+
+/usr/include/bits/termios-misc.h:
+
+/usr/include/c++/14.2.1/cstdint:
+
 /usr/include/c++/14.2.1/bits/invoke.h:
 
 /home/seger/projects/dpa/code/src/view.cpp:
@@ -8825,8 +8843,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/bits/pthreadtypes-arch.h:
 
-/usr/include/bits/locale.h:
-
 /usr/include/c++/14.2.1/ext/aligned_buffer.h:
 
 /usr/include/bits/libc-header-start.h:
@@ -8879,6 +8895,24 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/stdlib.h:
 
+/usr/include/bits/endianness.h:
+
+/usr/include/libintl.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/lwpintrin.h:
+
+/home/seger/projects/dpa/code/inc/tile.h:
+
+/usr/include/c++/14.2.1/pstl/execution_defs.h:
+
+/home/seger/projects/dpa/code/inc/ArtistCSVParser.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/c++/14.2.1/bits/stl_tempbuf.h:
+
+/usr/include/asm-generic/posix_types.h:
+
 /usr/include/c++/14.2.1/stdexcept:
 
 /usr/include/bits/types/time_t.h:
@@ -8910,6 +8944,8 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/include/asm/posix_types_64.h:
 
 /usr/include/c++/14.2.1/bits/basic_ios.tcc:
+
+/usr/include/bits/locale.h:
 
 /usr/include/bits/local_lim.h:
 
@@ -8946,6 +8982,10 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/include/c++/14.2.1/fstream:
 
 /usr/include/c++/14.2.1/bits/atomic_base.h:
+
+/usr/include/c++/14.2.1/bits/exception_defines.h:
+
+/usr/include/c++/14.2.1/bits/stl_tree.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/mmintrin.h:
 
@@ -8989,14 +9029,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/bits/types/__fpos_t.h:
 
-/usr/include/bits/endianness.h:
-
-/usr/include/libintl.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/lwpintrin.h:
-
-/home/seger/projects/dpa/code/inc/tile.h:
-
 /usr/include/bits/confname.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512vlintrin.h:
@@ -9016,16 +9048,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/rdseedintrin.h:
 
 /usr/include/bits/typesizes.h:
-
-/usr/include/c++/14.2.1/pstl/execution_defs.h:
-
-/home/seger/projects/dpa/code/inc/ArtistCSVParser.h:
-
-/usr/include/bits/stdlib-float.h:
-
-/usr/include/c++/14.2.1/bits/stl_tempbuf.h:
-
-/usr/include/asm-generic/posix_types.h:
 
 /usr/include/bits/thread-shared-types.h:
 
@@ -9177,10 +9199,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/c++/14.2.1/bits/cxxabi_init_exception.h:
 
-/usr/include/c++/14.2.1/bits/stl_tree.h:
-
-/usr/include/c++/14.2.1/bits/exception_defines.h:
-
 /home/seger/projects/dpa/code/inc/tileNode.h:
 
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
@@ -9292,6 +9310,10 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/include/c++/14.2.1/tr1/riemann_zeta.tcc:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/tmmintrin.h:
+
+/home/seger/projects/dpa/code/inc/addArtistBehavior.h:
+
+/usr/include/c++/14.2.1/bits/unordered_set.h:
 
 /usr/include/SDL2/SDL_assert.h:
 
@@ -9537,9 +9559,9 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/gfniintrin.h:
 
-/usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h:
-
 /usr/include/bits/floatn-common.h:
+
+/usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++io.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/hresetintrin.h:
 
@@ -9568,12 +9590,6 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/popcntintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/raointintrin.h:
-
-/usr/include/bits/termios-misc.h:
-
-/usr/include/c++/14.2.1/cstdint:
-
-/usr/include/c++/14.2.1/bits/stl_set.h:
 
 /usr/include/c++/14.2.1/typeinfo:
 
@@ -9635,9 +9651,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o: /home/seger/projects/dpa/code/src/view.c
 
 /usr/include/c++/14.2.1/bits/deque.tcc:
 
-/usr/include/c++/14.2.1/bits/stl_multiset.h:
-
-/usr/include/c++/14.2.1/set:
+/usr/include/c++/14.2.1/unordered_set:
 
 /usr/include/SDL2/SDL_guid.h:
 

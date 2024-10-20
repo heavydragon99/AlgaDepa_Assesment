@@ -85,3 +85,9 @@ void Renderer::drawSquare(int x, int y, int width, int height, Color color) {
     SDL_SetRenderDrawColor(mRenderer.get(), color.r, color.g, color.b, 0xFF);
     SDL_RenderFillRect(mRenderer.get(), &fillRect);
 }
+
+void Renderer::drawSquareRect(int x, int y, int width, int height, Color color) {
+    SDL_Rect rect = {x, y, width, height}; 
+    SDL_SetRenderDrawColor(mRenderer.get(), color.r, color.g, color.b, 0xFF);
+    SDL_RenderDrawRect(mRenderer.get(), &rect);
+}

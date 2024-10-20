@@ -25,6 +25,7 @@ CMakeFiles/depaAlgo.dir/src/FileHandler.cpp.o
  /usr/include/asm/sockios.h
  /usr/include/asm/unistd.h
  /usr/include/asm/unistd_64.h
+ /usr/include/assert.h
  /usr/include/bits/atomic_wide_counter.h
  /usr/include/bits/byteswap.h
  /usr/include/bits/confname.h
@@ -342,6 +343,7 @@ CMakeFiles/depaAlgo.dir/src/GridParserStrategy.cpp.o
  /usr/include/asm/sockios.h
  /usr/include/asm/unistd.h
  /usr/include/asm/unistd_64.h
+ /usr/include/assert.h
  /usr/include/bits/atomic_wide_counter.h
  /usr/include/bits/byteswap.h
  /usr/include/bits/confname.h
@@ -2003,14 +2005,11 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o
  /usr/include/c++/14.2.1/bits/stl_iterator_base_funcs.h
  /usr/include/c++/14.2.1/bits/stl_iterator_base_types.h
  /usr/include/c++/14.2.1/bits/stl_list.h
- /usr/include/c++/14.2.1/bits/stl_multiset.h
  /usr/include/c++/14.2.1/bits/stl_pair.h
  /usr/include/c++/14.2.1/bits/stl_queue.h
  /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h
  /usr/include/c++/14.2.1/bits/stl_relops.h
- /usr/include/c++/14.2.1/bits/stl_set.h
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h
- /usr/include/c++/14.2.1/bits/stl_tree.h
  /usr/include/c++/14.2.1/bits/stl_uninitialized.h
  /usr/include/c++/14.2.1/bits/stl_vector.h
  /usr/include/c++/14.2.1/bits/streambuf.tcc
@@ -2022,6 +2021,7 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o
  /usr/include/c++/14.2.1/bits/uniform_int_dist.h
  /usr/include/c++/14.2.1/bits/unique_ptr.h
  /usr/include/c++/14.2.1/bits/unordered_map.h
+ /usr/include/c++/14.2.1/bits/unordered_set.h
  /usr/include/c++/14.2.1/bits/uses_allocator.h
  /usr/include/c++/14.2.1/bits/uses_allocator_args.h
  /usr/include/c++/14.2.1/bits/utility.h
@@ -2070,7 +2070,6 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o
  /usr/include/c++/14.2.1/pstl/glue_memory_defs.h
  /usr/include/c++/14.2.1/pstl/pstl_config.h
  /usr/include/c++/14.2.1/queue
- /usr/include/c++/14.2.1/set
  /usr/include/c++/14.2.1/span
  /usr/include/c++/14.2.1/stdexcept
  /usr/include/c++/14.2.1/streambuf
@@ -2081,6 +2080,7 @@ CMakeFiles/depaAlgo.dir/src/Pathfinder.cpp.o
  /usr/include/c++/14.2.1/type_traits
  /usr/include/c++/14.2.1/typeinfo
  /usr/include/c++/14.2.1/unordered_map
+ /usr/include/c++/14.2.1/unordered_set
  /usr/include/c++/14.2.1/utility
  /usr/include/c++/14.2.1/variant
  /usr/include/c++/14.2.1/vector
@@ -3418,6 +3418,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o
  /home/seger/projects/dpa/code/inc/InputStructs.h
  /home/seger/projects/dpa/code/inc/Memento.h
  /home/seger/projects/dpa/code/inc/MementoManager.h
+ /home/seger/projects/dpa/code/inc/PathFinder.h
  /home/seger/projects/dpa/code/inc/Point.h
  /home/seger/projects/dpa/code/inc/PollingTUI.h
  /home/seger/projects/dpa/code/inc/Renderer.h
@@ -3686,6 +3687,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o
  /usr/include/c++/14.2.1/bits/stl_multiset.h
  /usr/include/c++/14.2.1/bits/stl_pair.h
  /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h
+ /usr/include/c++/14.2.1/bits/stl_relops.h
  /usr/include/c++/14.2.1/bits/stl_set.h
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h
  /usr/include/c++/14.2.1/bits/stl_tree.h
@@ -3783,6 +3785,7 @@ CMakeFiles/depaAlgo.dir/src/controller.cpp.o
  /usr/include/c++/14.2.1/type_traits
  /usr/include/c++/14.2.1/typeinfo
  /usr/include/c++/14.2.1/unordered_map
+ /usr/include/c++/14.2.1/utility
  /usr/include/c++/14.2.1/variant
  /usr/include/c++/14.2.1/vector
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h
@@ -4846,6 +4849,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o
  /home/seger/projects/dpa/code/inc/InputStructs.h
  /home/seger/projects/dpa/code/inc/Memento.h
  /home/seger/projects/dpa/code/inc/MementoManager.h
+ /home/seger/projects/dpa/code/inc/PathFinder.h
  /home/seger/projects/dpa/code/inc/Point.h
  /home/seger/projects/dpa/code/inc/PollingTUI.h
  /home/seger/projects/dpa/code/inc/Quadtree.h
@@ -5129,6 +5133,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o
  /usr/include/c++/14.2.1/bits/stl_multiset.h
  /usr/include/c++/14.2.1/bits/stl_pair.h
  /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h
+ /usr/include/c++/14.2.1/bits/stl_relops.h
  /usr/include/c++/14.2.1/bits/stl_set.h
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h
  /usr/include/c++/14.2.1/bits/stl_tree.h
@@ -5226,6 +5231,7 @@ CMakeFiles/depaAlgo.dir/src/main.cpp.o
  /usr/include/c++/14.2.1/type_traits
  /usr/include/c++/14.2.1/typeinfo
  /usr/include/c++/14.2.1/unordered_map
+ /usr/include/c++/14.2.1/utility
  /usr/include/c++/14.2.1/variant
  /usr/include/c++/14.2.1/vector
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h
@@ -5406,6 +5412,7 @@ CMakeFiles/depaAlgo.dir/src/model.cpp.o
  /home/seger/projects/dpa/code/src/model.cpp
  /home/seger/projects/dpa/code/inc/Memento.h
  /home/seger/projects/dpa/code/inc/MementoManager.h
+ /home/seger/projects/dpa/code/inc/PathFinder.h
  /home/seger/projects/dpa/code/inc/artist.h
  /home/seger/projects/dpa/code/inc/iTileState.h
  /home/seger/projects/dpa/code/inc/levelData.h
@@ -5577,6 +5584,7 @@ CMakeFiles/depaAlgo.dir/src/model.cpp.o
  /usr/include/c++/14.2.1/bits/stl_list.h
  /usr/include/c++/14.2.1/bits/stl_pair.h
  /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h
+ /usr/include/c++/14.2.1/bits/stl_relops.h
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h
  /usr/include/c++/14.2.1/bits/stl_uninitialized.h
  /usr/include/c++/14.2.1/bits/stl_vector.h
@@ -5646,6 +5654,7 @@ CMakeFiles/depaAlgo.dir/src/model.cpp.o
  /usr/include/c++/14.2.1/tuple
  /usr/include/c++/14.2.1/type_traits
  /usr/include/c++/14.2.1/typeinfo
+ /usr/include/c++/14.2.1/utility
  /usr/include/c++/14.2.1/variant
  /usr/include/c++/14.2.1/vector
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h
@@ -7956,6 +7965,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o
  /home/seger/projects/dpa/code/src/view.cpp
  /home/seger/projects/dpa/code/inc/Memento.h
  /home/seger/projects/dpa/code/inc/MementoManager.h
+ /home/seger/projects/dpa/code/inc/PathFinder.h
  /home/seger/projects/dpa/code/inc/Renderer.h
  /home/seger/projects/dpa/code/inc/artist.h
  /home/seger/projects/dpa/code/inc/iTileState.h
@@ -8194,6 +8204,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o
  /usr/include/c++/14.2.1/bits/stl_list.h
  /usr/include/c++/14.2.1/bits/stl_pair.h
  /usr/include/c++/14.2.1/bits/stl_raw_storage_iter.h
+ /usr/include/c++/14.2.1/bits/stl_relops.h
  /usr/include/c++/14.2.1/bits/stl_tempbuf.h
  /usr/include/c++/14.2.1/bits/stl_uninitialized.h
  /usr/include/c++/14.2.1/bits/stl_vector.h
@@ -8283,6 +8294,7 @@ CMakeFiles/depaAlgo.dir/src/view.cpp.o
  /usr/include/c++/14.2.1/tuple
  /usr/include/c++/14.2.1/type_traits
  /usr/include/c++/14.2.1/typeinfo
+ /usr/include/c++/14.2.1/utility
  /usr/include/c++/14.2.1/variant
  /usr/include/c++/14.2.1/vector
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h

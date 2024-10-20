@@ -7,7 +7,7 @@
 #include <thread>
 
 View::View(Model& aModel)
-    : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()) {}
+    : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()), mTileSize(0) {}
 
 View::~View() {}
 
@@ -21,6 +21,23 @@ void View::renderTile(int tileWidth, int tileHeight) {
         y = i / levelData.getCols();
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
+
+        if (levelData.getGrid().at(i).isVisited()) {
+            SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
+            mRenderer.drawSquareRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
+        }
+        if (levelData.getGrid().at(i).isPath()) {
+            // Calculate new dimensions
+            int newTileWidth = static_cast<int>(tileWidth * 0.7);
+            int newTileHeight = static_cast<int>(tileHeight * 0.7);
+
+            // Calculate new starting positions to center the smaller square
+            int newX = x * tileWidth + (tileWidth - newTileWidth) / 2;
+            int newY = y * tileHeight + (tileHeight - newTileHeight) / 2;
+
+            SDL_Rect smallSquare = {newX, newY, newTileWidth, newTileHeight}; // Ensure square tiles
+            mRenderer.drawSquare(smallSquare.x, smallSquare.y, smallSquare.w, smallSquare.h, Color(0, 0, 0));
+        }
     }
 }
 
@@ -60,13 +77,13 @@ void View::render() {
     int windowHeight = mRenderer.getWindowHeight();
 
     // Calculate tile width and height
-    int tileSize = std::min(windowWidth / levelData.getCols(), windowHeight / levelData.getRows());
+    mTileSize = std::min(windowWidth / levelData.getCols(), windowHeight / levelData.getRows());
 
     // Render grid
-    renderTile(tileSize, tileSize);
+    renderTile(mTileSize, mTileSize);
 
     // Render people
-    renderPeople(tileSize, tileSize);
+    renderPeople(mTileSize, mTileSize);
 
     mRenderer.show();
 }
@@ -90,6 +107,8 @@ void View::setGridColor(std::vector<GridColor> aGridColor) {
         mGridColor.push_back(color);
     }
 }
+
+int View::getTileSize() const { return mTileSize; }
 
 void View::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
     for (const GridColor& color : mGridColor) {
