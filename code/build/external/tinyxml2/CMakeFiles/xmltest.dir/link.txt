@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -O0 CMakeFiles/xmltest.dir/xmltest.cpp.o -o xmltest  libtinyxml2.a

@@ -1,39 +1,23 @@
-#pragma once
+#ifndef COMMAND_H
+#define COMMAND_H
 
 #include <iostream>
 #include <map>
 #include <memory>
 
-/*
- *
- *   Spatie: beweging artists    play/pause
-     Enter: herschik het vakje waar de muispointer zich bevindt
-        (Zie herschikken hierboven)
-     o:       bestand openen
-     a:       render artists       aan/uit
-     left arrow:   terug in de tijd gaan  x-ticks (bepaal x zelf)
-     right arrow:  vooruit in de tijd gaan  x-ticks (bepaal x zelf)
- *
- */
-
 class Command {
 public:
     virtual ~Command() {}
-    virtual void execute() = 0; // Pure virtual function to execute the command
+    virtual void execute() = 0;
     virtual std::string getName() = 0;
 
     Command() {}
 
     /// Assume Command has a copy constructor
-    Command(const Command& other) {
-        // Copy constructor logic (copy the necessary data)
-    }
+    Command(const Command& other) {}
 
     // Clone method to return a copy of this command
     virtual Command* clone() const = 0;
-    // return new Command(*this); // Creates a new instance using the copy constructor
-    // // return nullptr;
-    // }
 };
 
 class RearrangeTileCommand : public Command {
@@ -46,7 +30,6 @@ public:
 
     RearrangeTileCommand* clone() const override {
         return new RearrangeTileCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
     }
 };
 
@@ -60,7 +43,6 @@ public:
 
     FileOpenCommand* clone() const override {
         return new FileOpenCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
     }
 };
 
@@ -74,7 +56,6 @@ public:
 
     ToggleRenderArtistsCommand* clone() const override {
         return new ToggleRenderArtistsCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
     }
 };
 
@@ -88,7 +69,6 @@ public:
 
     BackwardInTimeCommand* clone() const override {
         return new BackwardInTimeCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
     }
 };
 
@@ -102,30 +82,119 @@ public:
 
     ForwardInTimeCommand* clone() const override {
         return new ForwardInTimeCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
     }
 };
 
-class PlayPauseCommand : public Command {
+class PlayPauseSimulationCommand : public Command {
 public:
-    // PlayPauseCommand() {}
-    PlayPauseCommand(bool& aPauseState) : mPauseState(aPauseState) {}
+    PlayPauseSimulationCommand(bool& aPauseState) : mPauseState(aPauseState) {}
     /// Assume Command has a copy constructor
-    PlayPauseCommand(const PlayPauseCommand& other) : mPauseState(other.mPauseState) {
-        // Copy constructor logic (copy the necessary data)
-        // this->mPauseState = other.mPauseState;
-    }
+    PlayPauseSimulationCommand(const PlayPauseSimulationCommand& other) : mPauseState(other.mPauseState) {}
 
     void execute() override { mPauseState = !mPauseState; }
     std::string getName() override { return "Play Pause Command"; }
 
-    PlayPauseCommand* clone() const override {
-        return new PlayPauseCommand(*this); // Creates a new instance using the copy constructor
-        // return nullptr;
+    PlayPauseSimulationCommand* clone() const override {
+        return new PlayPauseSimulationCommand(*this); // Creates a new instance using the copy constructor
     }
 
 private:
-    bool& mPauseState; // The receiver
+    bool& mPauseState;
+};
+
+class ToggleRenderQuadtreeCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Toggle Render Quadtree Command" << std::endl;
+    }
+    std::string getName() override { return "Toggle Render Quadtree Command"; }
+
+    ToggleRenderQuadtreeCommand* clone() const override {
+        return new ToggleRenderQuadtreeCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class ToggleRenderPathCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Toggle Render Path Command" << std::endl;
+    }
+    std::string getName() override { return "Toggle Render Path Command"; }
+
+    ToggleRenderPathCommand* clone() const override {
+        return new ToggleRenderPathCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class ToggleRenderVisitedCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Toggle Render Visited Command" << std::endl;
+    }
+    std::string getName() override { return "Toggle Render Visited Command"; }
+
+    ToggleRenderVisitedCommand* clone() const override {
+        return new ToggleRenderVisitedCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class ChangeCollisionMethodCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Change Collision Method Command" << std::endl;
+    }
+    std::string getName() override { return "Change Collision Method Command"; }
+
+    ChangeCollisionMethodCommand* clone() const override {
+        return new ChangeCollisionMethodCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class ToggleCollisionWithPathCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Toggle Collision With Path Command" << std::endl;
+    }
+    std::string getName() override { return "Toggle Collision With Path Command"; }
+
+    ToggleCollisionWithPathCommand* clone() const override {
+        return new ToggleCollisionWithPathCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class ChangePathfindingMethodCommand : public Command {
+public:
+    void execute() override {
+        // Action for moving down
+        std::cout << "Change Pathfinding Method Command" << std::endl;
+    }
+    std::string getName() override { return "Change Pathfinding Method Command"; }
+
+    ChangePathfindingMethodCommand* clone() const override {
+        return new ChangePathfindingMethodCommand(*this); // Creates a new instance using the copy constructor
+    }
+};
+
+class PlayPauseArtistsCommand : public Command {
+public:
+    PlayPauseArtistsCommand(bool& aPauseState) : mPauseState(aPauseState) {}
+    /// Assume Command has a copy constructor
+    PlayPauseArtistsCommand(const PlayPauseArtistsCommand& other) : mPauseState(other.mPauseState) {}
+
+    void execute() override { mPauseState = !mPauseState; }
+    std::string getName() override { return "Play Pause Artists Command"; }
+
+    PlayPauseArtistsCommand* clone() const override {
+        return new PlayPauseArtistsCommand(*this); // Creates a new instance using the copy constructor
+    }
+
+    private:
+    bool& mPauseState;
 };
 
 class InputHandler {
@@ -164,3 +233,5 @@ public:
 
     std::map<int, std::unique_ptr<Command>>& getRegistrations() { return commandMap; }
 };
+
+#endif // COMMAND_H

@@ -34,24 +34,29 @@ void Controller::checkInputs() {
 }
 
 void Controller::run() {
-    bool pause = true;
+    bool pauseSimulation = true;
+    bool pauseArtists = true;
 
     PollingTUI tui(mInputHandler);
 
-    // Example input codes:
-    // const int KEY_UP = 1;
-    // const int KEY_DOWN = 2;
-    // const int KEY_JUMP = 3;
-
-    // Bind inputs to commands
-    // inputHandler.setCommand(KEY_UP, std::make_unique<MoveUpCommand>());
-    // inputHandler.setCommand(KEY_DOWN, std::make_unique<MoveDownCommand>());
-    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseCommand>(pause));
-    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());
-    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());
-    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>());
-    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());
-    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());
+    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseSimulationCommand>(pauseSimulation)); // Play/Pause simulation
+    mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseSimulationCommand>(pauseArtists)); // Play/Pause artists
+    mInputHandler.setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>()); // Change Collision
+                                                                                                 // Method
+    mInputHandler.setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());  // Toggle Render
+                                                                                                 // Quadtree
+    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
+    mInputHandler.setCommand((int)Key::Key_W, std::make_unique<ToggleCollisionWithPathCommand>()); // Toggle Collision
+                                                                                                   // With Path
+    mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
+                                                                                                   // Method
+    mInputHandler.setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());        // Toggle Render Path
+    mInputHandler.setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
+    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());   // Rearrange Tile
+    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());            // File Open
+    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());   // Backward In Time
+    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());   // Forward In Time
 
     const int frameDelayView = 1000 / mFPSView;
     // Render the data with the view class
@@ -93,8 +98,9 @@ void Controller::run() {
 void Controller::handleUserInput() {
     Input& input = Input::getInstance();
     input.update();
-    if (!pause)
-        mModel->updateModel();
+    // if (!pauseSimulation){
+    //     mModel->updateModel();
+    // }
 
     // mCollisionHandler.handleCollisions();
 

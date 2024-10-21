@@ -84,17 +84,6 @@ private:
             std::cout << "(" << (commandID += 1) << ") " << command->getName()
                       << " is binded to: " << keyToString((Key)key) << std::endl;
         }
-        /*
-         *
-         *   Spatie: beweging artists    play/pause
-             Enter: herschik het vakje waar de muispointer zich bevindt
-                (Zie herschikken hierboven)
-             o:       bestand openen
-             a:       render artists       aan/uit
-             left arrow:   terug in de tijd gaan  x-ticks (bepaal x zelf)
-             right arrow:  vooruit in de tijd gaan  x-ticks (bepaal x zelf)
-         *
-         */
         char ch;
 
         while (kbhit() > 0) {
@@ -177,12 +166,6 @@ private:
         ioctl(STDIN_FILENO, FIONREAD, &bytesWaiting);
         return bytesWaiting > 0;
     }
-
-    // // Simulate external data polling
-    // int pollExternalData() {
-    //     static int data = 0;
-    //     return ++data;
-    // }
 
     // ANSI escape codes to clear the terminal and move the cursor
     void clearScreen() { std::cout << "\033[2J\033[1;1H"; }
