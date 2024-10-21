@@ -34,7 +34,7 @@ private:
     std::unique_ptr<MementoManager> mMementoManager;
     std::unique_ptr<PathFinder> mPathFinder;
     std::chrono::time_point<std::chrono::steady_clock> mLastUpdateTime;
-    static constexpr std::chrono::seconds UPDATE_INTERVAL{1}; // Define the interval here
+    static constexpr std::chrono::milliseconds MEMENTO_UPDATE_INTERVAL{600}; // Define the interval here
 
 };
 

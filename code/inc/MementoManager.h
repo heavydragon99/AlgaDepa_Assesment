@@ -2,8 +2,9 @@
 #define MEMENTOMANAGER_H
 
 #include "Memento.h"
-
 #include <vector>
+
+const int BUFFER_SIZE = 10; // Define the buffer size
 
 class MementoManager {
 public:
@@ -18,6 +19,8 @@ public:
 private:
     std::vector<Memento> mMementos;
     int mCurrentIndex;
+    int mStartIndex;
+    int mSize;
 };
 
 #endif // MEMENTOMANAGER_H

@@ -15,7 +15,7 @@ LevelData& Model::getLevelData() { return *mLevel; }
 void Model::updateModel() {
     if (!Configuration::getInstance().getConfig("PauseArtists")) {
         auto now = std::chrono::steady_clock::now();
-        if (now - mLastUpdateTime >= UPDATE_INTERVAL) {
+        if (now - mLastUpdateTime >= MEMENTO_UPDATE_INTERVAL) {
             mMementoManager->addMemento(saveToMemento());
             mLastUpdateTime = now;
         }
@@ -25,9 +25,12 @@ void Model::updateModel() {
 
 void Model::updateTile(int aX, int aY) { mLevel->updateTile(aX, aY); }
 
-Memento Model::saveToMemento() const { return Memento(std::make_unique<LevelData>(*mLevel)); }
+Memento Model::saveToMemento() const { return Memento(*mLevel.get()); }
 
-void Model::restoreFromMemento(Memento&& memento) { mLevel = std::move(memento.getState()); }
+void Model::restoreFromMemento(Memento&& memento) {
+    // mLevel = std::move(memento.getState());
+    // mLevel->connectNeighbors();
+}
 
 void Model::usePreviousMemento() { restoreFromMemento(mMementoManager->getPreviousMemento()); }
 

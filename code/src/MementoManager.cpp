@@ -1,30 +1,48 @@
 #include "MementoManager.h"
 
-MementoManager::MementoManager() : mCurrentIndex(-1) {}
+#include <stdexcept>
+
+MementoManager::MementoManager() : mCurrentIndex(-1), mStartIndex(0), mSize(0) {
+    mMementos.resize(BUFFER_SIZE);
+}
 
 void MementoManager::addMemento(Memento memento) {
-    // Remove all mementos after the current index
-    if (mCurrentIndex < mMementos.size() - 1) {
-        mMementos.erase(mMementos.begin() + mCurrentIndex + 1, mMementos.end());
+    if (mSize < BUFFER_SIZE) {
+        mSize++;
+    } else {
+        mStartIndex = (mStartIndex + 1) % BUFFER_SIZE;
     }
-    mMementos.push_back(std::move(memento));
-    mCurrentIndex++;
+    mCurrentIndex = (mCurrentIndex + 1) % BUFFER_SIZE;
+    mMementos[mCurrentIndex] = std::move(memento);
 }
 
 Memento MementoManager::getMemento(int index) {
-    return std::move(mMementos.at(index));
+    if (index < 0 || index >= mSize) {
+        throw std::out_of_range("Index out of range");
+    }
+    int actualIndex = (mStartIndex + index) % BUFFER_SIZE;
+    return mMementos[actualIndex];
 }
 
 Memento MementoManager::getPreviousMemento() {
-    if (mCurrentIndex > 0) {
-        mCurrentIndex--;
+    if (mSize == 0) {
+        throw std::out_of_range("No mementos available");
     }
-    return std::move(mMementos.at(mCurrentIndex));
+    if (mCurrentIndex == mStartIndex) {
+        throw std::out_of_range("No previous memento available");
+    }
+    mCurrentIndex = (mCurrentIndex - 1 + BUFFER_SIZE) % BUFFER_SIZE;
+    return mMementos[mCurrentIndex];
 }
 
 Memento MementoManager::getNextMemento() {
-    if (mCurrentIndex < mMementos.size() - 1) {
-        mCurrentIndex++;
+    if (mSize == 0) {
+        throw std::out_of_range("No mementos available");
     }
-    return std::move(mMementos.at(mCurrentIndex));
+    int nextIndex = (mCurrentIndex + 1) % BUFFER_SIZE;
+    if (nextIndex == (mStartIndex + mSize) % BUFFER_SIZE) {
+        throw std::out_of_range("No next memento available");
+    }
+    mCurrentIndex = nextIndex;
+    return mMementos[mCurrentIndex];
 }

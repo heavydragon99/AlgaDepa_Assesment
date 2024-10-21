@@ -6,15 +6,7 @@
 
 #include <cmath>
 #include <iostream>
-#include <unordered_set>
 #include <utility>
-
-// Hash function for std::pair<int, int> to use in unordered_set
-struct pair_hash {
-    template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& pair) const {
-        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
-    }
-};
 
 LevelData::LevelData() : mCols(0), mRows(0) { TileFactory::setLevelData(this); }
 
@@ -64,6 +56,11 @@ void LevelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aG
         tileNode.setWeight(weight);
     }
 
+    // Set tile weights
+    for(auto& gridColor : aGrid.gridColors) {
+        mGridWeights.push_back(std::make_pair(gridColor.letter, gridColor.weight));
+    }
+
     // Connect neighbors
     connectNeighbors();
 
@@ -97,6 +94,8 @@ int LevelData::getRows() const { return mRows; }
 std::vector<TileNode>& LevelData::getGrid() { return mGrid; }
 
 std::vector<Artist>& LevelData::getPeople() { return mPeople; }
+
+std::vector<std::pair<char, int>>& LevelData::getGridWeights() { return mGridWeights; }
 
 void LevelData::addArtist(const Tile& aTile) {
     if (mPeople.size() >= MAX_PEOPLE) {
