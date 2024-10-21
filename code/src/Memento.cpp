@@ -16,6 +16,15 @@ Memento::Memento(LevelData& aLevelData) {
     for(auto& tileNode : aLevelData.getGrid()) {
         grid.grid.push_back(tileNode.getTile().getColor());
     }
+
+    mPeople = aLevelData.getPeople();
+    mGrid = grid;
 }
 
-ParsedGrid Memento::getState() { return mGrid; }
+ParsedGrid Memento::getGrid() {
+    return mGrid;
+}
+
+std::vector<Artist>& Memento::getPeople() {
+    return mPeople;
+}

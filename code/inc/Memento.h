@@ -9,10 +9,12 @@ class Memento {
 public:
     Memento() = default;
     Memento(LevelData& aLevelData);
-    ParsedGrid getState();
+    ParsedGrid getGrid();
+    std::vector<Artist>& getPeople();
 
 private:
     ParsedGrid mGrid;
+    std::vector<Artist> mPeople;
 };
 
 #endif // MEMENTO_H

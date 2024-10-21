@@ -21,6 +21,7 @@ private:
     int mCurrentIndex;
     int mStartIndex;
     int mSize;
+    int mValidSize;
 };
 
 #endif // MEMENTOMANAGER_H

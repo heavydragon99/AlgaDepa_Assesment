@@ -19,8 +19,8 @@ public:
     ~LevelData();
 
     void updateLevelData();
-    void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
     void buildPersonData(std::vector<ParsedPerson> aPersons);
+    void buildPersonData(std::vector<Artist> aPersons);
     void buildGridData(ParsedGrid aGrid);
 
     int getCols() const;

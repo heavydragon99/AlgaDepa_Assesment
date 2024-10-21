@@ -1,12 +1,11 @@
 #include "MementoManager.h"
-
 #include <stdexcept>
+#include <iostream>
 
-MementoManager::MementoManager() : mCurrentIndex(-1), mStartIndex(0), mSize(0) {
-    mMementos.resize(BUFFER_SIZE);
-}
+MementoManager::MementoManager() : mCurrentIndex(-1), mStartIndex(0), mSize(0) , mValidSize(0) { mMementos.resize(BUFFER_SIZE); }
 
 void MementoManager::addMemento(Memento memento) {
+    mSize = mValidSize;
     if (mSize < BUFFER_SIZE) {
         mSize++;
     } else {
@@ -14,6 +13,8 @@ void MementoManager::addMemento(Memento memento) {
     }
     mCurrentIndex = (mCurrentIndex + 1) % BUFFER_SIZE;
     mMementos[mCurrentIndex] = std::move(memento);
+    mValidSize = mSize;
+    std::cout << "Memento added" << std::endl;
 }
 
 Memento MementoManager::getMemento(int index) {
@@ -25,24 +26,21 @@ Memento MementoManager::getMemento(int index) {
 }
 
 Memento MementoManager::getPreviousMemento() {
-    if (mSize == 0) {
-        throw std::out_of_range("No mementos available");
-    }
-    if (mCurrentIndex == mStartIndex) {
+    if (mValidSize <= 1) {
         throw std::out_of_range("No previous memento available");
     }
-    mCurrentIndex = (mCurrentIndex - 1 + BUFFER_SIZE) % BUFFER_SIZE;
+    int previousIndex = (mCurrentIndex - 1 + BUFFER_SIZE) % BUFFER_SIZE;
+    mCurrentIndex = previousIndex;
+    mValidSize--;
     return mMementos[mCurrentIndex];
 }
 
 Memento MementoManager::getNextMemento() {
-    if (mSize == 0) {
-        throw std::out_of_range("No mementos available");
+    if (mValidSize >= mSize) {
+        throw std::out_of_range("No next mementos available");
     }
     int nextIndex = (mCurrentIndex + 1) % BUFFER_SIZE;
-    if (nextIndex == (mStartIndex + mSize) % BUFFER_SIZE) {
-        throw std::out_of_range("No next memento available");
-    }
     mCurrentIndex = nextIndex;
+    mValidSize++;
     return mMementos[mCurrentIndex];
 }
