@@ -51,6 +51,12 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
                                                                                                 // simulation
     mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());  // Play/Pause
                                                                                                 // artists
+    mInputHandler.setCommand((int)Key::Key_Up,
+                             std::make_unique<SpeedUpCommand>([this]() { this->speedUp(); })); // Speed
+                                                                                               // Up
+    mInputHandler.setCommand((int)Key::Key_Down,
+                             std::make_unique<SlowDownCommand>([this]() { this->slowDown(); })); // Slow
+                                                                                                 // Down
 }
 
 void Controller::createLevel() {
@@ -145,7 +151,7 @@ void Controller::checkInputs() {
     static PollingTUI tui(mInputHandler, *mModel);
     input.update();
 
-    // tui.update();
+    tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 
@@ -172,4 +178,12 @@ void Controller::loadPreviousMemento() {
 void Controller::loadNextMemento() {
     Configuration::getInstance().setConfig("PauseArtists", true);
     mModel->useNextMemento();
+}
+
+void Controller::speedUp() { mCurrentFPSLogic += 1; }
+
+void Controller::slowDown() {
+    if (mCurrentFPSLogic > 1) {
+        mCurrentFPSLogic -= 1;
+    }
 }

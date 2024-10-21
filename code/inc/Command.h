@@ -264,6 +264,44 @@ public:
     }
 };
 
+class SpeedUpCommand : public Command {
+public:
+    SpeedUpCommand(std::function<void()> action) : mAction(action) {}
+
+    void execute() override {
+        mAction();
+        std::cout << "Executing Speed Up Command" << std::endl;
+    }
+
+    std::string getName() override { return "Speed Up Command"; }
+
+    SpeedUpCommand* clone() const override {
+        return new SpeedUpCommand(*this); // Creates a new instance using the copy constructor
+    }
+
+private:
+    std::function<void()> mAction;
+};
+
+class SlowDownCommand : public Command {
+public:
+    SlowDownCommand(std::function<void()> action) : mAction(action) {}
+
+    void execute() override {
+        mAction();
+        std::cout << "Executing Slow Down Command" << std::endl;
+    }
+
+    std::string getName() override { return "Slow Down Command"; }
+
+    SlowDownCommand* clone() const override {
+        return new SlowDownCommand(*this); // Creates a new instance using the copy constructor
+    }
+
+private:
+    std::function<void()> mAction;
+};
+
 class InputHandler {
 private:
     std::map<int, std::unique_ptr<Command>> commandMap; // Maps input codes to commands
