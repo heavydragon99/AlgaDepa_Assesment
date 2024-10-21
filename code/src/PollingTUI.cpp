@@ -87,7 +87,7 @@ void PollingTUI::chooseShortcutToChange() {
     // Display the polled data
     int curLine = 2;
     moveCursor(2, curLine += 2);
-    std::cout << "Enter the number correlating to the action" << std::endl;
+    std::cout << "Enter the number correlating to the action or q to go back" << std::endl;
 
     int commandID = 0;
 
@@ -100,6 +100,10 @@ void PollingTUI::chooseShortcutToChange() {
 
     while (kbhit() > 0) {
         ch = getchar();
+        if (ch == 'q') {
+            mChosenShortcut = 0;
+            mMenuState = MenuState::MainMenu;
+        }
         if (ch >= '1' && ch <= '6') {
             int chosenShortcut = ch - '1' + 1;
             std::cout << "selected Option: " << chosenShortcut << std::endl;
