@@ -112,6 +112,11 @@ public:
                         // This is a new collision
                         tileItr.getTile().updateTile();
                     }
+                    if (Configuration::getInstance().getConfig("CollisionWithPath")) {
+                        if (tile->isPath()) {
+                            person->triggerRed();
+                        }
+                    }
 
                     // Add to current collision set
                     currentCollision.insert(collisionKey);

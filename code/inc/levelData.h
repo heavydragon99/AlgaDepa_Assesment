@@ -20,6 +20,8 @@ public:
 
     void updateLevelData();
     void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    void buildPersonData(std::vector<ParsedPerson> aPersons);
+    void buildGridData(ParsedGrid aGrid);
 
     int getCols() const;
     int getRows() const;

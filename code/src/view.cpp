@@ -23,11 +23,11 @@ void View::renderTile(int tileWidth, int tileHeight) {
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
 
-        if (levelData.getGrid().at(i).isVisited()) {
+        if (levelData.getGrid().at(i).isVisited() && Configuration::getInstance().getConfig("RenderVisited")) {
             SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
             mRenderer.drawSquareRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
         }
-        if (levelData.getGrid().at(i).isPath()) {
+        if (levelData.getGrid().at(i).isPath() && Configuration::getInstance().getConfig("RenderPath")) {
             // Calculate new dimensions
             int newTileWidth = static_cast<int>(tileWidth * 0.7);
             int newTileHeight = static_cast<int>(tileHeight * 0.7);
@@ -84,7 +84,10 @@ void View::render() {
     renderTile(mTileSize, mTileSize);
 
     // Render people
-    renderPeople(mTileSize, mTileSize);
+
+    if (Configuration::getInstance().getConfig("RenderArtists")) {
+        renderPeople(mTileSize, mTileSize);
+    }
 
     if (Configuration::getInstance().getConfig("RenderQuadtree")) {
         // Render quadtree here

@@ -3,11 +3,14 @@
 Model::Model()
     : mLevel(std::make_unique<LevelData>()), mMementoManager(std::make_unique<MementoManager>()),
       mPathFinder(std::make_unique<PathFinder>()), mLastUpdateTime(std::chrono::steady_clock::now()),
-      mSimulationRunning(false), mPathfindingAlgorithm(PathFinder::Algorithms::Breathfirst) {}
+      mSimulationRunning(true), mPathfindingAlgorithm(PathFinder::Algorithms::Breathfirst) {}
 
 void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mLevel->buildLevelData(aPersons, aGrid);
 }
+void Model::setPersonData(std::vector<ParsedPerson> aPersons) { mLevel->buildPersonData(aPersons); }
+
+void Model::setGridData(ParsedGrid aGrid) { mLevel->buildGridData(aGrid); }
 
 LevelData& Model::getLevelData() { return *mLevel; }
 

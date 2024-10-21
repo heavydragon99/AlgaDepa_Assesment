@@ -18,13 +18,13 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     config.setConfig("RenderArtists", true);
     config.setConfig("RenderPath", true);
     config.setConfig("RenderVisited", false);
-    config.setConfig("CollisionWithPath", false);
+    config.setConfig("CollisionWithPath", true);
     config.setConfig("PathfindingMethodDijkstra", true);
-    config.setConfig("CollisionMethodQuadTree", true);
+    config.setConfig("CollisionMethodQuadTree", false);
     config.setConfig("PauseTiles", true);
     config.setConfig("PauseArtists", true);
 
-    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());                // File Open
+    // mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());                // File Open
     mInputHandler.setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());   // Change Collision
                                                                                                    // Method
     mInputHandler.setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());    // Toggle Render
@@ -33,7 +33,6 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
                                                                                                    // With Path
     mInputHandler.setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());        // Toggle Render Path
     mInputHandler.setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
-    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
     mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
 
     mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
@@ -54,21 +53,7 @@ void Controller::createLevel() {
     mView->setGridColor(mGrid.gridColors);
 }
 
-void Controller::checkInputs() {
-    Input& input = Input::getInstance();
-
-    input.update();
-
-    std::vector<Uint8> downKeys = input.getDownKeys();
-
-    for (int i = 0; i < downKeys.size(); i++) {
-        mInputHandler.handleInput(downKeys[i]);
-    }
-}
-
 void Controller::run() {
-    PollingTUI tui(mInputHandler);
-
     const int frameDelayView = 1000 / mFPSView;
 
     this->mCollisionHandler = CollisionHandler(mModel.get());
@@ -97,40 +82,15 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
-            // tui.update();
             checkInputs();
             mView->render();
-            handleUserInput();
             lastFrameTimeView = currentFrameTime;
         }
     }
 }
 
-void Controller::handleUserInput() {
+void Controller::handleMouseInput() {
     Input& input = Input::getInstance();
-    // input.update();
-    // if (!pauseSimulation){
-    //     mModel->updateModel();
-    // }
-
-    // mCollisionHandler.handleCollisions();
-
-    if (input.GetKeyDown(Key::Key_Space)) {
-        mModel->startStopSimulation();
-    }
-
-    if (input.GetKeyDown(Key::Key_Up)) {
-        mCurrentFPSLogic++;
-        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
-    }
-    if (input.GetKeyDown(Key::Key_Down)) {
-        mCurrentFPSLogic = std::max(1, mCurrentFPSLogic - 1); // Ensure FPS doesn't go below 1
-        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
-    }
-
-    if (input.GetKeyDown(Key::Key_D)) {
-        mModel->setPathfindingAlgorithm();
-    }
 
     if (input.GetMouseButtonDown(MouseButton::LEFT)) {
         Point tileLocation = input.MousePosition();
@@ -166,4 +126,20 @@ void Controller::handleUserInput() {
             mPathfindingEnd.reset();
         }
     }
+}
+
+void Controller::checkInputs() {
+    Input& input = Input::getInstance();
+    static PollingTUI tui(mInputHandler, *mModel);
+    input.update();
+
+    tui.update();
+
+    std::vector<Uint8> downKeys = input.getDownKeys();
+
+    for (int i = 0; i < downKeys.size(); i++) {
+        mInputHandler.handleInput(downKeys[i]);
+    }
+
+    handleMouseInput();
 }
