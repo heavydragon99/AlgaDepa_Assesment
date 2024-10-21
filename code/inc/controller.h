@@ -19,7 +19,8 @@ public:
     void run();
 
 private:
-    void handleUserInput();
+    void handleMouseInput();
+    void checkInputs();
 
 private:
     std::unique_ptr<Model> mModel;
@@ -35,8 +36,6 @@ private:
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;
     InputHandler mInputHandler;
-
-    void checkInputs();
 };
 
 #endif // CONTROLLER_H

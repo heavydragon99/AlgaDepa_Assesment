@@ -54,22 +54,7 @@ void Controller::createLevel() {
     mView->setGridColor(mGrid.gridColors);
 }
 
-void Controller::checkInputs() {
-    Input& input = Input::getInstance();
-
-    const int frameDelayView = 1000 / mFPSView;
-    input.update();
-
-    std::vector<Uint8> downKeys = input.getDownKeys();
-
-    for (int i = 0; i < downKeys.size(); i++) {
-        mInputHandler.handleInput(downKeys[i]);
-    }
-}
-
 void Controller::run() {
-    PollingTUI tui(mInputHandler);
-
     const int frameDelayView = 1000 / mFPSView;
 
     this->mCollisionHandler = CollisionHandler(mModel.get());
@@ -98,39 +83,15 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
-            // tui.update();
+            checkInputs();
             mView->render();
-            handleUserInput();
             lastFrameTimeView = currentFrameTime;
         }
     }
 }
 
-void Controller::handleUserInput() {
+void Controller::handleMouseInput() {
     Input& input = Input::getInstance();
-    input.update();
-    // if (!pauseSimulation){
-    //     mModel->updateModel();
-    // }
-
-    // mCollisionHandler.handleCollisions();
-
-    if (input.GetKeyDown(Key::Key_Space)) {
-        mModel->startStopSimulation();
-    }
-
-    if (input.GetKeyDown(Key::Key_Up)) {
-        mCurrentFPSLogic++;
-        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
-    }
-    if (input.GetKeyDown(Key::Key_Down)) {
-        mCurrentFPSLogic = std::max(1, mCurrentFPSLogic - 1); // Ensure FPS doesn't go below 1
-        std::cout << "Current FPS: " << mCurrentFPSLogic << std::endl;
-    }
-
-    if (input.GetKeyDown(Key::Key_D)) {
-        mModel->setPathfindingAlgorithm();
-    }
 
     if (input.GetMouseButtonDown(MouseButton::LEFT)) {
         Point tileLocation = input.MousePosition();
@@ -166,4 +127,18 @@ void Controller::handleUserInput() {
             mPathfindingEnd.reset();
         }
     }
+}
+
+void Controller::checkInputs() {
+    Input& input = Input::getInstance();
+    static PollingTUI tui(mInputHandler);
+    input.update();
+
+    std::vector<Uint8> downKeys = input.getDownKeys();
+
+    for (int i = 0; i < downKeys.size(); i++) {
+        mInputHandler.handleInput(downKeys[i]);
+    }
+
+    handleMouseInput();
 }
