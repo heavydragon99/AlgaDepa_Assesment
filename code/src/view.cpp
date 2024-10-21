@@ -1,6 +1,7 @@
 #include "view.h"
 
 #include "artist.h"
+#include "configuration.h"
 
 #include <chrono>
 #include <iostream>
@@ -84,6 +85,10 @@ void View::render() {
 
     // Render people
     renderPeople(mTileSize, mTileSize);
+
+    if (Configuration::getInstance().getConfig("RenderQuadtree")) {
+        // Render quadtree here
+    }
 
     mRenderer.show();
 }

@@ -5,6 +5,7 @@
 
 #include "Quadtree.h"
 #include "artist.h"
+#include "configuration.h"
 #include "model.h"
 
 class CollisionHandler {
@@ -14,8 +15,12 @@ public:
     ~CollisionHandler() {}
 
     void handleCollisions() {
-        naiveCollisionCheck();
-        // quadTreeCollisionCheck();
+
+        if (Configuration::getInstance().getConfig("CollisionMethodQuadTree")) {
+            quadTreeCollisionCheck();
+        } else {
+            naiveCollisionCheck();
+        }
         // if (mNaiveEnabled)
         //     naiveCollisionCheck();
         // else

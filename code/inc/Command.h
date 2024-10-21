@@ -142,6 +142,7 @@ public:
     void execute() override {
         Configuration::getInstance().setConfig("CollisionMethodQuadTree",
                                                !Configuration::getInstance().getConfig("CollisionMethodQuadTree"));
+        std::cout << "Change collision method" << std::endl;
     }
     std::string getName() override { return "Change Collision Method Command"; }
 

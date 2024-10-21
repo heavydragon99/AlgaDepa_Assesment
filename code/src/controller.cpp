@@ -57,7 +57,6 @@ void Controller::createLevel() {
 void Controller::checkInputs() {
     Input& input = Input::getInstance();
 
-    const int frameDelayView = 1000 / mFPSView;
     input.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
@@ -99,6 +98,7 @@ void Controller::run() {
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
             // tui.update();
+            checkInputs();
             mView->render();
             handleUserInput();
             lastFrameTimeView = currentFrameTime;
@@ -108,7 +108,7 @@ void Controller::run() {
 
 void Controller::handleUserInput() {
     Input& input = Input::getInstance();
-    input.update();
+    // input.update();
     // if (!pauseSimulation){
     //     mModel->updateModel();
     // }
