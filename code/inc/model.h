@@ -21,9 +21,9 @@ public:
     void usePreviousMemento();
     void useNextMemento();
 
-    void startStopSimulation();
-    void setPathfindingAlgorithm();
     void findPath(const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd);
+
+    void updateTile(int aX, int aY);
 
 private:
     Memento saveToMemento() const;
@@ -35,8 +35,6 @@ private:
     std::unique_ptr<PathFinder> mPathFinder;
     std::chrono::time_point<std::chrono::steady_clock> mLastUpdateTime;
     static constexpr std::chrono::seconds UPDATE_INTERVAL{1}; // Define the interval here
-    bool mSimulationRunning;
-    PathFinder::Algorithms mPathfindingAlgorithm; 
 
 };
 

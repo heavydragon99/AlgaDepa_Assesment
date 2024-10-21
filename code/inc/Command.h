@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <functional>
 
 class Command {
 public:
@@ -24,30 +25,31 @@ public:
 
 class RearrangeTileCommand : public Command {
 public:
-    using ActionFunction = void (*)();
-
-    RearrangeTileCommand(ActionFunction aAction) : mAction(aAction) {}
+    RearrangeTileCommand(std::function<void()> aAction) : mAction(aAction) {}
 
     RearrangeTileCommand(const RearrangeTileCommand& other) : mAction(other.mAction) {}
 
     void execute() override {
+        std::cout << "Executing Rearrange Tile Command" << std::endl;
         if (mAction) {
             mAction();
         }
     }
-    std::string getName() override { return "Rearrage Tile Command"; }
+
+    std::string getName() override { return "Rearrange Tile Command"; }
 
     RearrangeTileCommand* clone() const override {
         return new RearrangeTileCommand(*this); // Creates a new instance using the copy constructor
     }
 
-    private:
-    ActionFunction mAction;
+private:
+    std::function<void()> mAction;
 };
 
 class FileOpenCommand : public Command {
 public:
     void execute() override {
+        std::cout << "Executing File Open Command" << std::endl;
         // Action for moving down
         std::cout << "File Open Command" << std::endl;
     }
@@ -61,8 +63,9 @@ public:
 class ToggleRenderArtistsCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("RenderArtists",
-                                               !Configuration::getInstance().getConfig("RenderArtists"));
+        bool newValue = !Configuration::getInstance().getConfig("RenderArtists");
+        Configuration::getInstance().setConfig("RenderArtists", newValue);
+        std::cout << "Executing Toggle Render Artists Command, new RenderArtists value: " << newValue << std::endl;
     }
     std::string getName() override { return "Toggle Render Artists Command"; }
 
@@ -74,6 +77,7 @@ public:
 class BackwardInTimeCommand : public Command {
 public:
     void execute() override {
+        std::cout << "Executing Backward In Time Command" << std::endl;
         // Action for moving down
         std::cout << "Backward In Time Command" << std::endl;
     }
@@ -87,6 +91,7 @@ public:
 class ForwardInTimeCommand : public Command {
 public:
     void execute() override {
+        std::cout << "Executing Forward In Time Command" << std::endl;
         // Action for moving down
         std::cout << "Forward In Time Command" << std::endl;
     }
@@ -100,7 +105,9 @@ public:
 class PlayPauseTilesCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("PauseTiles", !Configuration::getInstance().getConfig("PauseTiles"));
+        bool newValue = !Configuration::getInstance().getConfig("PauseTiles");
+        Configuration::getInstance().setConfig("PauseTiles", newValue);
+        std::cout << "Executing Play Pause Tiles Command, new PauseTiles value: " << newValue << std::endl;
     }
     std::string getName() override { return "Play Pause Command"; }
 
@@ -112,8 +119,9 @@ public:
 class ToggleRenderQuadtreeCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("RenderQuadtree",
-                                               !Configuration::getInstance().getConfig("RenderQuadtree"));
+        bool newValue = !Configuration::getInstance().getConfig("RenderQuadtree");
+        Configuration::getInstance().setConfig("RenderQuadtree", newValue);
+        std::cout << "Executing Toggle Render Quadtree Command, new RenderQuadtree value: " << newValue << std::endl;
     }
     std::string getName() override { return "Toggle Render Quadtree Command"; }
 
@@ -125,7 +133,9 @@ public:
 class ToggleRenderPathCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("RenderPath", !Configuration::getInstance().getConfig("RenderPath"));
+        bool newValue = !Configuration::getInstance().getConfig("RenderPath");
+        Configuration::getInstance().setConfig("RenderPath", newValue);
+        std::cout << "Executing Toggle Render Path Command, new RenderPath value: " << newValue << std::endl;
     }
     std::string getName() override { return "Toggle Render Path Command"; }
 
@@ -137,8 +147,9 @@ public:
 class ToggleRenderVisitedCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("RenderVisited",
-                                               !Configuration::getInstance().getConfig("RenderVisited"));
+        bool newValue = !Configuration::getInstance().getConfig("RenderVisited");
+        Configuration::getInstance().setConfig("RenderVisited", newValue);
+        std::cout << "Executing Toggle Render Visited Command, new RenderVisited value: " << newValue << std::endl;
     }
     std::string getName() override { return "Toggle Render Visited Command"; }
 
@@ -150,8 +161,9 @@ public:
 class ChangeCollisionMethodCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("CollisionMethodQuadTree",
-                                               !Configuration::getInstance().getConfig("CollisionMethodQuadTree"));
+        bool newValue = !Configuration::getInstance().getConfig("CollisionMethodQuadTree");
+        Configuration::getInstance().setConfig("CollisionMethodQuadTree", newValue);
+        std::cout << "Executing Change Collision Method Command, new CollisionMethodQuadTree value: " << newValue << std::endl;
     }
     std::string getName() override { return "Change Collision Method Command"; }
 
@@ -163,8 +175,9 @@ public:
 class ToggleCollisionWithPathCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("CollisionWithPath",
-                                               !Configuration::getInstance().getConfig("CollisionWithPath"));
+        bool newValue = !Configuration::getInstance().getConfig("CollisionWithPath");
+        Configuration::getInstance().setConfig("CollisionWithPath", newValue);
+        std::cout << "Executing Toggle Collision With Path Command, new CollisionWithPath value: " << newValue << std::endl;
     }
     std::string getName() override { return "Toggle Collision With Path Command"; }
 
@@ -176,8 +189,9 @@ public:
 class ChangePathfindingMethodCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("PathfindingMethodDijkstra",
-                                               !Configuration::getInstance().getConfig("PathfindingMethodDijkstra"));
+        bool newValue = !Configuration::getInstance().getConfig("PathfindingMethodDijkstra");
+        Configuration::getInstance().setConfig("PathfindingMethodDijkstra", newValue);
+        std::cout << "Executing Change Pathfinding Method Command, new PathfindingMethodDijkstra value: " << newValue << std::endl;
     }
     std::string getName() override { return "Change Pathfinding Method Command"; }
 
@@ -189,7 +203,9 @@ public:
 class PlayPauseArtistsCommand : public Command {
 public:
     void execute() override {
-        Configuration::getInstance().setConfig("pauseArtists", !Configuration::getInstance().getConfig("pauseArtists"));
+        bool newValue = !Configuration::getInstance().getConfig("PauseArtists");
+        Configuration::getInstance().setConfig("PauseArtists", newValue);
+        std::cout << "Executing Play Pause Artists Command, new pauseArtists value: " << newValue << std::endl;
     }
     std::string getName() override { return "Play Pause Artists Command"; }
 

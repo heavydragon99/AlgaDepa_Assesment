@@ -166,3 +166,12 @@ void LevelData::infectTiles(const Tile& aTile) {
         }
     }
 }
+
+void LevelData::updateTile(int aX, int aY) {
+    for (auto& tileNode : mGrid) {
+        if (tileNode.getX() == aX && tileNode.getY() == aY) {
+            tileNode.getTile().updateTile();
+            break;
+        }
+    }
+}

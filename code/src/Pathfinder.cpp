@@ -15,7 +15,7 @@ struct pair_hash {
     }
 };
 
-PathFinder::PathFinder() : mAlgorithm(Algorithms::Dijkstra), mLevelData(nullptr), mGCost(0), mSteps(0) {}
+PathFinder::PathFinder() : mLevelData(nullptr), mGCost(0), mSteps(0) {}
 
 bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart,
                           const std::pair<int, int>& aEnd) {

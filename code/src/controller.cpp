@@ -38,13 +38,14 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
 
     mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
                                                                                                    // Method
-    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());       // Rearrange Tile
-    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());       // Backward In Time
-    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());       // Forward In Time
-    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseTilesCommand>());      // Play/Pause
-                                                                                                   // simulation
-    mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());     // Play/Pause
-                                                                                                   // artists
+    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>([this]() { this->rearrangeTile(); })); // Rearrange
+                                                                                                        // Tile
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());    // Backward In Time
+    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());    // Forward In Time
+    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseArtistsCommand>()); // Play/Pause
+                                                                                                // simulation
+    mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());  // Play/Pause
+                                                                                                // artists
 }
 
 void Controller::createLevel() {
@@ -144,6 +145,8 @@ void Controller::checkInputs() {
 }
 
 void Controller::rearrangeTile() {
-    // Rearrange the tile
-    std::cout << "Rearranging tile" << std::endl;
+    Point tileLocation = Input::getInstance().MousePosition();
+    tileLocation.x = tileLocation.x / mView->getTileSize();
+    tileLocation.y = tileLocation.y / mView->getTileSize();
+    mModel->updateTile(tileLocation.x, tileLocation.y);
 }
