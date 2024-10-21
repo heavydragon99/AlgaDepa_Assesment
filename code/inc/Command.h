@@ -1,6 +1,8 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#include "configuration.h"
+
 #include <iostream>
 #include <map>
 #include <memory>
@@ -49,8 +51,8 @@ public:
 class ToggleRenderArtistsCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Toggle Render Artists Command" << std::endl;
+        Configuration::getInstance().setConfig("RenderArtists",
+                                               !Configuration::getInstance().getConfig("RenderArtists"));
     }
     std::string getName() override { return "Toggle Render Artists Command"; }
 
@@ -85,28 +87,25 @@ public:
     }
 };
 
-class PlayPauseSimulationCommand : public Command {
+class PlayPauseTilesCommand : public Command {
 public:
-    PlayPauseSimulationCommand(bool& aPauseState) : mPauseState(aPauseState) {}
-    /// Assume Command has a copy constructor
-    PlayPauseSimulationCommand(const PlayPauseSimulationCommand& other) : mPauseState(other.mPauseState) {}
+    PlayPauseTilesCommand();
 
-    void execute() override { mPauseState = !mPauseState; }
+    void execute() override {
+        Configuration::getInstance().setConfig("PauseTiles", !Configuration::getInstance().getConfig("PauseTiles"));
+    }
     std::string getName() override { return "Play Pause Command"; }
 
-    PlayPauseSimulationCommand* clone() const override {
-        return new PlayPauseSimulationCommand(*this); // Creates a new instance using the copy constructor
+    PlayPauseTilesCommand* clone() const override {
+        return new PlayPauseTilesCommand(*this); // Creates a new instance using the copy constructor
     }
-
-private:
-    bool& mPauseState;
 };
 
 class ToggleRenderQuadtreeCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Toggle Render Quadtree Command" << std::endl;
+        Configuration::getInstance().setConfig("RenderQuadtree",
+                                               !Configuration::getInstance().getConfig("RenderQuadtree"));
     }
     std::string getName() override { return "Toggle Render Quadtree Command"; }
 
@@ -118,8 +117,7 @@ public:
 class ToggleRenderPathCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Toggle Render Path Command" << std::endl;
+        Configuration::getInstance().setConfig("RenderPath", !Configuration::getInstance().getConfig("RenderPath"));
     }
     std::string getName() override { return "Toggle Render Path Command"; }
 
@@ -131,8 +129,8 @@ public:
 class ToggleRenderVisitedCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Toggle Render Visited Command" << std::endl;
+        Configuration::getInstance().setConfig("RenderVisited",
+                                               !Configuration::getInstance().getConfig("RenderVisited"));
     }
     std::string getName() override { return "Toggle Render Visited Command"; }
 
@@ -144,8 +142,8 @@ public:
 class ChangeCollisionMethodCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Change Collision Method Command" << std::endl;
+        Configuration::getInstance().setConfig("CollisionMethodQuadTree",
+                                               !Configuration::getInstance().getConfig("CollisionMethodQuadTree"));
     }
     std::string getName() override { return "Change Collision Method Command"; }
 
@@ -157,8 +155,8 @@ public:
 class ToggleCollisionWithPathCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Toggle Collision With Path Command" << std::endl;
+        Configuration::getInstance().setConfig("CollisionWithPath",
+                                               !Configuration::getInstance().getConfig("CollisionWithPath"));
     }
     std::string getName() override { return "Toggle Collision With Path Command"; }
 
@@ -170,8 +168,8 @@ public:
 class ChangePathfindingMethodCommand : public Command {
 public:
     void execute() override {
-        // Action for moving down
-        std::cout << "Change Pathfinding Method Command" << std::endl;
+        Configuration::getInstance().setConfig("PathfindingMethodDijkstra",
+                                               !Configuration::getInstance().getConfig("PathfindingMethodDijkstra"));
     }
     std::string getName() override { return "Change Pathfinding Method Command"; }
 
@@ -182,19 +180,16 @@ public:
 
 class PlayPauseArtistsCommand : public Command {
 public:
-    PlayPauseArtistsCommand(bool& aPauseState) : mPauseState(aPauseState) {}
-    /// Assume Command has a copy constructor
-    PlayPauseArtistsCommand(const PlayPauseArtistsCommand& other) : mPauseState(other.mPauseState) {}
+    PlayPauseArtistsCommand();
 
-    void execute() override { mPauseState = !mPauseState; }
+    void execute() override {
+        Configuration::getInstance().setConfig("pauseArtists", !Configuration::getInstance().getConfig("pauseArtists"));
+    }
     std::string getName() override { return "Play Pause Artists Command"; }
 
     PlayPauseArtistsCommand* clone() const override {
         return new PlayPauseArtistsCommand(*this); // Creates a new instance using the copy constructor
     }
-
-    private:
-    bool& mPauseState;
 };
 
 class InputHandler {
