@@ -13,12 +13,13 @@
 
 class Controller {
 public:
-    Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    Controller();
 
-    void createLevel();
+    void initialize();
     void run();
 
 private:
+    void setCommands();
     void handleMouseInput();
     void checkInputs();
     void handleUserInput();
@@ -28,6 +29,7 @@ private:
     void speedUp();
     void slowDown();
     void runPathFinding();
+    void createLevel();
 
 private:
     std::unique_ptr<Model> mModel;
@@ -35,14 +37,14 @@ private:
     std::vector<ParsedPerson> mPersons;
     ParsedGrid mGrid;
 
-    CollisionHandler mCollisionHandler;
+    std::unique_ptr<CollisionHandler> mCollisionHandler;
+    std::unique_ptr<InputHandler> mInputHandler;
 
     const int mFPSView = 60;
     int mCurrentFPSLogic = 40;
 
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;
-    InputHandler mInputHandler;
 };
 
 #endif // CONTROLLER_H

@@ -9,6 +9,8 @@
 #include "configuration.h"
 #include "model.h"
 
+#define QUADTREE_CAPACITY 5
+
 class CollisionHandler {
 
 public:
@@ -142,7 +144,7 @@ public:
                                     static_cast<float>(mModel->getLevelData().getRows())};
 
         // Create the Quadtree with a capacity of 4 objects per node
-        Quadtree quadtree(boundary, 4);
+        Quadtree quadtree(boundary, QUADTREE_CAPACITY);
 
         // Insert all artists into the quadtree
         for (Artist& artist : mModel->getLevelData().getPeople()) {
