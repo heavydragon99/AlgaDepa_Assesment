@@ -7,21 +7,6 @@
 
 enum FileType { UNDEFINED, CSV, TXT, XML };
 
-// Color struct to store color properties
-// struct GridColor {
-//     char letter;
-//     int r, g, b; // RGB values
-//     int weight;
-// };
-
-// New struct that consolidates all the grid data
-// struct parsedGrid {
-//     int rows;
-//     int cols;
-//     std::vector<char> grid;        // Character grid buffer
-//     std::vector<Color> gridColors; // Color mappings
-// };
-
 struct LoadedFile {
     std::unique_ptr<std::ifstream> openedFile;
     FileType fileType = UNDEFINED;

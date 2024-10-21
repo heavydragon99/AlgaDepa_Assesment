@@ -14,13 +14,13 @@ include_directories(inc)
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Add an option to set the build type to Debug
-option(DEBUG_BUILD "Build with debug information" OFF)
+# option(DEBUG_BUILD "Build with debug information" OFF)
 
 # Specify compiler flags for debug configuration if DEBUG_BUILD is ON
-if(DEBUG_BUILD)
+# if(DEBUG_BUILD)
   set(CMAKE_BUILD_TYPE Debug)
   set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
-endif()
+# endif()
 
 # Find SDL2
 find_package(SDL2 REQUIRED)

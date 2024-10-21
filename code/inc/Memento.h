@@ -7,11 +7,14 @@
 
 class Memento {
 public:
-    Memento(std::unique_ptr<LevelData> state);
-    std::unique_ptr<LevelData> getState();
+    Memento() = default;
+    Memento(LevelData& aLevelData);
+    ParsedGrid getGrid();
+    std::vector<Artist>& getPeople();
 
 private:
-    std::unique_ptr<LevelData> mState;
+    ParsedGrid mGrid;
+    std::vector<Artist> mPeople;
 };
 
 #endif // MEMENTO_H

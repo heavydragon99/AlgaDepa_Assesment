@@ -1,12 +1,21 @@
 #include "PathFinder.h"
+#include "configuration.h"
 #include "levelData.h"
 
 #include <iostream>
+#include <limits>
 #include <queue>
-#include <set>
 #include <unordered_map>
+#include <unordered_set>
 
-PathFinder::PathFinder() : mAlgorithm(Algorithms::Dijkstra), mLevelData(nullptr), mGCost(0), mSteps(0) {}
+// Define a hash function for std::pair<int, int>
+struct pair_hash {
+    template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& pair) const {
+        return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
+    }
+};
+
+PathFinder::PathFinder() : mLevelData(nullptr), mGCost(0), mSteps(0) {}
 
 bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart,
                           const std::pair<int, int>& aEnd) {
@@ -32,7 +41,14 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     }
 
     // Execute the selected algorithm
-    switch (mAlgorithm) {
+    Algorithms Algorithm;
+    if (Configuration::getInstance().getConfig("PathfindingMethodDijkstra")) {
+        Algorithm = Algorithms::Dijkstra;
+    } else {
+        Algorithm = Algorithms::Breathfirst;
+    }
+    
+    switch (Algorithm) {
     case Algorithms::Dijkstra:
         dijkstra();
         break;
@@ -46,8 +62,6 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     return true;
 }
 
-void PathFinder::setAlgorithm(Algorithms aAlgorithm) { mAlgorithm = aAlgorithm; }
-
 void PathFinder::reset() {
     // Reset the state of the grid
     for (auto& node : mLevelData->getGrid()) {
@@ -55,7 +69,7 @@ void PathFinder::reset() {
         node.setIsVisited(false);
     }
 
-    mPath.clear();
+    mAllPaths.clear();
     mVisited.clear();
     mGCost = 0;
     mSteps = 0;
@@ -66,70 +80,81 @@ void PathFinder::dijkstra() {
     std::priority_queue<std::shared_ptr<PathFinderNode>, std::vector<std::shared_ptr<PathFinderNode>>,
                         PathFinderNodeCompare>
         openList;
-    std::set<std::pair<int, int>> closedList;
+    std::unordered_set<std::pair<int, int>, pair_hash> closedList; // unordered_set for faster lookups
+    std::unordered_map<int, int> distanceMap;
 
     int cols = mLevelData->getCols();
 
-    while (true) {
-        // Initialize the start node
-        auto startNode = std::make_shared<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
-        openList.push(startNode);
+    // Initialize the start node
+    auto startNode = std::make_shared<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
+    openList.push(startNode);
+    // init distance map to max values
+    for (const auto& node : mLevelData->getGrid()) {
+        int id = calculateId(node.getX(), node.getY());
+        distanceMap[id] = std::numeric_limits<int>::max();
+    }
+    distanceMap[calculateId(mStart.first, mStart.second)] = 0;
 
-        bool pathFound = false;
+    bool shortestPathFound = false;
+    int shortestPathCost = std::numeric_limits<int>::max(); // Track the shortest path cost
 
-        while (!openList.empty()) {
-            auto currentNode = openList.top();
-            openList.pop();
+    while (!openList.empty()) {
+        auto currentNode = openList.top();
+        openList.pop();
 
-            std::pair<int, int> currentPos = {currentNode->mX, currentNode->mY};
-            mVisited.push_back(currentPos);
-            int currentId = currentNode->mY * cols + currentNode->mX;
+        std::pair<int, int> currentPos = {currentNode->mX, currentNode->mY};
+        mVisited.push_back(currentPos);
+        int currentId = currentNode->mY * cols + currentNode->mX;
 
-            // Check if the end node is reached
-            if (currentPos == mEnd) {
-                mGCost = currentNode->mGCost;
-                // Reconstruct path
-                auto parentNode = currentNode;
-                std::vector<std::pair<int, int>> path;
-                while (parentNode != nullptr) {
-                    mSteps++;
-                    path.push_back({parentNode->mX, parentNode->mY});
-                    parentNode = parentNode->mParent;
-                }
-                mAllPaths.push_back(path);
-                pathFound = true;
-                break;
-            }
-
-            closedList.insert(currentPos);
-
-            // Explore neighbors
-            for (auto& neighbor : mLevelData->getGrid()[currentId].getNeighbors()) {
-                int neighborX = neighbor.get().getX();
-                int neighborY = neighbor.get().getY();
-                std::pair<int, int> neighborPos = {neighborX, neighborY};
-
-                // Skip if the neighbor is already in the closed list
-                if (closedList.find(neighborPos) != closedList.end()) {
-                    continue;
-                }
-
-                int tentativeG = currentNode->mGCost + neighbor.get().getWeight();
-                auto neighborNode = std::make_shared<PathFinderNode>(neighborX, neighborY, tentativeG, currentNode);
-
-                openList.push(neighborNode);
-            }
-        }
-
-        if (!pathFound) {
+        // If the current node's cost exceeds the shortest path cost, stop exploring
+        if (shortestPathFound && currentNode->mGCost > shortestPathCost) {
             break;
         }
 
-        // Reset for the next run
-        mPath.clear();
-        mVisited.clear();
-        mGCost = 0;
-        mSteps = 0;
+        // Check if the end node is reached
+        if (currentPos == mEnd) {
+            if (!shortestPathFound) {
+                shortestPathFound = true;
+                shortestPathCost = currentNode->mGCost;
+            }
+            // Reconstruct path
+            std::vector<std::pair<int, int>> path;
+            auto parentNode = currentNode;
+            while (parentNode != nullptr) {
+                mSteps++;
+                path.push_back({parentNode->mX, parentNode->mY});
+                parentNode = parentNode->mParent;
+            }
+            mAllPaths.push_back(path);
+            continue;
+        }
+
+        closedList.insert(currentPos);
+
+        // Explore neighbors
+        for (auto& neighbor : mLevelData->getGrid()[currentId].getNeighbors()) {
+            int neighborX = neighbor.get().getX();
+            int neighborY = neighbor.get().getY();
+            std::pair<int, int> neighborPos = {neighborX, neighborY};
+            int neighborId = calculateId(neighborX, neighborY);
+
+            // Skip if the neighbor is already in the closed list or is a white tile
+            if (closedList.find(neighborPos) != closedList.end() || neighbor.get().getTile().getColor() == 'W') {
+                continue;
+            }
+
+            int tentativeG = currentNode->mGCost + neighbor.get().getWeight();
+
+            // Only proceed if the new tentative distance is shorter
+            if (tentativeG < distanceMap[neighborId] || distanceMap.find(neighborId) == distanceMap.end()) {
+                distanceMap[neighborId] = tentativeG;
+                openList.push(std::make_shared<PathFinderNode>(neighborX, neighborY, tentativeG, currentNode));
+            }
+        }
+    }
+
+    if (!shortestPathFound) {
+        std::cerr << "No path found" << std::endl;
     }
 }
 
@@ -154,21 +179,24 @@ void PathFinder::breathfirst() {
 
         // Check if the end node is reached
         if (currentNode == mEnd) {
+            std::vector<std::pair<int, int>> path;
             // Reconstruct path
             while (currentNode != mStart) {
                 mSteps++;
-                mPath.push_back(currentNode);
+                path.push_back(currentNode);
                 currentNode = previousNodes[currentIndex];
                 currentIndex = currentNode.second * columns + currentNode.first;
             }
-            mPath.push_back(mStart);
+            path.push_back(mStart);
+            mAllPaths.push_back(path);
             return;
         }
 
         // Explore neighbors
         for (auto& neighbor : mLevelData->getGrid()[currentIndex].getNeighbors()) {
             int neighborIndex = neighbor.get().getY() * columns + neighbor.get().getX();
-            if (!visitedNodes[neighborIndex]) {
+            // Skip if the neighbor is a white tile
+            if (!visitedNodes[neighborIndex] && neighbor.get().getTile().getColor() != 'W') {
                 visitedNodes[neighborIndex] = true;
                 previousNodes[neighborIndex] = currentNode;
                 queue.push({neighbor.get().getX(), neighbor.get().getY()});
@@ -179,7 +207,7 @@ void PathFinder::breathfirst() {
 
 void PathFinder::setTileNodes() {
     // Mark the path nodes
-    for (auto& path : mPath) {
+    for (auto& path : mAllPaths[0]) {
         int index = path.second * mLevelData->getCols() + path.first;
         mLevelData->getGrid()[index].setIsPath(true);
     }
@@ -190,3 +218,5 @@ void PathFinder::setTileNodes() {
         mLevelData->getGrid()[index].setIsVisited(true);
     }
 }
+
+int PathFinder::calculateId(int x, int y) const { return y * mLevelData->getCols() + x; }

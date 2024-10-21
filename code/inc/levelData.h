@@ -1,15 +1,15 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#define MAX_PEOPLE 2000
+#define MAX_PEOPLE 20000
 
 #include "artist.h"
 #include "structs.h"
 #include "tileNode.h"
 
-#include <list>
 #include <memory>
 #include <vector>
+#include <utility>
 
 class Tile;
 
@@ -19,34 +19,34 @@ public:
     ~LevelData();
 
     void updateLevelData();
-    void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    void buildPersonData(std::vector<ParsedPerson> aPersons);
+    void buildPersonData(std::vector<Artist> aPersons);
+    void buildGridData(ParsedGrid aGrid);
 
     int getCols() const;
     int getRows() const;
 
     std::vector<TileNode>& getGrid();
     std::vector<Artist>& getPeople();
+    std::vector<std::pair<char, int>>& getGridWeights();
 
     void addArtist(const Tile& aTile);
     void deleteArtist(const Tile& aTile);
     void infectTiles(const Tile& aTile);
 
+    void updateTile(int aX, int aY);
+    void connectNeighbors();
+
 private:
     void setNodeWeights();
     float calculateWeight(const TileNode& aNode);
-    void connectNeighbors();
-
-    bool checkCollisions(Artist& aPerson);
-    bool isColliding(const Artist& aPerson1, const Artist& aPerson2);
-
-    void addArtist(int aX, int aY);
-    void deleteArtist(int aX, int aY);
 
 private:
     std::vector<Artist> mPeople;
     std::vector<TileNode> mGrid;
     int mCols;
     int mRows;
+    std::vector<std::pair<char, int>> mGridWeights;
 };
 
 #endif // LEVELDATA_H

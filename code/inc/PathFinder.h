@@ -23,8 +23,8 @@ private:
     };
 
     struct PathFinderNodeCompare {
-        bool operator()(const std::shared_ptr<PathFinderNode>& lhs, const std::shared_ptr<PathFinderNode>& rhs) const {
-            return lhs->mGCost > rhs->mGCost;
+        bool operator()(const std::shared_ptr<PathFinderNode>& a, const std::shared_ptr<PathFinderNode>& b) const {
+            return a->mGCost > b->mGCost;
         }
     };
 
@@ -38,11 +38,10 @@ private:
     void dijkstra();
     void breathfirst();
     void setTileNodes();
+    int calculateId(int x, int y) const;
 
-    std::vector<std::pair<int, int>> mPath;
     std::vector<std::vector<std::pair<int, int>>> mAllPaths;
     std::vector<std::pair<int, int>> mVisited;
-    Algorithms mAlgorithm;
 
     LevelData* mLevelData;
     std::pair<int, int> mStart;

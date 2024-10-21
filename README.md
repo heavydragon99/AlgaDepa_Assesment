@@ -15,17 +15,22 @@ Make sure you have CMake, a C++ compiler, SDL2, and CURL installed on your syste
     cd code
     ```
 
-2. Navigate to the build directory:
+2. Create the build directory if it doesn't exist:
+    ```sh
+    mkdir -p build
+    ```
+
+3. Navigate to the build directory:
     ```sh
     cd build
     ```
 
-3. Run CMake to configure the project:
+4. Run CMake to configure the project:
     ```sh
     cmake ..
     ```
 
-4. Build the project:
+5. Build the project:
     ```sh
     make
     ```
@@ -46,22 +51,27 @@ To build the project with debug information, follow these steps:
     cd code
     ```
 
-2. Navigate to the build directory:
+2. Create the build directory if it doesn't exist:
+    ```sh
+    mkdir -p build
+    ```
+
+3. Navigate to the build directory:
     ```sh
     cd build
     ```
 
-3. Run CMake with the `-DDEBUG_BUILD=ON` option to configure the project:
+4. Run CMake with the `-DDEBUG_BUILD=ON` option to configure the project:
     ```sh
     cmake -DDEBUG_BUILD=ON ..
     ```
 
-4. Build the project:
+5. Build the project:
     ```sh
     make
     ```
 
-5. Run the program with debug information:
+6. Run the program with debug information:
     ```sh
     ./depaAlgo
     ```
