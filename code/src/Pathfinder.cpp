@@ -220,3 +220,12 @@ void PathFinder::setTileNodes() {
 }
 
 int PathFinder::calculateId(int x, int y) const { return y * mLevelData->getCols() + x; }
+
+
+int PathFinder::getGCost(){
+    return mGCost;
+}
+
+int PathFinder::getSteps(){
+    return mSteps;
+}

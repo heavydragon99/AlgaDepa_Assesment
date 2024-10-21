@@ -145,7 +145,7 @@ void Controller::checkInputs() {
     static PollingTUI tui(mInputHandler, *mModel);
     input.update();
 
-    // tui.update();
+    tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 

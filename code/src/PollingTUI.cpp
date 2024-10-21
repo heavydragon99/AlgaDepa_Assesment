@@ -37,22 +37,31 @@ void PollingTUI::update() {
 
 void PollingTUI::mainMenu() {
     // Display the polled data
-    moveCursor(2, 2);
+    int curline = 2;
+    moveCursor(2, curline += 2);
     std::cout << "Welcome to the best simulation program ever" << std::endl;
 
-    moveCursor(2, 4);
+    moveCursor(2, curline += 2);
     std::cout << "(1) change key bindings" << std::endl;
 
-    moveCursor(2, 6);
+    moveCursor(2, curline += 2);
     std::cout << "(2) load artist file" << std::endl;
 
-    moveCursor(2, 8);
+    moveCursor(2, curline += 2);
     std::cout << "(3) load grid file" << std::endl;
 
-    moveCursor(2, 10);
+    moveCursor(2, curline += 2);
     std::cout << "Current amount of artists: " << mModel.getLevelData().getPeople().size() << std::endl;
 
-    moveCursor(2, 12);
+    if (mModel.getPathFinder().getGCost() != 0) {
+        moveCursor(2, curline += 2);
+        std::cout << "GCost of current path: " << mModel.getPathFinder().getGCost() << std::endl;
+    }
+    if (mModel.getPathFinder().getSteps() != 0) {
+        moveCursor(2, curline += 2);
+        std::cout << "Amount of steps in current path: " << mModel.getPathFinder().getSteps() << std::endl;
+    }
+    moveCursor(2, curline += 2);
     std::cout << "Press 'q' to quit" << std::endl;
 
     char ch;
@@ -67,6 +76,9 @@ void PollingTUI::mainMenu() {
         }
         if (ch == '3') {
             mMenuState = MenuState::OpenGridFile;
+        }
+        if (ch == 'q') {
+            exit(0);
         }
     }
 }

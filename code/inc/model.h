@@ -27,6 +27,8 @@ public:
 
     void updateTile(int aX, int aY);
 
+    PathFinder& getPathFinder();
+
 private:
     Memento saveToMemento() const;
     void restoreFromMemento(Memento&& memento);
