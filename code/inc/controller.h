@@ -21,6 +21,8 @@ public:
 private:
     void handleMouseInput();
     void checkInputs();
+    void handleUserInput();
+    void rearrangeTile();
 
 private:
     std::unique_ptr<Model> mModel;

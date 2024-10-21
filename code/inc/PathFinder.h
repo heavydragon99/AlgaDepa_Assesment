@@ -42,7 +42,6 @@ private:
 
     std::vector<std::vector<std::pair<int, int>>> mAllPaths;
     std::vector<std::pair<int, int>> mVisited;
-    Algorithms mAlgorithm;
 
     LevelData* mLevelData;
     std::pair<int, int> mStart;

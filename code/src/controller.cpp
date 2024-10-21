@@ -142,3 +142,8 @@ void Controller::checkInputs() {
 
     handleMouseInput();
 }
+
+void Controller::rearrangeTile() {
+    // Rearrange the tile
+    std::cout << "Rearranging tile" << std::endl;
+}

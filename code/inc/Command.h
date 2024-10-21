@@ -24,15 +24,25 @@ public:
 
 class RearrangeTileCommand : public Command {
 public:
+    using ActionFunction = void (*)();
+
+    RearrangeTileCommand(ActionFunction aAction) : mAction(aAction) {}
+
+    RearrangeTileCommand(const RearrangeTileCommand& other) : mAction(other.mAction) {}
+
     void execute() override {
-        // action
-        std::cout << "Rearrage Tile Command" << std::endl;
+        if (mAction) {
+            mAction();
+        }
     }
     std::string getName() override { return "Rearrage Tile Command"; }
 
     RearrangeTileCommand* clone() const override {
         return new RearrangeTileCommand(*this); // Creates a new instance using the copy constructor
     }
+
+    private:
+    ActionFunction mAction;
 };
 
 class FileOpenCommand : public Command {
