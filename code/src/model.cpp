@@ -2,12 +2,13 @@
 
 #include "configuration.h"
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 Model::Model()
     : mLevel(std::make_unique<LevelData>()), mMementoManager(std::make_unique<MementoManager>()),
-      mPathFinder(std::make_unique<PathFinder>()), mLastUpdateTime(std::chrono::steady_clock::now() - MEMENTO_UPDATE_INTERVAL) {}
+      mPathFinder(std::make_unique<PathFinder>()),
+      mLastUpdateTime(std::chrono::steady_clock::now() - MEMENTO_UPDATE_INTERVAL) {}
 
 void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mLevel->buildGridData(aGrid);
@@ -57,3 +58,5 @@ void Model::useNextMemento() {
 void Model::findPath(const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd) {
     mPathFinder->findPath(mLevel.get(), aStart, aEnd);
 }
+
+PathFinder& Model::getPathFinder() { return *mPathFinder; }

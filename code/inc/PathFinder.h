@@ -1,6 +1,7 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
+#include <memory> // Include for smart pointers
 #include <utility>
 #include <vector>
 #include <memory> 
@@ -33,6 +34,9 @@ public:
     PathFinder();
     bool findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd);
     void setAlgorithm(Algorithms aAlgorithm);
+
+    int getGCost();
+    int getSteps();
 
 private:
     void reset();
