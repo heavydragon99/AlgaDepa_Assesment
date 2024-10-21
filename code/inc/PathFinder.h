@@ -3,9 +3,10 @@
 
 #include <utility>
 #include <vector>
-#include <memory> // Include for smart pointers
+#include <memory> 
+#include <unordered_map>
 
-class LevelData; // Forward declaration
+class LevelData; 
 
 class PathFinder {
 public:
@@ -38,10 +39,10 @@ private:
     void dijkstra();
     void breathfirst();
     void setTileNodes();
-    int calculateId(int x, int y) const;
+    int calculateIndex(int x, int y) const;
 
     std::vector<std::vector<std::pair<int, int>>> mAllPaths;
-    std::vector<std::pair<int, int>> mVisited;
+    std::unordered_map<int,bool> mVisited;
 
     LevelData* mLevelData;
     std::pair<int, int> mStart;
