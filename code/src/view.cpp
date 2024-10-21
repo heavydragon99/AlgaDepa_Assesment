@@ -67,6 +67,26 @@ void View::renderPeople(int tileWidth, int tileHeight) {
     }
 }
 
+void View::renderQuadtree() {
+    if (mBoundaries.size() == 0) {
+        return;
+    }
+
+    // Get window size
+    int windowWidth = mRenderer.getWindowWidth();
+    int windowHeight = mRenderer.getWindowHeight();
+
+    // Calculate tile width and height
+    mTileSize = std::min(windowWidth / mModel.getLevelData().getCols(), windowHeight / mModel.getLevelData().getRows());
+
+    for (Quadtree::Boundary boundary : mBoundaries) {
+        mRenderer.drawSquareRect(boundary.x * mTileSize, boundary.y * mTileSize, boundary.width * mTileSize,
+                                 boundary.height * mTileSize, Color(0, 255, 17));
+    }
+
+    mBoundaries.resize(0);
+}
+
 void View::render() {
     mRenderer.clear();
 
@@ -89,12 +109,12 @@ void View::render() {
         renderPeople(mTileSize, mTileSize);
     }
 
-    if (Configuration::getInstance().getConfig("RenderQuadtree")) {
-        // Render quadtree here
-    }
+    renderQuadtree();
 
     mRenderer.show();
 }
+
+void View::setQuadtreeBoundaries(std::vector<Quadtree::Boundary> aBoundaries) { mBoundaries = aBoundaries; }
 
 void View::handleEvents(bool& quit) {
     SDL_Event e;

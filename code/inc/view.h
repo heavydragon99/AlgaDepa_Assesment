@@ -7,6 +7,8 @@
 #include "Renderer.h"
 #include "model.h"
 
+#include "Quadtree.h"
+
 class View {
 public:
     View(Model& aModel);
@@ -17,12 +19,17 @@ public:
     void setGridColor(std::vector<GridColor> aGridColor);
     int getTileSize() const;
 
+    void setQuadtreeBoundaries(std::vector<Quadtree::Boundary> aBoundaries);
+
 private:
+    void renderQuadtree();
     void renderTile(int tileWidth, int tileHeight);
     void renderPeople(int tileWidth, int tileHeight);
     void getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue);
 
 private:
+    std::vector<Quadtree::Boundary> mBoundaries;
+
     Model& mModel;
 
     std::vector<GridColor> mGridColor;

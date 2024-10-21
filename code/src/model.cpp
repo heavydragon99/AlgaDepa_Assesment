@@ -1,9 +1,10 @@
 #include "model.h"
 
+#include "configuration.h"
+
 Model::Model()
     : mLevel(std::make_unique<LevelData>()), mMementoManager(std::make_unique<MementoManager>()),
-      mPathFinder(std::make_unique<PathFinder>()), mLastUpdateTime(std::chrono::steady_clock::now()),
-      mSimulationRunning(true), mPathfindingAlgorithm(PathFinder::Algorithms::Breathfirst) {}
+      mPathFinder(std::make_unique<PathFinder>()), mLastUpdateTime(std::chrono::steady_clock::now()) {}
 
 void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mLevel->buildLevelData(aPersons, aGrid);
@@ -15,7 +16,7 @@ void Model::setGridData(ParsedGrid aGrid) { mLevel->buildGridData(aGrid); }
 LevelData& Model::getLevelData() { return *mLevel; }
 
 void Model::updateModel() {
-    if (mSimulationRunning) {
+    if (!Configuration::getInstance().getConfig("PauseArtists")) {
         auto now = std::chrono::steady_clock::now();
         if (now - mLastUpdateTime >= UPDATE_INTERVAL) {
             mMementoManager->addMemento(saveToMemento());
@@ -25,6 +26,8 @@ void Model::updateModel() {
     }
 }
 
+void Model::updateTile(int aX, int aY) { mLevel->updateTile(aX, aY); }
+
 Memento Model::saveToMemento() const { return Memento(std::make_unique<LevelData>(*mLevel)); }
 
 void Model::restoreFromMemento(Memento&& memento) { mLevel = std::move(memento.getState()); }
@@ -32,15 +35,6 @@ void Model::restoreFromMemento(Memento&& memento) { mLevel = std::move(memento.g
 void Model::usePreviousMemento() { restoreFromMemento(mMementoManager->getPreviousMemento()); }
 
 void Model::useNextMemento() { restoreFromMemento(mMementoManager->getNextMemento()); }
-
-void Model::startStopSimulation() { mSimulationRunning = !mSimulationRunning; }
-
-void Model::setPathfindingAlgorithm() {
-    mPathfindingAlgorithm = (mPathfindingAlgorithm == PathFinder::Algorithms::Breathfirst)
-                                ? PathFinder::Algorithms::Dijkstra
-                                : PathFinder::Algorithms::Breathfirst;
-    mPathFinder->setAlgorithm(mPathfindingAlgorithm);
-}
 
 void Model::findPath(const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd) {
     mPathFinder->findPath(mLevel.get(), aStart, aEnd);

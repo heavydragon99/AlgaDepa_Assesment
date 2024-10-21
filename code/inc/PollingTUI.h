@@ -75,6 +75,9 @@ private:
         std::cout << "(3) load grid file" << std::endl;
 
         moveCursor(2, 10);
+        std::cout << "Current amount of artists: " << mModel.getLevelData().getPeople().size() << std::endl;
+
+        moveCursor(2, 12);
         std::cout << "Press 'q' to quit" << std::endl;
 
         char ch;

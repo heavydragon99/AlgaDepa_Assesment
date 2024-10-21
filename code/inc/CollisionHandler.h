@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <set>
 #include <tuple>
 
@@ -21,10 +22,6 @@ public:
         } else {
             naiveCollisionCheck();
         }
-        // if (mNaiveEnabled)
-        //     naiveCollisionCheck();
-        // else
-        //     quadTreeCollisionCheck();
     }
 
     bool isColliding(Artist& person1, Artist& person2) {
@@ -110,7 +107,9 @@ public:
                     // Check if this collision is new
                     if (previousCollisions.find(collisionKey) == previousCollisions.end()) {
                         // This is a new collision
-                        tileItr.getTile().updateTile();
+                        if (!Configuration::getInstance().getConfig("PauseTiles")) { // Check if the tiles are paused
+                            tileItr.getTile().updateTile();
+                        }
                     }
                     if (Configuration::getInstance().getConfig("CollisionWithPath")) {
                         if (tile->isPath()) {
@@ -143,7 +142,7 @@ public:
                                     static_cast<float>(mModel->getLevelData().getRows())};
 
         // Create the Quadtree with a capacity of 4 objects per node
-        Quadtree quadtree(boundary, 52);
+        Quadtree quadtree(boundary, 4);
 
         // Insert all artists into the quadtree
         for (Artist& artist : mModel->getLevelData().getPeople()) {
@@ -156,6 +155,8 @@ public:
             tile.getTile().resetUpdate();
             quadtree.insert(&tile);
         }
+
+        // std::cout << "Quadtree boundaries: " << quadtree.getBoundaries().size() << std::endl;
 
         // Current collisions set for tiles
         std::set<std::tuple<Artist*, TileNode*>> currentTileCollisions;
@@ -196,7 +197,9 @@ public:
 
                     // If this collision did not occur in the previous check, act on it
                     if (mPreviousTileCollisions.find(collisionKey) == mPreviousTileCollisions.end()) {
-                        tile->getTile().updateTile(); // Act on new collision
+                        if (!Configuration::getInstance().getConfig("PauseTiles")) { // Check if the tiles are paused
+                            tile->getTile().updateTile();                            // Act on new collision
+                        }
                     }
 
                     // Add to current tile collision set
@@ -209,13 +212,34 @@ public:
         mPreviousTileCollisions = std::move(currentTileCollisions);
     }
 
-    void setNaive(bool aNaiveState) { mNaiveEnabled = aNaiveState; }
+    std::vector<Quadtree::Boundary> getBoundaries() {
+        if (!Configuration::getInstance().getConfig("CollisionMethodQuadTree")) {
+            return std::vector<Quadtree::Boundary>(0);
+        }
+
+        // Define the bounds of the entire grid
+        Quadtree::Boundary boundary{0, 0, static_cast<float>(mModel->getLevelData().getCols()),
+                                    static_cast<float>(mModel->getLevelData().getRows())};
+
+        // Create the Quadtree with a capacity of 4 objects per node
+        Quadtree quadtree(boundary, 32);
+
+        // Insert all artists into the quadtree
+        for (Artist& artist : mModel->getLevelData().getPeople()) {
+            quadtree.insert(&artist);
+        }
+
+        // Insert all tiles into the quadtree
+        for (TileNode& tile : mModel->getLevelData().getGrid()) {
+            quadtree.insert(&tile);
+        }
+
+        return quadtree.getBoundaries();
+    }
 
 private:
     // Store previous collisions between artists and tiles
     std::set<std::tuple<Artist*, TileNode*>> mPreviousTileCollisions;
-
-    bool mNaiveEnabled = true;
 
     Model* mModel;
 };

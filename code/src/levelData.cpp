@@ -145,9 +145,9 @@ std::vector<TileNode>& LevelData::getGrid() { return mGrid; }
 std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 
 void LevelData::addArtist(const Tile& aTile) {
-    if (mPeople.size() >= MAX_PEOPLE) {
-        return; // Do not add a new person if the limit is reached
-    }
+    // if (mPeople.size() >= MAX_PEOPLE) {
+    //     return; // Do not add a new person if the limit is reached
+    // }
 
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {
@@ -209,6 +209,15 @@ void LevelData::infectTiles(const Tile& aTile) {
                 tileNode.getNeighbors().at(firstIndex).get().getTile().forceBlue();
                 tileNode.getNeighbors().at(secondIndex).get().getTile().forceBlue();
             }
+        }
+    }
+}
+
+void LevelData::updateTile(int aX, int aY) {
+    for (auto& tileNode : mGrid) {
+        if (tileNode.getX() == aX && tileNode.getY() == aY) {
+            tileNode.getTile().updateTile();
+            break;
         }
     }
 }

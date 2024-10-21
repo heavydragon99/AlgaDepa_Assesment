@@ -21,6 +21,8 @@ public:
 private:
     void handleMouseInput();
     void checkInputs();
+    void handleUserInput();
+    void rearrangeTile();
 
 private:
     std::unique_ptr<Model> mModel;
@@ -31,7 +33,7 @@ private:
     CollisionHandler mCollisionHandler;
 
     const int mFPSView = 60;
-    int mCurrentFPSLogic = 10;
+    int mCurrentFPSLogic = 40;
 
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;

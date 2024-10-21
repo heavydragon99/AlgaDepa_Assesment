@@ -23,9 +23,9 @@ public:
     void usePreviousMemento();
     void useNextMemento();
 
-    void startStopSimulation();
-    void setPathfindingAlgorithm();
     void findPath(const std::pair<int, int>& aStart, const std::pair<int, int>& aEnd);
+
+    void updateTile(int aX, int aY);
 
 private:
     Memento saveToMemento() const;

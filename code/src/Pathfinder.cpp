@@ -1,4 +1,5 @@
 #include "PathFinder.h"
+#include "configuration.h"
 #include "levelData.h"
 
 #include <iostream>
@@ -14,7 +15,7 @@ struct pair_hash {
     }
 };
 
-PathFinder::PathFinder() : mAlgorithm(Algorithms::Dijkstra), mLevelData(nullptr), mGCost(0), mSteps(0) {}
+PathFinder::PathFinder() : mLevelData(nullptr), mGCost(0), mSteps(0) {}
 
 bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart,
                           const std::pair<int, int>& aEnd) {
@@ -40,7 +41,14 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     }
 
     // Execute the selected algorithm
-    switch (mAlgorithm) {
+    Algorithms Algorithm;
+    if (Configuration::getInstance().getConfig("PathfindingMethodDijkstra")) {
+        Algorithm = Algorithms::Dijkstra;
+    } else {
+        Algorithm = Algorithms::Breathfirst;
+    }
+    
+    switch (Algorithm) {
     case Algorithms::Dijkstra:
         dijkstra();
         break;
@@ -53,8 +61,6 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
 
     return true;
 }
-
-void PathFinder::setAlgorithm(Algorithms aAlgorithm) { mAlgorithm = aAlgorithm; }
 
 void PathFinder::reset() {
     // Reset the state of the grid
@@ -82,7 +88,7 @@ void PathFinder::dijkstra() {
     // Initialize the start node
     auto startNode = std::make_shared<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
     openList.push(startNode);
-    //init distance map to max values
+    // init distance map to max values
     for (const auto& node : mLevelData->getGrid()) {
         int id = calculateId(node.getX(), node.getY());
         distanceMap[id] = std::numeric_limits<int>::max();
@@ -213,6 +219,4 @@ void PathFinder::setTileNodes() {
     }
 }
 
-int PathFinder::calculateId(int x, int y) const {
-        return y * mLevelData->getCols() + x;
-    }
+int PathFinder::calculateId(int x, int y) const { return y * mLevelData->getCols() + x; }

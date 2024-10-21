@@ -26,7 +26,7 @@ public:
 private:
     std::unique_ptr<ITileState> mState;
 
-    bool mUpdated = false;
+    bool mUpdated = true;
 };
 
 #endif // TILE_H

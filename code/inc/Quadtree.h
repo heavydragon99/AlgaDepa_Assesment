@@ -110,6 +110,33 @@ public:
         }
     }
 
+    std::vector<Boundary> getBoundaries() {
+        if (mDivided) {
+            std::vector<Boundary> boundaries;
+
+            std::vector<Boundary> topleft = mTopLeft->getBoundaries();
+            boundaries.insert(boundaries.end(), topleft.begin(), topleft.end());
+
+            std::vector<Boundary> topright = mTopRight->getBoundaries();
+            boundaries.insert(boundaries.end(), topright.begin(), topright.end());
+
+            std::vector<Boundary> bottomleft = mBottomLeft->getBoundaries();
+            boundaries.insert(boundaries.end(), bottomleft.begin(), bottomleft.end());
+
+            std::vector<Boundary> bottomright = mBottomRight->getBoundaries();
+            boundaries.insert(boundaries.end(), bottomright.begin(), bottomright.end());
+            // vec1.insert(vec1.end(), vec2.begin(), vec2.end());
+            // mTopLeft->getBoundaries(range, found);
+            // mTopRight->queryTiles(range, found);
+            // mBottomLeft->queryTiles(range, found);
+            // mBottomRight->queryTiles(range, found);
+
+            return boundaries;
+        } else {
+            return std::vector<Boundary>{mBoundary};
+        }
+    }
+
 private:
     Boundary mBoundary;
     int mCapacity;

@@ -1,7 +1,7 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#define MAX_PEOPLE 50000
+#define MAX_PEOPLE 20000
 
 #include "artist.h"
 #include "structs.h"
@@ -33,16 +33,12 @@ public:
     void deleteArtist(const Tile& aTile);
     void infectTiles(const Tile& aTile);
 
+    void updateTile(int aX, int aY);
+
 private:
     void setNodeWeights();
     float calculateWeight(const TileNode& aNode);
     void connectNeighbors();
-
-    bool checkCollisions(Artist& aPerson);
-    bool isColliding(const Artist& aPerson1, const Artist& aPerson2);
-
-    void addArtist(int aX, int aY);
-    void deleteArtist(int aX, int aY);
 
 private:
     std::vector<Artist> mPeople;
