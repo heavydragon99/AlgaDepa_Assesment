@@ -27,6 +27,7 @@ private:
     void loadNextMemento();
     void speedUp();
     void slowDown();
+    void runPathFinding();
 
 private:
     std::unique_ptr<Model> mModel;

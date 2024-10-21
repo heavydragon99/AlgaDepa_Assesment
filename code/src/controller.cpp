@@ -35,8 +35,9 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     mInputHandler.setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
     mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
 
-    mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
-                                                                                                   // Method
+    mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>(
+                                                  [this]() { this->runPathFinding(); })); // Change Pathfinding
+                                                                                          // Method
     mInputHandler.setCommand((int)Key::Key_Enter,
                              std::make_unique<RearrangeTileCommand>([this]() { this->rearrangeTile(); })); // Rearrange
                                                                                                            // Tile
@@ -115,15 +116,15 @@ void Controller::handleMouseInput() {
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
         if (mPathfindingStart) {
-            mPathfindingStart.reset();
-            mPathfindingEnd.reset();
+            // mPathfindingStart.reset();
+            // mPathfindingEnd.reset();
         }
         mPathfindingStart = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "Start: " << mPathfindingStart->first << ", " << mPathfindingStart->second << std::endl;
         if (mPathfindingStart && mPathfindingEnd) {
             mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
-            mPathfindingStart.reset();
-            mPathfindingEnd.reset();
+            // mPathfindingStart.reset();
+            // mPathfindingEnd.reset();
         }
     }
 
@@ -132,19 +133,21 @@ void Controller::handleMouseInput() {
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
         if (mPathfindingEnd) {
-            mPathfindingStart.reset();
-            mPathfindingEnd.reset();
+            // mPathfindingStart.reset();
+            // mPathfindingEnd.reset();
             mView->render();
         }
         mPathfindingEnd = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "End: " << mPathfindingEnd->first << ", " << mPathfindingEnd->second << std::endl;
         if (mPathfindingStart && mPathfindingEnd) {
             mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
-            mPathfindingStart.reset();
-            mPathfindingEnd.reset();
+            // mPathfindingStart.reset();
+            // mPathfindingEnd.reset();
         }
     }
 }
+
+void Controller::runPathFinding() { mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value()); }
 
 void Controller::checkInputs() {
     Input& input = Input::getInstance();

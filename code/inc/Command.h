@@ -237,17 +237,47 @@ public:
 
 class ChangePathfindingMethodCommand : public Command {
 public:
+    ChangePathfindingMethodCommand(std::function<void()> aAction) : mAction(aAction) {}
+
+    // Copy constructor
+    ChangePathfindingMethodCommand(const ChangePathfindingMethodCommand& other) : mAction(other.mAction) {}
+
+    // Copy assignment operator
+    ChangePathfindingMethodCommand& operator=(const ChangePathfindingMethodCommand& other) {
+        if (this != &other) {
+            mAction = other.mAction;
+        }
+        return *this;
+    }
+
+    // Move constructor
+    ChangePathfindingMethodCommand(ChangePathfindingMethodCommand&& other) : mAction(std::move(other.mAction)) {}
+
+    // Move assignment operator
+    ChangePathfindingMethodCommand& operator=(ChangePathfindingMethodCommand&& other) {
+        if (this != &other) {
+            mAction = std::move(other.mAction);
+        }
+        return *this;
+    }
+
+    ~ChangePathfindingMethodCommand() override = default; // Rule of Five: Destructor
+
     void execute() override {
+        std::cout << "Executing Change Pathfinding Method Command" << std::endl;
         bool newValue = !Configuration::getInstance().getConfig("PathfindingMethodDijkstra");
         Configuration::getInstance().setConfig("PathfindingMethodDijkstra", newValue);
-        std::cout << "Executing Change Pathfinding Method Command, new PathfindingMethodDijkstra value: " << newValue
-                  << std::endl;
+        if (mAction) {
+            mAction();
+        }
     }
+
     std::string getName() override { return "Change Pathfinding Method Command"; }
 
-    ChangePathfindingMethodCommand* clone() const override {
-        return new ChangePathfindingMethodCommand(*this); // Creates a new instance using the copy constructor
-    }
+    ChangePathfindingMethodCommand* clone() const override { return new ChangePathfindingMethodCommand(*this); }
+
+private:
+    std::function<void()> mAction;
 };
 
 class PlayPauseArtistsCommand : public Command {
@@ -339,4 +369,4 @@ public:
     std::map<int, std::unique_ptr<Command>>& getRegistrations() { return commandMap; }
 };
 
-#endif // COMMAND_H
+#endif
