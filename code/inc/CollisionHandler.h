@@ -5,6 +5,7 @@
 
 #include "Quadtree.h"
 #include "artist.h"
+#include "configuration.h"
 #include "model.h"
 
 class CollisionHandler {
@@ -105,7 +106,9 @@ public:
                     // Check if this collision is new
                     if (previousCollisions.find(collisionKey) == previousCollisions.end()) {
                         // This is a new collision
-                        tileItr.getTile().updateTile();
+                        if (!Configuration::getInstance().getConfig("PauseTiles")) { // Check if the tiles are paused
+                            tileItr.getTile().updateTile();
+                        }
                     }
 
                     // Add to current collision set
@@ -186,7 +189,9 @@ public:
 
                     // If this collision did not occur in the previous check, act on it
                     if (mPreviousTileCollisions.find(collisionKey) == mPreviousTileCollisions.end()) {
-                        tile->getTile().updateTile(); // Act on new collision
+                        if (!Configuration::getInstance().getConfig("PauseTiles")) { // Check if the tiles are paused
+                            tile->getTile().updateTile();                            // Act on new collision
+                        }
                     }
 
                     // Add to current tile collision set
