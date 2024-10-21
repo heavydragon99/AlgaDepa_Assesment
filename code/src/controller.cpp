@@ -115,39 +115,26 @@ void Controller::handleMouseInput() {
         Point tileLocation = input.MousePosition();
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
-        if (mPathfindingStart) {
-            // mPathfindingStart.reset();
-            // mPathfindingEnd.reset();
-        }
         mPathfindingStart = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "Start: " << mPathfindingStart->first << ", " << mPathfindingStart->second << std::endl;
-        if (mPathfindingStart && mPathfindingEnd) {
-            mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
-            // mPathfindingStart.reset();
-            // mPathfindingEnd.reset();
-        }
+        runPathFinding();
     }
 
     if (input.GetMouseButtonDown(MouseButton::RIGHT)) {
         Point tileLocation = input.MousePosition();
         tileLocation.x = tileLocation.x / mView->getTileSize();
         tileLocation.y = tileLocation.y / mView->getTileSize();
-        if (mPathfindingEnd) {
-            // mPathfindingStart.reset();
-            // mPathfindingEnd.reset();
-            mView->render();
-        }
         mPathfindingEnd = std::make_pair(tileLocation.x, tileLocation.y);
         std::cout << "End: " << mPathfindingEnd->first << ", " << mPathfindingEnd->second << std::endl;
-        if (mPathfindingStart && mPathfindingEnd) {
-            mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
-            // mPathfindingStart.reset();
-            // mPathfindingEnd.reset();
-        }
+        runPathFinding();
     }
 }
 
-void Controller::runPathFinding() { mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value()); }
+void Controller::runPathFinding() {
+    if (mPathfindingStart && mPathfindingEnd) {
+        mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
+    }
+}
 
 void Controller::checkInputs() {
     Input& input = Input::getInstance();

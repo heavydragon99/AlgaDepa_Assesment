@@ -46,7 +46,7 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     } else {
         Algorithm = Algorithms::Breathfirst;
     }
-    
+
     switch (Algorithm) {
     case Algorithms::Dijkstra:
         dijkstra();
@@ -115,6 +115,7 @@ void PathFinder::dijkstra() {
             if (!shortestPathFound) {
                 shortestPathFound = true;
                 shortestPathCost = currentNode->mGCost;
+                mGCost = currentNode->mGCost;
             }
             // Reconstruct path
             std::vector<std::pair<int, int>> path;
@@ -194,7 +195,9 @@ void PathFinder::breathfirst() {
         for (auto& neighbor : mLevelData->getGrid()[currentIndex].getNeighbors()) {
             int neighborIndex = neighbor.get().getY() * columns + neighbor.get().getX();
             // Skip if the neighbor is a white tile
-            if (!mVisited[neighborIndex] && neighbor.get().getTile().getColor() != 'W') {
+            if (mVisited[neighborIndex] || neighbor.get().getTile().getColor() == 'W') {
+                continue;
+            } else {
                 mVisited[neighborIndex] = true;
                 previousNodes[neighborIndex] = currentNode;
                 queue.push({neighbor.get().getX(), neighbor.get().getY()});
@@ -213,16 +216,11 @@ void PathFinder::setTileNodes() {
     // Mark the visited nodes
     for (auto& visited : mVisited) {
         int index = visited.first;
-        mLevelData->getGrid()[index].setIsVisited(true);
+        mLevelData->getGrid()[index].setIsVisited(visited.second);
     }
 }
 
-int PathFinder::getGCost(){
-    return mGCost;
-}
-int PathFinder::getSteps(){
-    return mSteps;
-
-}
+int PathFinder::getGCost() { return mGCost; }
+int PathFinder::getSteps() { return mSteps; }
 
 int PathFinder::calculateIndex(int x, int y) const { return y * mLevelData->getCols() + x; }
