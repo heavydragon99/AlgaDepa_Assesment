@@ -5,7 +5,6 @@
 #include <iostream>
 #include <limits>
 #include <queue>
-#include <unordered_map>
 #include <unordered_set>
 
 // Define a hash function for std::pair<int, int>
@@ -90,10 +89,10 @@ void PathFinder::dijkstra() {
     openList.push(startNode);
     // init distance map to max values
     for (const auto& node : mLevelData->getGrid()) {
-        int id = calculateId(node.getX(), node.getY());
+        int id = calculateIndex(node.getX(), node.getY());
         distanceMap[id] = std::numeric_limits<int>::max();
     }
-    distanceMap[calculateId(mStart.first, mStart.second)] = 0;
+    distanceMap[calculateIndex(mStart.first, mStart.second)] = 0;
 
     bool shortestPathFound = false;
     int shortestPathCost = std::numeric_limits<int>::max(); // Track the shortest path cost
@@ -103,7 +102,7 @@ void PathFinder::dijkstra() {
         openList.pop();
 
         std::pair<int, int> currentPos = {currentNode->mX, currentNode->mY};
-        mVisited.push_back(currentPos);
+        mVisited[calculateIndex(currentPos.first, currentPos.second)] = true;
         int currentId = currentNode->mY * cols + currentNode->mX;
 
         // If the current node's cost exceeds the shortest path cost, stop exploring
@@ -136,7 +135,7 @@ void PathFinder::dijkstra() {
             int neighborX = neighbor.get().getX();
             int neighborY = neighbor.get().getY();
             std::pair<int, int> neighborPos = {neighborX, neighborY};
-            int neighborId = calculateId(neighborX, neighborY);
+            int neighborId = calculateIndex(neighborX, neighborY);
 
             // Skip if the neighbor is already in the closed list or is a white tile
             if (closedList.find(neighborPos) != closedList.end() || neighbor.get().getTile().getColor() == 'W') {
@@ -162,14 +161,13 @@ void PathFinder::dijkstra() {
 void PathFinder::breathfirst() {
     std::queue<std::pair<int, int>> queue;
     std::unordered_map<int, std::pair<int, int>> previousNodes;
-    std::unordered_map<int, bool> visitedNodes;
 
     int columns = mLevelData->getCols();
     int startIndex = mStart.second * columns + mStart.first;
     int endIndex = mEnd.second * columns + mEnd.first;
 
     queue.push(mStart);
-    visitedNodes[startIndex] = true;
+    mVisited[startIndex] = true;
 
     while (!queue.empty()) {
         auto currentNode = queue.front();
@@ -196,8 +194,8 @@ void PathFinder::breathfirst() {
         for (auto& neighbor : mLevelData->getGrid()[currentIndex].getNeighbors()) {
             int neighborIndex = neighbor.get().getY() * columns + neighbor.get().getX();
             // Skip if the neighbor is a white tile
-            if (!visitedNodes[neighborIndex] && neighbor.get().getTile().getColor() != 'W') {
-                visitedNodes[neighborIndex] = true;
+            if (!mVisited[neighborIndex] && neighbor.get().getTile().getColor() != 'W') {
+                mVisited[neighborIndex] = true;
                 previousNodes[neighborIndex] = currentNode;
                 queue.push({neighbor.get().getX(), neighbor.get().getY()});
             }
@@ -214,18 +212,17 @@ void PathFinder::setTileNodes() {
 
     // Mark the visited nodes
     for (auto& visited : mVisited) {
-        int index = visited.second * mLevelData->getCols() + visited.first;
+        int index = visited.first;
         mLevelData->getGrid()[index].setIsVisited(true);
     }
 }
 
-int PathFinder::calculateId(int x, int y) const { return y * mLevelData->getCols() + x; }
-
-
 int PathFinder::getGCost(){
     return mGCost;
 }
-
 int PathFinder::getSteps(){
     return mSteps;
+
 }
+
+int PathFinder::calculateIndex(int x, int y) const { return y * mLevelData->getCols() + x; }
