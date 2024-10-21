@@ -40,8 +40,13 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     mInputHandler.setCommand((int)Key::Key_Enter,
                              std::make_unique<RearrangeTileCommand>([this]() { this->rearrangeTile(); })); // Rearrange
                                                                                                            // Tile
-    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());    // Backward In Time
-    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());    // Forward In Time
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>(
+                                                     [this]() { this->loadPreviousMemento(); })); // Backward
+                                                                                                  // In
+                                                                                                  // Time
+    mInputHandler.setCommand((int)Key::Key_Right,
+                             std::make_unique<ForwardInTimeCommand>([this]() { this->loadNextMemento(); })); // Forward
+                                                                                                             // In Time
     mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseArtistsCommand>()); // Play/Pause
                                                                                                 // simulation
     mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());  // Play/Pause
@@ -140,7 +145,7 @@ void Controller::checkInputs() {
     static PollingTUI tui(mInputHandler, *mModel);
     input.update();
 
-    tui.update();
+    // tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 
@@ -156,4 +161,15 @@ void Controller::rearrangeTile() {
     tileLocation.x = tileLocation.x / mView->getTileSize();
     tileLocation.y = tileLocation.y / mView->getTileSize();
     mModel->updateTile(tileLocation.x, tileLocation.y);
+}
+
+void Controller::loadPreviousMemento() {
+
+    Configuration::getInstance().setConfig("PauseArtists", true);
+    mModel->usePreviousMemento();
+}
+
+void Controller::loadNextMemento() {
+    Configuration::getInstance().setConfig("PauseArtists", true);
+    mModel->useNextMemento();
 }

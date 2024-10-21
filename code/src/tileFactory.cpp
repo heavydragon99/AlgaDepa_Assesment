@@ -1,15 +1,8 @@
 #include "tileFactory.h"
 
-#include "tileStateBlue.h"
-#include "tileStateGray.h"
-#include "tileStateRed.h"
-#include "tileStateWhite.h"
-#include "tileStateYellow.h"
+#include "iTileState.h"
 
-#include "addArtistBehavior.h"
 #include "iTileBehavior.h"
-#include "infectTilesBehavior.h"
-#include "killArtistBehavior.h"
 
 LevelData* TileFactory::mLevelData = nullptr;
 
@@ -87,9 +80,9 @@ std::unique_ptr<ITileBehavior> TileFactory::createBehavior(TileColor aColor) {
     case TileColor::Yellow:
         return std::make_unique<AddArtistBehavior>(mLevelData);
     case TileColor::Gray:
-        return std::make_unique<ITileBehavior>();
+        return std::make_unique<NoOpBehavior>();
     case TileColor::White:
-        return std::make_unique<ITileBehavior>();
+        return std::make_unique<NoOpBehavior>();
     default:
         return nullptr;
     }

@@ -105,30 +105,48 @@ public:
 
 class BackwardInTimeCommand : public Command {
 public:
+    BackwardInTimeCommand(std::function<void()> aAction) : mAction(aAction) {}
+
+    BackwardInTimeCommand(const BackwardInTimeCommand& other) : mAction(other.mAction) {}
+
     void execute() override {
         std::cout << "Executing Backward In Time Command" << std::endl;
-        // Action for moving down
-        std::cout << "Backward In Time Command" << std::endl;
+        if (mAction) {
+            mAction();
+        }
     }
+
     std::string getName() override { return "Backward In Time Command"; }
 
     BackwardInTimeCommand* clone() const override {
         return new BackwardInTimeCommand(*this); // Creates a new instance using the copy constructor
     }
+
+private:
+    std::function<void()> mAction;
 };
 
 class ForwardInTimeCommand : public Command {
 public:
+    ForwardInTimeCommand(std::function<void()> aAction) : mAction(aAction) {}
+
+    ForwardInTimeCommand(const ForwardInTimeCommand& other) : mAction(other.mAction) {}
+
     void execute() override {
         std::cout << "Executing Forward In Time Command" << std::endl;
-        // Action for moving down
-        std::cout << "Forward In Time Command" << std::endl;
+        if (mAction) {
+            mAction();
+        }
     }
+
     std::string getName() override { return "Forward In Time Command"; }
 
     ForwardInTimeCommand* clone() const override {
         return new ForwardInTimeCommand(*this); // Creates a new instance using the copy constructor
     }
+
+private:
+    std::function<void()> mAction;
 };
 
 class PlayPauseTilesCommand : public Command {

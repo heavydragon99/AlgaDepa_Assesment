@@ -23,6 +23,8 @@ private:
     void checkInputs();
     void handleUserInput();
     void rearrangeTile();
+    void loadPreviousMemento();
+    void loadNextMemento();
 
 private:
     std::unique_ptr<Model> mModel;
