@@ -25,6 +25,8 @@ private:
     void rearrangeTile();
     void loadPreviousMemento();
     void loadNextMemento();
+    void speedUp();
+    void slowDown();
 
 private:
     std::unique_ptr<Model> mModel;
