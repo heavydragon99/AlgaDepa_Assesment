@@ -24,26 +24,27 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     config.setConfig("PauseTiles", true);
     config.setConfig("PauseArtists", true);
 
-    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseTilesCommand>());  // Play/Pause
-                                                                                                    // simulation
-    mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>()); // Play/Pause
-                                                                                                    // artists
-    mInputHandler.setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());    // Change Collision
-                                                                                                    // Method
-    mInputHandler.setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());     // Toggle Render
-                                                                                                    // Quadtree
-    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
+    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());                // File Open
+    mInputHandler.setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());   // Change Collision
+                                                                                                   // Method
+    mInputHandler.setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());    // Toggle Render
+                                                                                                   // Quadtree
     mInputHandler.setCommand((int)Key::Key_W, std::make_unique<ToggleCollisionWithPathCommand>()); // Toggle Collision
                                                                                                    // With Path
-    mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
-                                                                                                   // Method
     mInputHandler.setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());        // Toggle Render Path
     mInputHandler.setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
-    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());   // Rearrange Tile
-    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());            // File Open
     mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
-    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());   // Backward In Time
-    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());   // Forward In Time
+    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
+
+    mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
+                                                                                                   // Method
+    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());       // Rearrange Tile
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());       // Backward In Time
+    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());       // Forward In Time
+    mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseTilesCommand>());      // Play/Pause
+                                                                                                   // simulation
+    mInputHandler.setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());     // Play/Pause
+                                                                                                   // artists
 }
 
 void Controller::createLevel() {
@@ -156,6 +157,13 @@ void Controller::handleUserInput() {
             mPathfindingStart.reset();
             mPathfindingEnd.reset();
             mView->render();
+        }
+        mPathfindingEnd = std::make_pair(tileLocation.x, tileLocation.y);
+        std::cout << "End: " << mPathfindingEnd->first << ", " << mPathfindingEnd->second << std::endl;
+        if (mPathfindingStart && mPathfindingEnd) {
+            mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
+            mPathfindingStart.reset();
+            mPathfindingEnd.reset();
         }
     }
 }

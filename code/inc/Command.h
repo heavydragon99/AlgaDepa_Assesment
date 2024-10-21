@@ -89,8 +89,6 @@ public:
 
 class PlayPauseTilesCommand : public Command {
 public:
-    PlayPauseTilesCommand();
-
     void execute() override {
         Configuration::getInstance().setConfig("PauseTiles", !Configuration::getInstance().getConfig("PauseTiles"));
     }
@@ -180,8 +178,6 @@ public:
 
 class PlayPauseArtistsCommand : public Command {
 public:
-    PlayPauseArtistsCommand();
-
     void execute() override {
         Configuration::getInstance().setConfig("pauseArtists", !Configuration::getInstance().getConfig("pauseArtists"));
     }
