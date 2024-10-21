@@ -68,12 +68,79 @@ ParsedGrid GridTXTParser::parseFile(std::ifstream& aFileStream) {
     return data;
 }
 
-// // Single getter that returns all grid data in one struct
-// GridData GridTXTParser::getGridData() const {
-//     GridData data;
-//     data.rows = rows;
-//     data.cols = cols;
-//     data.gridBuffer = gridBuffer; // Copy grid buffer
-//     data.colors = colors;         // Copy color mappings
-//     return data;
-// }
+ParsedGrid GridXMLParser::parseFile(std::ifstream& aFileStream) {
+    ParsedGrid gridData;
+
+    // Check if the file stream is open
+    if (!aFileStream.is_open()) {
+        throw std::runtime_error("Failed to open XML file");
+    }
+
+    // Convert the file stream to a string
+    std::string xmlContent((std::istreambuf_iterator<char>(aFileStream)), std::istreambuf_iterator<char>());
+
+    // Parse the XML content using TinyXML2
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError error = doc.Parse(xmlContent.c_str());
+    if (error != tinyxml2::XML_SUCCESS) {
+        throw std::runtime_error("Failed to parse XML file");
+    }
+
+    // Parse the <canvas> element to extract rows and cols
+    tinyxml2::XMLElement* canvasElement = doc.FirstChildElement("canvas");
+    if (canvasElement == nullptr) {
+        throw std::runtime_error("Missing <canvas> element in XML");
+    }
+
+    canvasElement->QueryIntAttribute("rows", &gridData.rows);
+    canvasElement->QueryIntAttribute("cols", &gridData.cols);
+
+    // Parse <nodeTypes> to extract color information
+    tinyxml2::XMLElement* nodeTypesElement = canvasElement->FirstChildElement("nodeTypes");
+    if (nodeTypesElement != nullptr) {
+        parseNodeTypes(nodeTypesElement, gridData);
+    }
+
+    // Parse <nodes> to extract grid data
+    tinyxml2::XMLElement* nodesElement = canvasElement->FirstChildElement("nodes");
+    if (nodesElement != nullptr) {
+        parseNodes(nodesElement, gridData);
+    }
+
+    return gridData;
+}
+
+// Helper function to parse <nodeTypes> and fill color information
+void GridXMLParser::parseNodeTypes(tinyxml2::XMLElement* nodeTypesElement, ParsedGrid& gridData) {
+    for (tinyxml2::XMLElement* nodeType = nodeTypesElement->FirstChildElement("nodeType"); nodeType != nullptr;
+         nodeType = nodeType->NextSiblingElement("nodeType")) {
+
+        GridColor color;
+        color.letter = nodeType->Attribute("tag")[0];
+        nodeType->QueryIntAttribute("red", &color.red);
+        nodeType->QueryIntAttribute("green", &color.green);
+        nodeType->QueryIntAttribute("blue", &color.blue);
+        nodeType->QueryIntAttribute("weight", &color.weight);
+
+        gridData.gridColors.push_back(color);
+    }
+}
+
+// Helper function to parse <nodes> and fill grid buffer information
+void GridXMLParser::parseNodes(tinyxml2::XMLElement* nodesElement, ParsedGrid& gridData) {
+    gridData.grid.resize(gridData.rows * gridData.cols, '_'); // Initialize with spaces
+
+    for (tinyxml2::XMLElement* node = nodesElement->FirstChildElement(); node != nullptr;
+         node = node->NextSiblingElement()) {
+
+        const char* tag = node->Value(); // Get the node tag (Y, R, etc.)
+        int x, y;
+        node->QueryIntAttribute("x", &x);
+        node->QueryIntAttribute("y", &y);
+
+        // Place the tag in the corresponding position in the grid
+        if (x < gridData.cols && y < gridData.rows) {
+            gridData.grid[y * gridData.cols + x] = tag[0];
+        }
+    }
+}
