@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "Command.h"
+#include "PollingTUI.h"
 #include "controller.h"
 #include "view.h"
 
@@ -35,7 +36,22 @@ void Controller::checkInputs() {
 void Controller::run() {
     bool pause = true;
 
+    PollingTUI tui(mInputHandler);
+
+    // Example input codes:
+    // const int KEY_UP = 1;
+    // const int KEY_DOWN = 2;
+    // const int KEY_JUMP = 3;
+
+    // Bind inputs to commands
+    // inputHandler.setCommand(KEY_UP, std::make_unique<MoveUpCommand>());
+    // inputHandler.setCommand(KEY_DOWN, std::make_unique<MoveDownCommand>());
     mInputHandler.setCommand((int)Key::Key_Space, std::make_unique<PlayPauseCommand>(pause));
+    mInputHandler.setCommand((int)Key::Key_Enter, std::make_unique<RearrangeTileCommand>());
+    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());
+    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>());
+    mInputHandler.setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>());
+    mInputHandler.setCommand((int)Key::Key_Right, std::make_unique<ForwardInTimeCommand>());
 
     const int frameDelayView = 1000 / mFPSView;
     // Render the data with the view class
@@ -66,6 +82,7 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
+            // tui.update();
             mView->render();
             handleUserInput();
             lastFrameTimeView = currentFrameTime;
@@ -79,7 +96,7 @@ void Controller::handleUserInput() {
     if (!pause)
         mModel->updateModel();
 
-    mCollisionHandler.handleCollisions();
+    // mCollisionHandler.handleCollisions();
 
     if (input.GetKeyDown(Key::Key_Space)) {
         mModel->startStopSimulation();

@@ -3,6 +3,7 @@
 #include <set>
 #include <tuple>
 
+#include "Quadtree.h"
 #include "artist.h"
 #include "model.h"
 
@@ -13,10 +14,12 @@ public:
     ~CollisionHandler() {}
 
     void handleCollisions() {
-        if (mNaiveEnabled)
-            naiveCollisionCheck();
-        else
-            quadTreeCollisionCheck();
+        naiveCollisionCheck();
+        // quadTreeCollisionCheck();
+        // if (mNaiveEnabled)
+        //     naiveCollisionCheck();
+        // else
+        //     quadTreeCollisionCheck();
     }
 
     bool isColliding(Artist& person1, Artist& person2) {
@@ -53,11 +56,25 @@ public:
         int cols = mModel->getLevelData().getCols();
         int rows = mModel->getLevelData().getRows();
 
+        // Insert all artists into the quadtree
+        for (Artist& artist : mModel->getLevelData().getPeople()) {
+            artist.resetRed();
+        }
+
+        // Insert all tiles into the quadtree
+        for (TileNode& tile : mModel->getLevelData().getGrid()) {
+            tile.getTile().resetUpdate();
+        }
+
         for (Artist& firstPerson : mModel->getLevelData().getPeople()) {
 
             Artist::Location& loc = firstPerson.getLocation();
-            if (loc.mX + artistWidth > cols || loc.mX < 0 || loc.mY + artistHeight > rows || loc.mY < 0) {
-                firstPerson.collidedWall();
+            if (loc.mX < 0 || loc.mY < 0) {
+                firstPerson.collidedWall(false);
+            }
+
+            if (loc.mX + artistWidth > cols || loc.mY + artistHeight > rows) {
+                firstPerson.collidedWall(true);
             }
 
             for (Artist& secondPerson : mModel->getLevelData().getPeople()) {
@@ -103,11 +120,91 @@ public:
         return;
     }
 
-    void quadTreeCollisionCheck() {}
+    void quadTreeCollisionCheck() {
+        const float artistWidth = 0.5f;
+        const float artistHeight = 0.5f;
+        const float tileWidth = 1.0f;
+        const float tileHeight = 1.0f;
+        int cols = mModel->getLevelData().getCols();
+        int rows = mModel->getLevelData().getRows();
+
+        // Define the bounds of the entire grid
+        Quadtree::Boundary boundary{0, 0, static_cast<float>(mModel->getLevelData().getCols()),
+                                    static_cast<float>(mModel->getLevelData().getRows())};
+
+        // Create the Quadtree with a capacity of 4 objects per node
+        Quadtree quadtree(boundary, 52);
+
+        // Insert all artists into the quadtree
+        for (Artist& artist : mModel->getLevelData().getPeople()) {
+            artist.resetRed();
+            quadtree.insert(&artist);
+        }
+
+        // Insert all tiles into the quadtree
+        for (TileNode& tile : mModel->getLevelData().getGrid()) {
+            tile.getTile().resetUpdate();
+            quadtree.insert(&tile);
+        }
+
+        // Current collisions set for tiles
+        std::set<std::tuple<Artist*, TileNode*>> currentTileCollisions;
+
+        // Check collisions between artists
+        for (Artist& artist : mModel->getLevelData().getPeople()) {
+            Artist::Location& loc = artist.getLocation();
+            if (loc.mX < 0 || loc.mY < 0) {
+                artist.collidedWall(false);
+            }
+
+            if (loc.mX + artistWidth > cols || loc.mY + artistHeight > rows) {
+                artist.collidedWall(true);
+            }
+            Quadtree::Boundary artistBoundary{artist.getLocation().mX - artistWidth,
+                                              artist.getLocation().mY - artistHeight, artistWidth * 2,
+                                              artistHeight * 2};
+
+            // Query possible artist collisions
+            std::vector<Artist*> possibleArtistCollisions;
+            quadtree.queryArtists(artistBoundary, possibleArtistCollisions);
+
+            for (Artist* other : possibleArtistCollisions) {
+                if (&artist != other && isColliding(artist, *other)) {
+                    // Call collided function for artist-artist collision
+                    artist.collidedOtherArtist();
+                }
+            }
+
+            // Query possible tile collisions
+            std::vector<TileNode*> possibleTileCollisions;
+            quadtree.queryTiles(artistBoundary, possibleTileCollisions);
+
+            for (TileNode* tile : possibleTileCollisions) {
+                if (isColliding(artist, *tile)) {
+                    // Create a tuple for the current artist-tile collision
+                    std::tuple<Artist*, TileNode*> collisionKey = std::make_tuple(&artist, tile);
+
+                    // If this collision did not occur in the previous check, act on it
+                    if (mPreviousTileCollisions.find(collisionKey) == mPreviousTileCollisions.end()) {
+                        tile->getTile().updateTile(); // Act on new collision
+                    }
+
+                    // Add to current tile collision set
+                    currentTileCollisions.insert(collisionKey);
+                }
+            }
+        }
+
+        // Update previous collisions with the current tile collisions
+        mPreviousTileCollisions = std::move(currentTileCollisions);
+    }
 
     void setNaive(bool aNaiveState) { mNaiveEnabled = aNaiveState; }
 
 private:
+    // Store previous collisions between artists and tiles
+    std::set<std::tuple<Artist*, TileNode*>> mPreviousTileCollisions;
+
     bool mNaiveEnabled = true;
 
     Model* mModel;

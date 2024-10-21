@@ -1,4 +1,5 @@
 #include "FileHandler.h"
+#include "PollingTUI.h"
 #include "Quadtree.h"
 #include "controller.h"
 
@@ -45,11 +46,20 @@
 // }
 
 int main() {
+    // PollingTUI tui;
+    //
+    // while (true) {
+    //     tui.update();
+    //     SDL_Delay(50);
+    // }
 
     // yay text
     FileHandler fileHandler;
 
-    ParsedGrid grid = fileHandler.loadGrid("graph.xml");
+    std::string urlgrid = "https://firebasestorage.googleapis.com/v0/b/dpa-files.appspot.com/o/grid.txt?alt=media";
+    std::string urlgraph = "https://firebasestorage.googleapis.com/v0/b/dpa-files.appspot.com/o/graph.xml?alt=media";
+
+    ParsedGrid grid = fileHandler.loadGrid(urlgraph);
     std::vector<ParsedPerson> persons = fileHandler.loadArtist("artists.csv");
     int cols = grid.cols; // specify the number of columns
     int rows = grid.rows; // specify the number of rows

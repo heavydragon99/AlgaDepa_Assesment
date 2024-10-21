@@ -100,8 +100,9 @@ std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 
 void LevelData::addArtist(const Tile& aTile) {
     if (mPeople.size() >= MAX_PEOPLE) {
-        return;
+        return; // Do not add a new person if the limit is reached
     }
+
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {
             Artist::Location location = {static_cast<float>(tileNode.getX()), static_cast<float>(tileNode.getY())};

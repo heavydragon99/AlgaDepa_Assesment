@@ -8,8 +8,8 @@
 #include "structs.h"
 #include "view.h"
 
-#include <vector>
 #include <optional>
+#include <vector>
 
 class Controller {
 public:
@@ -30,7 +30,7 @@ private:
     CollisionHandler mCollisionHandler;
 
     const int mFPSView = 60;
-    int mCurrentFPSLogic = 1;
+    int mCurrentFPSLogic = 10;
 
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;
