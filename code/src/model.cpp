@@ -9,6 +9,9 @@ Model::Model()
 void Model::createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     mLevel->buildLevelData(aPersons, aGrid);
 }
+void Model::setPersonData(std::vector<ParsedPerson> aPersons) { mLevel->buildPersonData(aPersons); }
+
+void Model::setGridData(ParsedGrid aGrid) { mLevel->buildGridData(aGrid); }
 
 LevelData& Model::getLevelData() { return *mLevel; }
 

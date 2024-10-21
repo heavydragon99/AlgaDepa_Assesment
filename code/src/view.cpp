@@ -1,6 +1,7 @@
 #include "view.h"
 
 #include "artist.h"
+#include "configuration.h"
 
 #include <chrono>
 #include <iostream>
@@ -22,11 +23,11 @@ void View::renderTile(int tileWidth, int tileHeight) {
         SDL_Rect fillRect = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
         mRenderer.drawSquare(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(red, green, blue));
 
-        if (levelData.getGrid().at(i).isVisited()) {
+        if (levelData.getGrid().at(i).isVisited() && Configuration::getInstance().getConfig("RenderVisited")) {
             SDL_Rect smallSquare = {x * tileWidth, y * tileHeight, tileWidth, tileWidth}; // Ensure square tiles
             mRenderer.drawSquareRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, Color(134, 0, 0));
         }
-        if (levelData.getGrid().at(i).isPath()) {
+        if (levelData.getGrid().at(i).isPath() && Configuration::getInstance().getConfig("RenderPath")) {
             // Calculate new dimensions
             int newTileWidth = static_cast<int>(tileWidth * 0.7);
             int newTileHeight = static_cast<int>(tileHeight * 0.7);
@@ -66,6 +67,26 @@ void View::renderPeople(int tileWidth, int tileHeight) {
     }
 }
 
+void View::renderQuadtree() {
+    if (mBoundaries.size() == 0) {
+        return;
+    }
+
+    // Get window size
+    int windowWidth = mRenderer.getWindowWidth();
+    int windowHeight = mRenderer.getWindowHeight();
+
+    // Calculate tile width and height
+    mTileSize = std::min(windowWidth / mModel.getLevelData().getCols(), windowHeight / mModel.getLevelData().getRows());
+
+    for (Quadtree::Boundary boundary : mBoundaries) {
+        mRenderer.drawSquareRect(boundary.x * mTileSize, boundary.y * mTileSize, boundary.width * mTileSize,
+                                 boundary.height * mTileSize, Color(0, 255, 17));
+    }
+
+    mBoundaries.resize(0);
+}
+
 void View::render() {
     mRenderer.clear();
 
@@ -83,10 +104,17 @@ void View::render() {
     renderTile(mTileSize, mTileSize);
 
     // Render people
-    renderPeople(mTileSize, mTileSize);
+
+    if (Configuration::getInstance().getConfig("RenderArtists")) {
+        renderPeople(mTileSize, mTileSize);
+    }
+
+    renderQuadtree();
 
     mRenderer.show();
 }
+
+void View::setQuadtreeBoundaries(std::vector<Quadtree::Boundary> aBoundaries) { mBoundaries = aBoundaries; }
 
 void View::handleEvents(bool& quit) {
     SDL_Event e;

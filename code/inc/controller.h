@@ -35,7 +35,7 @@ private:
     CollisionHandler mCollisionHandler;
 
     const int mFPSView = 60;
-    int mCurrentFPSLogic = 10;
+    int mCurrentFPSLogic = 40;
 
     std::optional<std::pair<int, int>> mPathfindingStart;
     std::optional<std::pair<int, int>> mPathfindingEnd;

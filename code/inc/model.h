@@ -3,17 +3,19 @@
 
 #include "Memento.h"
 #include "MementoManager.h"
+#include "PathFinder.h"
 #include "levelData.h"
 #include "structs.h"
-#include "PathFinder.h"
 
-#include <memory>
 #include <chrono>
+#include <memory>
 
 class Model {
 public:
     Model();
     void createLevel(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    void setPersonData(std::vector<ParsedPerson> aPersons);
+    void setGridData(ParsedGrid aGrid);
     LevelData& getLevelData();
 
     void updateModel();
@@ -35,8 +37,6 @@ private:
     std::unique_ptr<PathFinder> mPathFinder;
     std::chrono::time_point<std::chrono::steady_clock> mLastUpdateTime;
     static constexpr std::chrono::milliseconds MEMENTO_UPDATE_INTERVAL{600}; // Define the interval here
-
 };
-
 
 #endif // MODEL_H

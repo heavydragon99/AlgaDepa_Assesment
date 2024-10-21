@@ -18,6 +18,52 @@ void LevelData::updateLevelData() {
     }
 }
 
+void LevelData::buildPersonData(std::vector<ParsedPerson> aPersons) {
+    // Clear existing data
+    mPeople.clear();
+
+    // Create persons and add to mPeople
+    for (const ParsedPerson& personIterator : aPersons) {
+        Artist::Location personLocation = {personIterator.x, personIterator.y};
+        Artist person(personLocation, personIterator.vx, personIterator.vy);
+        mPeople.push_back(person);
+    }
+}
+
+void LevelData::buildGridData(ParsedGrid aGrid) {
+    // Clear existing data
+    mGrid.clear();
+
+    // Set rows and cols
+    mRows = aGrid.rows;
+    mCols = aGrid.cols;
+
+    // Create tiles and add to mGrid
+    mGrid.resize(mRows * mCols);
+    for (int row = 0; row < mRows; ++row) {
+        for (int col = 0; col < mCols; ++col) {
+            char color = aGrid.grid[row * mCols + col];
+            std::unique_ptr<Tile> tile = TileFactory::createTile(color);
+            mGrid[row * mCols + col] = TileNode(std::move(tile), col, row);
+        }
+    }
+
+    // Set weights for each node
+    for (auto& tileNode : mGrid) {
+        int weight = 0;
+        char color = tileNode.getTile().getColor();
+        for (const GridColor& gridColor : aGrid.gridColors) {
+            if (gridColor.letter == color) {
+                weight = gridColor.weight;
+            }
+        }
+        tileNode.setWeight(weight);
+    }
+
+    // Connect neighbors
+    connectNeighbors();
+}
+
 void LevelData::buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid) {
     // Clear existing data
     mPeople.clear();
@@ -98,9 +144,9 @@ std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 std::vector<std::pair<char, int>>& LevelData::getGridWeights() { return mGridWeights; }
 
 void LevelData::addArtist(const Tile& aTile) {
-    if (mPeople.size() >= MAX_PEOPLE) {
-        return; // Do not add a new person if the limit is reached
-    }
+    // if (mPeople.size() >= MAX_PEOPLE) {
+    //     return; // Do not add a new person if the limit is reached
+    // }
 
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {

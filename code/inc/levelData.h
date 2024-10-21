@@ -1,7 +1,7 @@
 #ifndef LEVELDATA_H
 #define LEVELDATA_H
 
-#define MAX_PEOPLE 50000
+#define MAX_PEOPLE 20000
 
 #include "artist.h"
 #include "structs.h"
@@ -20,6 +20,8 @@ public:
 
     void updateLevelData();
     void buildLevelData(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid);
+    void buildPersonData(std::vector<ParsedPerson> aPersons);
+    void buildGridData(ParsedGrid aGrid);
 
     int getCols() const;
     int getRows() const;

@@ -10,13 +10,16 @@
 #include "SDL.h"
 
 #include "Command.h"
+#include "FileHandler.h"
 #include "InputStructs.h"
+#include "model.h"
+#include "structs.h"
 
-enum MenuState { MainMenu = 0, ChooseShortcutToChange, SetKeyForShortcut };
+enum MenuState { MainMenu = 0, ChooseShortcutToChange, SetKeyForShortcut, OpenArtistFile, OpenGridFile };
 
 class PollingTUI {
 public:
-    PollingTUI(InputHandler& aInputHandler) : mInputHandler(aInputHandler) {
+    PollingTUI(InputHandler& aInputHandler, Model& aModel) : mInputHandler(aInputHandler), mModel(aModel) {
         // Initialize terminal settings
         setNonBlockingInput();
     }
@@ -40,6 +43,12 @@ public:
         case MenuState::SetKeyForShortcut:
             setKeyForShortcut();
             break;
+        case MenuState::OpenArtistFile:
+            openArtistFile();
+            break;
+        case MenuState::OpenGridFile:
+            openGridFile();
+            break;
         default:
             break;
         }
@@ -47,6 +56,7 @@ public:
 
 private:
     MenuState mMenuState = MenuState::MainMenu;
+    Model& mModel;
     InputHandler& mInputHandler;
     int mChosenShortcut = 0;
 
@@ -59,6 +69,15 @@ private:
         std::cout << "(1) change key bindings" << std::endl;
 
         moveCursor(2, 6);
+        std::cout << "(2) load artist file" << std::endl;
+
+        moveCursor(2, 8);
+        std::cout << "(3) load grid file" << std::endl;
+
+        moveCursor(2, 10);
+        std::cout << "Current amount of artists: " << mModel.getLevelData().getPeople().size() << std::endl;
+
+        moveCursor(2, 12);
         std::cout << "Press 'q' to quit" << std::endl;
 
         char ch;
@@ -67,6 +86,12 @@ private:
             ch = getchar();
             if (ch == '1') {
                 mMenuState = MenuState::ChooseShortcutToChange;
+            }
+            if (ch == '2') {
+                mMenuState = MenuState::OpenArtistFile;
+            }
+            if (ch == '3') {
+                mMenuState = MenuState::OpenGridFile;
             }
         }
     }
@@ -95,6 +120,74 @@ private:
                 mChosenShortcut = chosenShortcut;
             }
         }
+    }
+
+    void openArtistFile() {
+        static std::string fileName = "";
+
+        moveCursor(2, 0);
+        std::cout << "Enter file name to be loaded:" << std::endl;
+
+        char ch;
+
+        while (kbhit() > 0) {
+            ch = getchar();
+
+            if (ch == '\n') {
+                FileHandler fileHandler;
+
+                std::vector<ParsedPerson> persons = fileHandler.loadArtist(fileName);
+
+                mModel.setPersonData(persons);
+
+                mMenuState = MenuState::MainMenu;
+                fileName = "";
+
+            } else if (ch == '\b' || ch == 127) {
+                if (fileName.size() > 0)
+                    fileName.resize(fileName.size() - 1);
+            } else {
+                fileName += ch;
+            }
+        }
+        moveCursor(2, 3);
+        std::cout << fileName << std::endl;
+        moveCursor(2 + fileName.size(), 3);
+        std::cout.flush();
+    }
+
+    void openGridFile() {
+        static std::string fileName = "";
+
+        moveCursor(2, 0);
+        std::cout << "Enter file name to be loaded:" << std::endl;
+
+        char ch;
+
+        while (kbhit() > 0) {
+            ch = getchar();
+
+            if (ch == '\n') {
+                FileHandler fileHandler;
+
+                ParsedGrid grid = fileHandler.loadGrid(fileName);
+
+                mModel.setGridData(grid);
+
+                mMenuState = MenuState::MainMenu;
+                fileName = "";
+
+            } else if (ch == '\b' || ch == 127) {
+                if (fileName.size() > 0)
+                    fileName.resize(fileName.size() - 1);
+            } else {
+                fileName += ch;
+            }
+        }
+        moveCursor(2, 3);
+        std::cout << fileName << std::endl;
+        moveCursor(2 + fileName.size(), 3);
+        std::cout.flush();
     }
 
     void setKeyForShortcut() {

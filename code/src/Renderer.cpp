@@ -18,7 +18,10 @@ Renderer::~Renderer() { SDL_Quit(); }
 
 void Renderer::show() { SDL_RenderPresent(mRenderer.get()); }
 
-void Renderer::clear() { SDL_RenderClear(mRenderer.get()); }
+void Renderer::clear() {
+    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 255); // RGB values for black and full opacity
+    SDL_RenderClear(mRenderer.get());
+}
 
 int Renderer::getWindowWidth() {
     int windowWidth, windowHeight;
@@ -87,7 +90,7 @@ void Renderer::drawSquare(int x, int y, int width, int height, Color color) {
 }
 
 void Renderer::drawSquareRect(int x, int y, int width, int height, Color color) {
-    SDL_Rect rect = {x, y, width, height}; 
+    SDL_Rect rect = {x, y, width, height};
     SDL_SetRenderDrawColor(mRenderer.get(), color.r, color.g, color.b, 0xFF);
     SDL_RenderDrawRect(mRenderer.get(), &rect);
 }

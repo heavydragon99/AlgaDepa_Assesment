@@ -14,17 +14,17 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
     mGrid = aGrid;
 
     Configuration& config = Configuration::getInstance();
-    config.setConfig("RenderQuadtree", false);
+    config.setConfig("RenderQuadtree", true);
     config.setConfig("RenderArtists", true);
     config.setConfig("RenderPath", true);
     config.setConfig("RenderVisited", false);
-    config.setConfig("CollisionWithPath", false);
+    config.setConfig("CollisionWithPath", true);
     config.setConfig("PathfindingMethodDijkstra", true);
-    config.setConfig("CollisionMethodQuadTree", true);
+    config.setConfig("CollisionMethodQuadTree", false);
     config.setConfig("PauseTiles", true);
     config.setConfig("PauseArtists", true);
 
-    mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());                // File Open
+    // mInputHandler.setCommand((int)Key::Key_O, std::make_unique<FileOpenCommand>());                // File Open
     mInputHandler.setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());   // Change Collision
                                                                                                    // Method
     mInputHandler.setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());    // Toggle Render
@@ -33,7 +33,6 @@ Controller::Controller(std::vector<ParsedPerson> aPersons, ParsedGrid aGrid)
                                                                                                    // With Path
     mInputHandler.setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());        // Toggle Render Path
     mInputHandler.setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
-    mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
     mInputHandler.setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
 
     mInputHandler.setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>()); // Change Pathfinding
@@ -86,6 +85,11 @@ void Controller::run() {
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
             checkInputs();
+
+            if (Configuration::getInstance().getConfig("RenderQuadtree")) {
+                mView->setQuadtreeBoundaries(mCollisionHandler.getBoundaries());
+            }
+
             mView->render();
             lastFrameTimeView = currentFrameTime;
         }
@@ -133,8 +137,10 @@ void Controller::handleMouseInput() {
 
 void Controller::checkInputs() {
     Input& input = Input::getInstance();
-    static PollingTUI tui(mInputHandler);
+    static PollingTUI tui(mInputHandler, *mModel);
     input.update();
+
+    tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 

@@ -3,21 +3,30 @@
 
 #include "configuration.h"
 
+#include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <functional>
 
 class Command {
 public:
-    virtual ~Command() {}
+    virtual ~Command() = default; // Rule of Five: Destructor
     virtual void execute() = 0;
     virtual std::string getName() = 0;
 
-    Command() {}
+    Command() = default; // Default constructor
 
-    /// Assume Command has a copy constructor
-    Command(const Command& other) {}
+    // Copy constructor
+    Command(const Command& other) = default;
+
+    // Copy assignment operator
+    Command& operator=(const Command& other) = default;
+
+    // Move constructor
+    Command(Command&& other) = default;
+
+    // Move assignment operator
+    Command& operator=(Command&& other) = default;
 
     // Clone method to return a copy of this command
     virtual Command* clone() const = 0;
@@ -27,7 +36,29 @@ class RearrangeTileCommand : public Command {
 public:
     RearrangeTileCommand(std::function<void()> aAction) : mAction(aAction) {}
 
+    // Copy constructor
     RearrangeTileCommand(const RearrangeTileCommand& other) : mAction(other.mAction) {}
+
+    // Copy assignment operator
+    RearrangeTileCommand& operator=(const RearrangeTileCommand& other) {
+        if (this != &other) {
+            mAction = other.mAction;
+        }
+        return *this;
+    }
+
+    // Move constructor
+    RearrangeTileCommand(RearrangeTileCommand&& other) : mAction(std::move(other.mAction)) {}
+
+    // Move assignment operator
+    RearrangeTileCommand& operator=(RearrangeTileCommand&& other) {
+        if (this != &other) {
+            mAction = std::move(other.mAction);
+        }
+        return *this;
+    }
+
+    ~RearrangeTileCommand() override = default; // Rule of Five: Destructor
 
     void execute() override {
         std::cout << "Executing Rearrange Tile Command" << std::endl;
@@ -38,9 +69,7 @@ public:
 
     std::string getName() override { return "Rearrange Tile Command"; }
 
-    RearrangeTileCommand* clone() const override {
-        return new RearrangeTileCommand(*this); // Creates a new instance using the copy constructor
-    }
+    RearrangeTileCommand* clone() const override { return new RearrangeTileCommand(*this); }
 
 private:
     std::function<void()> mAction;
@@ -181,7 +210,8 @@ public:
     void execute() override {
         bool newValue = !Configuration::getInstance().getConfig("CollisionMethodQuadTree");
         Configuration::getInstance().setConfig("CollisionMethodQuadTree", newValue);
-        std::cout << "Executing Change Collision Method Command, new CollisionMethodQuadTree value: " << newValue << std::endl;
+        std::cout << "Executing Change Collision Method Command, new CollisionMethodQuadTree value: " << newValue
+                  << std::endl;
     }
     std::string getName() override { return "Change Collision Method Command"; }
 
@@ -195,7 +225,8 @@ public:
     void execute() override {
         bool newValue = !Configuration::getInstance().getConfig("CollisionWithPath");
         Configuration::getInstance().setConfig("CollisionWithPath", newValue);
-        std::cout << "Executing Toggle Collision With Path Command, new CollisionWithPath value: " << newValue << std::endl;
+        std::cout << "Executing Toggle Collision With Path Command, new CollisionWithPath value: " << newValue
+                  << std::endl;
     }
     std::string getName() override { return "Toggle Collision With Path Command"; }
 
@@ -209,7 +240,8 @@ public:
     void execute() override {
         bool newValue = !Configuration::getInstance().getConfig("PathfindingMethodDijkstra");
         Configuration::getInstance().setConfig("PathfindingMethodDijkstra", newValue);
-        std::cout << "Executing Change Pathfinding Method Command, new PathfindingMethodDijkstra value: " << newValue << std::endl;
+        std::cout << "Executing Change Pathfinding Method Command, new PathfindingMethodDijkstra value: " << newValue
+                  << std::endl;
     }
     std::string getName() override { return "Change Pathfinding Method Command"; }
 
