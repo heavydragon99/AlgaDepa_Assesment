@@ -16,8 +16,13 @@ Quadtree::Quadtree(const Boundary& boundary, int capacity)
  * @return True if the location is within the boundary, false otherwise.
  */
 bool Quadtree::Boundary::contains(const Artist::Location& loc) const {
+    // Include on the boundary for left/top, exclude for right/bottom
     return loc.mX >= x && loc.mX < x + width && loc.mY >= y && loc.mY < y + height;
 }
+//
+// bool Quadtree::Boundary::contains(const Artist::Location& loc) const {
+//     return loc.mX >= x && loc.mX < x + width && loc.mY >= y && loc.mY < y + height;
+// }
 
 /**
  * @brief Checks if a tile is within the boundary.

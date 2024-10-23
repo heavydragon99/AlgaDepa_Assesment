@@ -164,8 +164,7 @@ void CollisionHandler::quadTreeCollisionCheck() {
     for (Artist& artist : mModel->getLevelData().getPeople()) {
         artist.resetRed();
         if (quadtree.insert(&artist) == false) {
-            std::cout << "Quadtree artist insertion failed" << std::endl;
-            std::cout << "Artist pos: " << artist.getLocation().mX << ", " << artist.getLocation().mY << std::endl;
+            // std::cout << "Quadtree artist insertion failed" << std::endl;
         }
     }
 
@@ -173,7 +172,7 @@ void CollisionHandler::quadTreeCollisionCheck() {
     for (TileNode& tile : mModel->getLevelData().getGrid()) {
         tile.getTile().resetUpdate();
         if (quadtree.insert(&tile) == false) {
-            std::cout << "Quadtree tile insertion failed" << std::endl;
+            // std::cout << "Quadtree tile insertion failed" << std::endl;
         }
     }
 
