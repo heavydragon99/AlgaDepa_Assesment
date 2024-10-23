@@ -1,6 +1,11 @@
 #include "InputStructs.h"
 
-// Function to convert enum class values to their corresponding string representation
+/**
+ * @brief Converts a Key enum value to its corresponding string representation.
+ * 
+ * @param key The Key enum value to convert.
+ * @return std::string The string representation of the Key enum value.
+ */
 std::string keyToString(Key key) {
     switch (key) {
     // Alphabet keys
@@ -126,8 +131,6 @@ std::string keyToString(Key key) {
         return "Key_Num8";
     case Key::Key_Num9:
         return "Key_Num9";
-    // case Key::Key_NumLock:
-    //     return "Key_NumLock";
     case Key::Key_NumDivide:
         return "Key_NumDivide";
     case Key::Key_NumMultiply:
@@ -138,8 +141,6 @@ std::string keyToString(Key key) {
         return "Key_NumPlus";
     case Key::Key_NumEnter:
         return "Key_NumEnter";
-    // case Key::Key_NumDecimal:
-    //     return "Key_NumDecimal";
 
     // Arrow keys
     case Key::Key_Up:
@@ -192,8 +193,6 @@ std::string keyToString(Key key) {
         return "Key_Pause";
 
     // Punctuation keys
-    // case Key::Key_Tilde:
-    //     return "Key_Tilde";
     case Key::Key_Minus:
         return "Key_Minus";
     case Key::Key_Equals:
@@ -206,8 +205,6 @@ std::string keyToString(Key key) {
         return "Key_Backslash";
     case Key::Key_Semicolon:
         return "Key_Semicolon";
-    // case Key::Key_Quote:
-    //     return "Key_Quote";
     case Key::Key_Comma:
         return "Key_Comma";
     case Key::Key_Period:
@@ -253,12 +250,18 @@ std::string keyToString(Key key) {
     case Key::Controller_DPad_Right:
         return "Controller_DPad_Right";
 
-        // Unknown key (default case)
+    // Unknown key (default case)
     default:
         return "Unknown Key";
     }
 }
 
+/**
+ * @brief Converts a DefAction enum value to its corresponding string representation.
+ * 
+ * @param action The DefAction enum value to convert.
+ * @return std::string The string representation of the DefAction enum value.
+ */
 std::string actionToString(DefAction action) {
     switch (action) {
     case DefAction::Move_Up:
@@ -275,6 +278,12 @@ std::string actionToString(DefAction action) {
     }
 }
 
+/**
+ * @brief Converts a string representation of an action to its corresponding DefAction enum value.
+ * 
+ * @param aKeyString The string representation of the action.
+ * @return int The integer value of the corresponding DefAction enum.
+ */
 int stringToActionID(std::string aKeyString) {
     std::string returnedString = "";
     int currentKeyAttempt = 0;
@@ -293,6 +302,12 @@ int stringToActionID(std::string aKeyString) {
     return currentKeyAttempt;
 }
 
+/**
+ * @brief Converts a string representation of a key to its corresponding Key enum value.
+ * 
+ * @param aKeyString The string representation of the key.
+ * @return int The integer value of the corresponding Key enum.
+ */
 int stringToKeyID(std::string aKeyString) {
     std::string returnedString = "";
 

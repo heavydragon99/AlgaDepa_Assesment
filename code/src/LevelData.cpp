@@ -1,23 +1,39 @@
-#include "levelData.h"
+#include "LevelData.h"
 
-#include "artist.h"
-#include "tileFactory.h"
-#include "tileNode.h"
+#include "Artist.h"
+#include "TileFactory.h"
+#include "TileNode.h"
 
 #include <cmath>
 #include <iostream>
 #include <utility>
 
+/**
+ * @brief Constructor for LevelData.
+ * Initializes the number of columns and rows to 0 and sets the level data in TileFactory.
+ */
 LevelData::LevelData() : mCols(0), mRows(0) { TileFactory::setLevelData(this); }
 
+/**
+ * @brief Destructor for LevelData.
+ */
 LevelData::~LevelData() {}
 
+/**
+ * @brief Updates the level data by updating each person in mPeople.
+ */
 void LevelData::updateLevelData() {
     for (auto& person : mPeople) {
         Artist::Location tile = person.update();
     }
 }
 
+/**
+ * @brief Builds person data from a vector of ParsedPerson.
+ * Clears existing data and creates new persons to add to mPeople.
+ * 
+ * @param aPersons Vector of ParsedPerson to build person data from.
+ */
 void LevelData::buildPersonData(std::vector<ParsedPerson> aPersons) {
     // Clear existing data
     mPeople.clear();
@@ -30,6 +46,12 @@ void LevelData::buildPersonData(std::vector<ParsedPerson> aPersons) {
     }
 }
 
+/**
+ * @brief Builds person data from a vector of Artist.
+ * Clears existing data and adds new persons to mPeople.
+ * 
+ * @param aPersons Vector of Artist to build person data from.
+ */
 void LevelData::buildPersonData(std::vector<Artist> aPersons) {
     // Clear existing data
     mPeople.clear();
@@ -40,6 +62,12 @@ void LevelData::buildPersonData(std::vector<Artist> aPersons) {
     }
 }
 
+/**
+ * @brief Builds grid data from a ParsedGrid.
+ * Clears existing data, sets rows and columns, creates tiles, and connects neighbors.
+ * 
+ * @param aGrid ParsedGrid to build grid data from.
+ */
 void LevelData::buildGridData(ParsedGrid aGrid) {
     // Clear existing data
     mGrid.clear();
@@ -74,6 +102,9 @@ void LevelData::buildGridData(ParsedGrid aGrid) {
     connectNeighbors();
 }
 
+/**
+ * @brief Connects neighboring tiles in the grid.
+ */
 void LevelData::connectNeighbors() {
     for (int row = 0; row < mRows; ++row) {
         for (int col = 0; col < mCols; ++col) {
@@ -94,16 +125,46 @@ void LevelData::connectNeighbors() {
     }
 }
 
+/**
+ * @brief Gets the number of columns in the grid.
+ * 
+ * @return Number of columns.
+ */
 int LevelData::getCols() const { return mCols; }
 
+/**
+ * @brief Gets the number of rows in the grid.
+ * 
+ * @return Number of rows.
+ */
 int LevelData::getRows() const { return mRows; }
 
+/**
+ * @brief Gets the grid of TileNodes.
+ * 
+ * @return Reference to the vector of TileNodes.
+ */
 std::vector<TileNode>& LevelData::getGrid() { return mGrid; }
 
+/**
+ * @brief Gets the list of people (artists) in the level.
+ * 
+ * @return Reference to the vector of Artists.
+ */
 std::vector<Artist>& LevelData::getPeople() { return mPeople; }
 
+/**
+ * @brief Gets the grid weights.
+ * 
+ * @return Reference to the vector of pairs of characters and integers representing grid weights.
+ */
 std::vector<std::pair<char, int>>& LevelData::getGridWeights() { return mGridWeights; }
 
+/**
+ * @brief Adds an artist to the level at the location of the given tile.
+ * 
+ * @param aTile Tile where the artist will be added.
+ */
 void LevelData::addArtist(const Tile& aTile) {
     // if (mPeople.size() >= MAX_PEOPLE) {
     //     return; // Do not add a new person if the limit is reached
@@ -135,6 +196,11 @@ void LevelData::addArtist(const Tile& aTile) {
     }
 }
 
+/**
+ * @brief Deletes an artist from the level at the location of the given tile.
+ * 
+ * @param aTile Tile where the artist will be deleted.
+ */
 void LevelData::deleteArtist(const Tile& aTile) {
     // return; // added to fix runtime error
     for (auto& tileNode : mGrid) {
@@ -153,6 +219,11 @@ void LevelData::deleteArtist(const Tile& aTile) {
     }
 }
 
+/**
+ * @brief Infects neighboring tiles of the given tile.
+ * 
+ * @param aTile Tile whose neighbors will be infected.
+ */
 void LevelData::infectTiles(const Tile& aTile) {
     for (auto& tileNode : mGrid) {
         if (&tileNode.getTile() == &aTile) {
@@ -173,6 +244,12 @@ void LevelData::infectTiles(const Tile& aTile) {
     }
 }
 
+/**
+ * @brief Updates the tile at the given coordinates.
+ * 
+ * @param aX X-coordinate of the tile to update.
+ * @param aY Y-coordinate of the tile to update.
+ */
 void LevelData::updateTile(int aX, int aY) {
     for (auto& tileNode : mGrid) {
         if (tileNode.getX() == aX && tileNode.getY() == aY) {

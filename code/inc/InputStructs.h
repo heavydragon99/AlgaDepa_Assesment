@@ -1,42 +1,45 @@
-#pragma once
+/**
+ * @file InputStructs.h
+ * @brief Defines structures and enumerations for input handling, including keyboard, mouse, and controller inputs.
+ */
+
+#ifndef INPUTSTRUCTS_H
+#define INPUTSTRUCTS_H
 
 #include <string>
+#include "Structs.h"
 
-#include "Point.h"
 
-enum class Key;
-enum class DefAction;
-
-// Function to convert enum class values to their corresponding string representation
-std::string keyToString(Key key);
-
-int stringToKeyID(std::string aKeyString);
-
-std::string actionToString(DefAction action);
-
-int stringToActionID(std::string aKeyString);
-
-enum class MouseButton { LEFT = 1, MIDDLE = 2, RIGHT = 3 };
-
-struct Mouse {
-    Point position;
-
-    bool left = false;
-    bool middle = false;
-    bool right = false;
+/**
+ * @enum MouseButton
+ * @brief Enumeration for mouse buttons.
+ */
+enum class MouseButton { 
+    LEFT = 1, 
+    MIDDLE = 2, 
+    RIGHT = 3 
 };
 
-// Define an enum class for all keyboard, mouse, and controller keys
+/**
+ * @struct Mouse
+ * @brief Structure to represent the state of the mouse.
+ */
+struct Mouse {
+    Point position; ///< The position of the mouse.
+
+    bool left = false;   ///< State of the left mouse button.
+    bool middle = false; ///< State of the middle mouse button.
+    bool right = false;  ///< State of the right mouse button.
+};
+
+/**
+ * @enum Key
+ * @brief Enumeration for all keyboard, mouse, and controller keys.
+ */
 enum class Key {
     Key_UNKNOWN = 0,
 
-    /**
-     *  \name Usage page 0x07
-     *
-     *  These values are from usage page 0x07 (USB keyboard page).
-     */
-    /*  */
-
+    // ABC keys
     Key_A = 4,
     Key_B = 5,
     Key_C = 6,
@@ -64,6 +67,7 @@ enum class Key {
     Key_Y = 28,
     Key_Z = 29,
 
+    // Number keys
     Key_1 = 30,
     Key_2 = 31,
     Key_3 = 32,
@@ -75,6 +79,7 @@ enum class Key {
     Key_9 = 38,
     Key_0 = 39,
 
+    // Special keys
     Key_Enter = 40,
     Key_Escape = 41,
     Key_Backspace = 42,
@@ -85,57 +90,18 @@ enum class Key {
     Key_Equals = 46,
     Key_LeftBracket = 47,
     Key_RightBracket = 48,
-    Key_Backslash = 49, /**< Located at the lower left of the return
-                         *   key on ISO keyboards and at the right end
-                         *   of the QWERTY row on ANSI keyboards.
-                         *   Produces REVERSE SOLIDUS (backslash) and
-                         *   VERTICAL LINE in a US layout, REVERSE
-                         *   SOLIDUS and VERTICAL LINE in a UK Mac
-                         *   layout, NUMBER SIGN and TILDE in a UK
-                         *   Windows layout, DOLLAR SIGN and POUND SIGN
-                         *   in a Swiss German layout, NUMBER SIGN and
-                         *   APOSTROPHE in a German layout, GRAVE
-                         *   ACCENT and POUND SIGN in a French Mac
-                         *   layout, and ASTERISK and MICRO SIGN in a
-                         *   French Windows layout.
-                         */
-    Key_NONUSHASH = 50, /**< ISO USB keyboards actually use this code
-                         *   instead of 49 for the same key, but all
-                         *   OSes I've seen treat the two codes
-                         *   identically. So, as an implementor, unless
-                         *   your keyboard generates both of those
-                         *   codes and your OS treats them differently,
-                         *   you should generate Key_BACKSLASH
-                         *   instead of this code. As a user, you
-                         *   should not rely on this code because SDL
-                         *   will never generate it with most (all?)
-                         *   keyboards.
-                         */
+    Key_Backslash = 49,
+    Key_NONUSHASH = 50,
     Key_Semicolon = 51,
     Key_Apostrophe = 52,
-    Key_Grave = 53, /**< Located in the top left corner (on both ANSI
-                     *   and ISO keyboards). Produces GRAVE ACCENT and
-                     *   TILDE in a US Windows layout and in US and UK
-                     *   Mac layouts on ANSI keyboards, GRAVE ACCENT
-                     *   and NOT SIGN in a UK Windows layout, SECTION
-                     *   SIGN and PLUS-MINUS SIGN in US and UK Mac
-                     *   layouts on ISO keyboards, SECTION SIGN and
-                     *   DEGREE SIGN in a Swiss German layout (Mac:
-                     *   only on ISO keyboards), CIRCUMFLEX ACCENT and
-                     *   DEGREE SIGN in a German layout (Mac: only on
-                     *   ISO keyboards), SUPERSCRIPT TWO and TILDE in a
-                     *   French Windows layout, COMMERCIAL AT and
-                     *   NUMBER SIGN in a French Mac layout on ISO
-                     *   keyboards, and LESS-THAN SIGN and GREATER-THAN
-                     *   SIGN in a Swiss German, German, or French Mac
-                     *   layout on ANSI keyboards.
-                     */
+    Key_Grave = 53,
     Key_Comma = 54,
     Key_Period = 55,
     Key_Slash = 56,
 
     Key_CapsLock = 57,
 
+    // Function keys
     Key_F1 = 58,
     Key_F2 = 59,
     Key_F3 = 60,
@@ -149,11 +115,11 @@ enum class Key {
     Key_F11 = 68,
     Key_F12 = 69,
 
+    
     Key_PrintScreen = 70,
     Key_ScrollLock = 71,
     Key_Pause = 72,
-    Key_Insert = 73, /**< insert on PC, help on some Mac keyboards (but
-                                   does send code 73, not 117) */
+    Key_Insert = 73,
     Key_Home = 74,
     Key_PageUp = 75,
     Key_Delete = 76,
@@ -164,8 +130,7 @@ enum class Key {
     Key_Down = 81,
     Key_Up = 82,
 
-    Key_NUMLOCKCLEAR = 83, /**< num lock on PC, clear on Mac keyboards
-                            */
+    Key_NUMLOCKCLEAR = 83,
     Key_NumDivide = 84,
     Key_NumMultiply = 85,
     Key_NumMinus = 86,
@@ -185,12 +150,12 @@ enum class Key {
 
     Key_LControl = 224,
     Key_LShift = 225,
-    Key_LAlt = 226, /**< alt, option */
-    Key_LGui = 227, /**< windows, command (apple), meta */
+    Key_LAlt = 226,
+    Key_LGui = 227,
     Key_RControl = 228,
     Key_RShift = 229,
-    Key_RAlt = 230, /**< alt gr, option */
-    Key_RGui = 231, /**< windows, command (apple), meta */
+    Key_RAlt = 230,
+    Key_RGui = 231,
 
     // Mouse buttons
     Mouse_LeftButton,
@@ -213,16 +178,28 @@ enum class Key {
     Controller_DPad_Left,
     Controller_DPad_Right,
 
-    Key_NumberOfKeys = 512 /**< not a key, just marks the number of scancodes
-                                 for array bounds */
-
+    Key_NumberOfKeys = 512
 };
 
+/**
+ * @enum DefAction
+ * @brief Enumeration for default actions.
+ */
 enum class DefAction {
-    Move_Up,
-    Move_Left,
-    Move_Down,
-    Move_Right,
+    Move_Up,    ///< Move up action.
+    Move_Left,  ///< Move left action.
+    Move_Down,  ///< Move down action.
+    Move_Right, ///< Move right action.
 
-    Undefined
+    Undefined   ///< Undefined action.
 };
+
+std::string keyToString(Key key);
+
+int stringToKeyID(std::string aKeyString);
+
+std::string actionToString(DefAction action);
+
+int stringToActionID(std::string aKeyString);
+
+#endif // INPUTSTRUCTS_H

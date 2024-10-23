@@ -1,10 +1,17 @@
 #include "FileHandler.h"
-#include "ArtistParserStrategy.h"
+#include "ArtistParser.h"
 #include "FileLoader.h"
-#include "GridParserStrategy.h"
+#include "GridParser.h"
 
 FileHandler::FileHandler() {}
 
+/**
+ * @brief Determines if the file is likely an XML file based on the number of XML tags.
+ * 
+ * @param file A unique pointer to the file stream.
+ * @param threshold The minimum number of tags to consider the file as XML.
+ * @return true if the file is likely XML, false otherwise.
+ */
 bool isLikelyXML(std::unique_ptr<std::ifstream>& file, int threshold = 10) {
     if (!file->is_open()) {
         std::cerr << "Error: File stream is not open." << std::endl;
@@ -38,24 +45,37 @@ bool isLikelyXML(std::unique_ptr<std::ifstream>& file, int threshold = 10) {
     return tagCount >= threshold;
 }
 
+/**
+ * @brief Loads artist data from the specified file path.
+ * 
+ * @param aFilePath The path to the file containing artist data.
+ * @return A vector of ParsedPerson objects containing the artist data.
+ */
 std::vector<ParsedPerson> FileHandler::loadArtist(std::string aFilePath) {
 
-    FileLoaderContext fileLoader;
+    FileLoader fileLoader;
     std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
 
     LoadedFile loadedFile;
     loadedFile.fileType = getFileType(aFilePath);
     loadedFile.openedFile = std::move(filePointer);
 
-    ArtistParserStrategy artistParser;
+    ArtistParser artistParser;
 
     std::vector<ParsedPerson> artistData = artistParser.parseFile(loadedFile);
 
     return artistData;
 }
+
+/**
+ * @brief Loads grid data from the specified file path.
+ * 
+ * @param aFilePath The path to the file containing grid data.
+ * @return A ParsedGrid object containing the grid data.
+ */
 ParsedGrid FileHandler::loadGrid(std::string aFilePath) {
 
-    FileLoaderContext fileLoader;
+    FileLoader fileLoader;
     std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
 
     LoadedFile loadedFile;
@@ -69,14 +89,19 @@ ParsedGrid FileHandler::loadGrid(std::string aFilePath) {
     }
     loadedFile.openedFile = std::move(filePointer);
 
-    GridParserStrategy gridParser;
+    GridParser gridParser;
 
     ParsedGrid gridData = gridParser.parseFile(loadedFile);
 
     return gridData;
 }
 
-// Function to get the file type based on file extension
+/**
+ * @brief Determines the file type based on the file extension.
+ * 
+ * @param aFilePath The path to the file.
+ * @return The FileType corresponding to the file extension.
+ */
 FileType FileHandler::getFileType(const std::string aFilePath) {
     // Find the position of the last dot '.' in the file path
     size_t dotPos = aFilePath.find_last_of('.');

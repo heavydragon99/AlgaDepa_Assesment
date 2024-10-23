@@ -13,24 +13,43 @@
 #include "Command.h"
 #include "FileHandler.h"
 #include "InputStructs.h"
-#include "model.h"
-#include "structs.h"
+#include "Model.h"
+#include "Structs.h"
 
+/**
+ * @enum MenuState
+ * @brief Represents the different states of the menu.
+ */
 enum MenuState { MainMenu = 0, ChooseShortcutToChange, SetKeyForShortcut, OpenArtistFile, OpenGridFile };
 
+/**
+ * @class PollingTUI
+ * @brief A class that handles the text-based user interface for polling input.
+ */
 class PollingTUI {
 public:
+    /**
+     * @brief Constructs a PollingTUI object.
+     * @param aInputHandler Reference to the input handler.
+     * @param aModel Reference to the model.
+     */
     PollingTUI(InputHandler& aInputHandler, Model& aModel);
+
+    /**
+     * @brief Destructs the PollingTUI object.
+     */
     ~PollingTUI();
 
-    // Starts the polling loop
+    /**
+     * @brief Starts the polling loop.
+     */
     void update();
 
 private:
-    MenuState mMenuState = MenuState::MainMenu;
-    Model& mModel;
-    InputHandler& mInputHandler;
-    int mChosenShortcut = 0;
+    MenuState mMenuState = MenuState::MainMenu; ///< Current state of the menu.
+    Model& mModel; ///< Reference to the model.
+    InputHandler& mInputHandler; ///< Reference to the input handler.
+    int mChosenShortcut = 0; ///< Currently chosen shortcut.
 
     void mainMenu();
 
@@ -42,16 +61,12 @@ private:
 
     void setKeyForShortcut();
 
-    // Disable input buffering for non-blocking input
     void setNonBlockingInput();
 
-    // Reset terminal settings after exit
     void resetInput();
 
-    // Check if a key has been pressed (non-blocking)
     bool kbhit();
 
-    // ANSI escape codes to clear the terminal and move the cursor
     void clearScreen();
 
     void moveCursor(int x, int y);

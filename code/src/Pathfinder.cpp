@@ -1,6 +1,6 @@
 #include "PathFinder.h"
-#include "configuration.h"
-#include "levelData.h"
+#include "Configuration.h"
+#include "LevelData.h"
 
 #include <iostream>
 #include <limits>
@@ -9,13 +9,28 @@
 
 // Define a hash function for std::pair<int, int>
 struct pair_hash {
+    /**
+     * @brief Hash function for std::pair<int, int>.
+     * @param pair The pair to hash.
+     * @return The hash value.
+     */
     template <class T1, class T2> std::size_t operator()(const std::pair<T1, T2>& pair) const {
         return std::hash<T1>()(pair.first) ^ std::hash<T2>()(pair.second);
     }
 };
 
+/**
+ * @brief Constructor for PathFinder.
+ */
 PathFinder::PathFinder() : mLevelData(nullptr), mGCost(0), mSteps(0) {}
 
+/**
+ * @brief Finds a path from start to end using the selected algorithm.
+ * @param aLevelData Pointer to the level data.
+ * @param aStart Start position.
+ * @param aEnd End position.
+ * @return True if a path is found, false otherwise.
+ */
 bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>& aStart,
                           const std::pair<int, int>& aEnd) {
     mLevelData = const_cast<LevelData*>(aLevelData);
@@ -61,6 +76,9 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     return true;
 }
 
+/**
+ * @brief Resets the state of the grid.
+ */
 void PathFinder::reset() {
     // Reset the state of the grid
     for (auto& node : mLevelData->getGrid()) {
@@ -74,7 +92,9 @@ void PathFinder::reset() {
     mSteps = 0;
 }
 
-// Dijkstra's Algorithm
+/**
+ * @brief Implements Dijkstra's algorithm to find the shortest path.
+ */
 void PathFinder::dijkstra() {
     std::priority_queue<std::shared_ptr<PathFinderNode>, std::vector<std::shared_ptr<PathFinderNode>>,
                         PathFinderNodeCompare>
@@ -158,7 +178,9 @@ void PathFinder::dijkstra() {
     }
 }
 
-// Breadth-First Search (BFS)
+/**
+ * @brief Implements Breadth-First Search (BFS) algorithm to find a path.
+ */
 void PathFinder::breathfirst() {
     std::queue<std::pair<int, int>> queue;
     std::unordered_map<int, std::pair<int, int>> previousNodes;
@@ -206,6 +228,9 @@ void PathFinder::breathfirst() {
     }
 }
 
+/**
+ * @brief Sets the nodes in the path and visited nodes in the grid.
+ */
 void PathFinder::setTileNodes() {
     // Mark the path nodes
     for (auto& path : mAllPaths[0]) {
@@ -220,7 +245,22 @@ void PathFinder::setTileNodes() {
     }
 }
 
+/**
+ * @brief Gets the total cost of the path.
+ * @return The total cost.
+ */
 int PathFinder::getGCost() { return mGCost; }
+
+/**
+ * @brief Gets the number of steps in the path.
+ * @return The number of steps.
+ */
 int PathFinder::getSteps() { return mSteps; }
 
+/**
+ * @brief Calculates the index of a node in the grid.
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @return The index in the grid.
+ */
 int PathFinder::calculateIndex(int x, int y) const { return y * mLevelData->getCols() + x; }

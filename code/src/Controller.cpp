@@ -1,15 +1,18 @@
-#include "controller.h"
+#include "Controller.h"
 
 #include "Command.h"
 #include "FileHandler.h"
 #include "PollingTUI.h"
-#include "configuration.h"
-#include "view.h"
+#include "Configuration.h"
+#include "View.h"
 
 #include <chrono>
 #include <iostream>
 #include <thread>
 
+/**
+ * @brief Constructs a new Controller object and initializes configuration settings.
+ */
 Controller::Controller() {
     Configuration& config = Configuration::getInstance();
     config.setConfig("RenderQuadtree", true);
@@ -23,6 +26,9 @@ Controller::Controller() {
     config.setConfig("PauseArtists", true);
 }
 
+/**
+ * @brief Initializes the controller, loads necessary data, and sets up the game level.
+ */
 void Controller::initialize() {
     FileHandler fileHandler;
     ParsedGrid grid = fileHandler.loadGrid("grid.txt");
@@ -37,6 +43,9 @@ void Controller::initialize() {
     setCommands();
 }
 
+/**
+ * @brief Creates the game level based on the loaded data.
+ */
 void Controller::createLevel() {
     mModel = std::make_unique<Model>();
     mModel->createLevel(mPersons, mGrid);
@@ -44,6 +53,9 @@ void Controller::createLevel() {
     mView->setGridColor(mGrid.gridColors);
 }
 
+/**
+ * @brief Runs the main game loop.
+ */
 void Controller::run() {
     const int frameDelayView = 1000 / mFPSView;
 
@@ -83,6 +95,9 @@ void Controller::run() {
     }
 }
 
+/**
+ * @brief Sets up the commands for input handling.
+ */
 void Controller::setCommands() {
     mInputHandler->setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());   // Change Collision
                                                                                                    // Method
@@ -119,6 +134,9 @@ void Controller::setCommands() {
                                                                                                  // Down
 }
 
+/**
+ * @brief Handles mouse input events.
+ */
 void Controller::handleMouseInput() {
     Input& input = Input::getInstance();
 
@@ -141,18 +159,24 @@ void Controller::handleMouseInput() {
     }
 }
 
+/**
+ * @brief Runs the pathfinding algorithm.
+ */
 void Controller::runPathFinding() {
     if (mPathfindingStart && mPathfindingEnd) {
         mModel->findPath(mPathfindingStart.value(), mPathfindingEnd.value());
     }
 }
 
+/**
+ * @brief Checks and processes user inputs.
+ */
 void Controller::checkInputs() {
     Input& input = Input::getInstance();
     static PollingTUI tui(*mInputHandler.get(), *mModel.get());
     input.update();
 
-    //tui.update();
+    tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 
@@ -164,6 +188,9 @@ void Controller::checkInputs() {
     handleMouseInput();
 }
 
+/**
+ * @brief Rearranges a tile based on the current mouse position.
+ */
 void Controller::rearrangeTile() {
     Point tileLocation = Input::getInstance().MousePosition();
     tileLocation.x = tileLocation.x / mView->getTileSize();
@@ -171,19 +198,30 @@ void Controller::rearrangeTile() {
     mModel->updateTile(tileLocation.x, tileLocation.y);
 }
 
+/**
+ * @brief Loads the previous memento state.
+ */
 void Controller::loadPreviousMemento() {
-
     Configuration::getInstance().setConfig("PauseArtists", true);
     mModel->usePreviousMemento();
 }
 
+/**
+ * @brief Loads the next memento state.
+ */
 void Controller::loadNextMemento() {
     Configuration::getInstance().setConfig("PauseArtists", true);
     mModel->useNextMemento();
 }
 
+/**
+ * @brief Increases the logic update speed.
+ */
 void Controller::speedUp() { mCurrentFPSLogic += 1; }
 
+/**
+ * @brief Decreases the logic update speed.
+ */
 void Controller::slowDown() {
     if (mCurrentFPSLogic > 1) {
         mCurrentFPSLogic -= 1;

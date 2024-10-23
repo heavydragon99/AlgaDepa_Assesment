@@ -1,11 +1,28 @@
-#include "GridParserStrategy.h"
+#include "IGridParser.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-#include "structs.h"
+#include "Structs.h"
 
-// Function to parse a color line like "Y,[250,201,1],1"
+/**
+ * @brief Unimplemented method to parse a CSV grid file.
+ * 
+ * @param aFileStream The input file stream containing the grid data.
+ * @return ParsedGrid The parsed grid data.
+ */
+ParsedGrid GridCSVParser::parseFile(std::ifstream& aFileStream) {
+    ParsedGrid gridData;
+    std::cout << "CSV grid loading not implemented" << std::endl;
+    return gridData;
+}
+
+/**
+ * @brief Parses a color line in the format "Y,[250,201,1],1".
+ * 
+ * @param line The line containing the color information.
+ * @return GridColor The parsed color information.
+ */
 GridColor GridTXTParser::parseColor(const std::string& line) const {
     GridColor color;
     std::stringstream ss(line);
@@ -22,7 +39,12 @@ GridColor GridTXTParser::parseColor(const std::string& line) const {
     return color;
 }
 
-// Function to parse the grid file and store the data
+/**
+ * @brief Parses the grid file and stores the data.
+ * 
+ * @param aFileStream The input file stream containing the grid data.
+ * @return ParsedGrid The parsed grid data.
+ */
 ParsedGrid GridTXTParser::parseFile(std::ifstream& aFileStream) {
     int rows, cols;
     std::vector<GridColor> colors;
@@ -68,6 +90,13 @@ ParsedGrid GridTXTParser::parseFile(std::ifstream& aFileStream) {
     return data;
 }
 
+/**
+ * @brief Parses the XML grid file and stores the data.
+ * 
+ * @param aFileStream The input file stream containing the XML grid data.
+ * @return ParsedGrid The parsed grid data.
+ * @throws std::runtime_error If the file cannot be opened or parsed.
+ */
 ParsedGrid GridXMLParser::parseFile(std::ifstream& aFileStream) {
     ParsedGrid gridData;
 
@@ -110,7 +139,12 @@ ParsedGrid GridXMLParser::parseFile(std::ifstream& aFileStream) {
     return gridData;
 }
 
-// Helper function to parse <nodeTypes> and fill color information
+/**
+ * @brief Helper function to parse <nodeTypes> and fill color information.
+ * 
+ * @param nodeTypesElement The XML element containing node types.
+ * @param gridData The parsed grid data to be filled.
+ */
 void GridXMLParser::parseNodeTypes(tinyxml2::XMLElement* nodeTypesElement, ParsedGrid& gridData) {
     for (tinyxml2::XMLElement* nodeType = nodeTypesElement->FirstChildElement("nodeType"); nodeType != nullptr;
          nodeType = nodeType->NextSiblingElement("nodeType")) {
@@ -126,7 +160,12 @@ void GridXMLParser::parseNodeTypes(tinyxml2::XMLElement* nodeTypesElement, Parse
     }
 }
 
-// Helper function to parse <nodes> and fill grid buffer information
+/**
+ * @brief Helper function to parse <nodes> and fill grid buffer information.
+ * 
+ * @param nodesElement The XML element containing nodes.
+ * @param gridData The parsed grid data to be filled.
+ */
 void GridXMLParser::parseNodes(tinyxml2::XMLElement* nodesElement, ParsedGrid& gridData) {
     gridData.grid.resize(gridData.rows * gridData.cols, '_'); // Initialize with spaces
 

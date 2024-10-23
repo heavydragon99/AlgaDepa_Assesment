@@ -4,8 +4,12 @@
 #include "Memento.h"
 #include <vector>
 
-const int BUFFER_SIZE = 10; // Define the buffer size
+const int BUFFER_SIZE = 200; // Define the buffer size
 
+/**
+ * @class MementoManager
+ * @brief Manages a collection of Memento objects with a fixed buffer size.
+ */
 class MementoManager {
 public:
     MementoManager();
@@ -17,11 +21,11 @@ public:
     Memento getNextMemento();
 
 private:
-    std::vector<Memento> mMementos;
-    int mCurrentIndex;
-    int mStartIndex;
-    int mSize;
-    int mValidSize;
+    std::vector<Memento> mMementos; ///< Vector to store mementos
+    int mCurrentIndex; ///< Current index in the memento buffer
+    int mStartIndex; ///< Start index for the circular buffer
+    int mSize; ///< Current size of the buffer
+    int mValidSize; ///< Valid size of the buffer
 };
 
 #endif // MEMENTOMANAGER_H
