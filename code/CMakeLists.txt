@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.20)
 # Set the project name
 project(depaAlgo)
 
+set(PROJECT_LIB ${PROJECT_NAME}_Lib)
+set(PROJECT_TESTS ${PROJECT_NAME}_tests)
+
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -13,29 +16,64 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Set the output directory for the executable
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Include common settings
-include(${CMAKE_SOURCE_DIR}/common.cmake)
-
-# Find SDL2
-find_package(SDL2 REQUIRED)
-
-# Find the CURL package
-find_package(CURL REQUIRED)
+# Add source and include directories
+include_directories(${PROJECT_SOURCE_DIR}/inc)
+add_subdirectory(tests)
 
 # Add subdirectory for TinyXML2
 add_subdirectory(${CMAKE_SOURCE_DIR}/external/tinyxml2)
 
-# Add the executable
-add_executable(${PROJECT_NAME} ${MAIN_SOURCES})
+# Find SDL2 and CURL
+find_package(SDL2 REQUIRED)
+find_package(CURL REQUIRED)
 
-# Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/inc ${SDL2_INCLUDE_DIRS})
+# Include SDL2 and CURL directories
+include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${CURL_INCLUDE_DIRS})
 
-# Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE tinyxml2 CURL::libcurl ${SDL2_LIBRARIES})
+# List all source files explicitly
+set(SRC_FILES
+    ${CMAKE_SOURCE_DIR}/src/Artist.cpp
+    ${CMAKE_SOURCE_DIR}/src/ArtistParser.cpp
+    ${CMAKE_SOURCE_DIR}/src/CollisionHandler.cpp
+    ${CMAKE_SOURCE_DIR}/src/Controller.cpp
+    ${CMAKE_SOURCE_DIR}/src/FileHandler.cpp
+    ${CMAKE_SOURCE_DIR}/src/FileLoader.cpp
+    ${CMAKE_SOURCE_DIR}/src/GridParser.cpp
+    ${CMAKE_SOURCE_DIR}/src/IArtistParser.cpp
+    ${CMAKE_SOURCE_DIR}/src/IFileLoader.cpp
+    ${CMAKE_SOURCE_DIR}/src/IGridParser.cpp
+    ${CMAKE_SOURCE_DIR}/src/Input.cpp
+    ${CMAKE_SOURCE_DIR}/src/InputStructs.cpp
+    ${CMAKE_SOURCE_DIR}/src/ITileState.cpp
+    ${CMAKE_SOURCE_DIR}/src/LevelData.cpp
+    ${CMAKE_SOURCE_DIR}/src/Memento.cpp
+    ${CMAKE_SOURCE_DIR}/src/MementoManager.cpp
+    ${CMAKE_SOURCE_DIR}/src/Model.cpp
+    ${CMAKE_SOURCE_DIR}/src/Pathfinder.cpp
+    ${CMAKE_SOURCE_DIR}/src/PollingTUI.cpp
+    ${CMAKE_SOURCE_DIR}/src/Quadtree.cpp
+    ${CMAKE_SOURCE_DIR}/src/Renderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/Tile.cpp
+    ${CMAKE_SOURCE_DIR}/src/TileFactory.cpp
+    ${CMAKE_SOURCE_DIR}/src/TileNode.cpp
+    ${CMAKE_SOURCE_DIR}/src/View.cpp
+)
 
-# Add subdirectory for tests
-add_subdirectory(tests)
+# Create a library from the source files
+add_library(${PROJECT_LIB} STATIC ${SRC_FILES})
+
+# Link libraries against own library
+target_link_libraries(${PROJECT_LIB} PRIVATE tinyxml2 ${CURL_LIBRARIES} ${SDL2_LIBRARIES})
+
+# Define executable for main application
+add_executable(${PROJECT_NAME} src/Main.cpp)
+
+# Link libraries against application
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIB})
+
+# Enable testing
+enable_testing()
 
 # Add custom target to run the main program
 add_custom_target(run

@@ -33,9 +33,9 @@ public:
     std::vector<Artist>& getPeople();
     std::vector<std::pair<char, int>>& getGridWeights();
 
-    void addArtist(const Tile& aTile);
-    void deleteArtist(const Tile& aTile);
-    void infectTiles(const Tile& aTile);
+    virtual void addArtist(const Tile& aTile); //Virtual so test can overwrite it
+    virtual void deleteArtist(const Tile& aTile); //Virtual so test can overwrite it
+    virtual void infectTiles(const Tile& aTile); //Virtual so test can overwrite it
 
     void updateTile(int aX, int aY);
     void connectNeighbors();
