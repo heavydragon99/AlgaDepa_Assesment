@@ -1,5 +1,7 @@
 #include "Quadtree.h"
 
+#include <iostream>
+
 /**
  * @brief Constructs a Quadtree with a given boundary and capacity.
  * @param boundary The boundary of the Quadtree.
@@ -43,19 +45,31 @@ bool Quadtree::Boundary::intersects(const Boundary& other) const {
  * @param artist The artist to insert.
  * @return True if the artist was successfully inserted, false otherwise.
  */
+
 bool Quadtree::insert(Artist* artist) {
     if (!mBoundary.contains(artist->getLocation())) {
         return false; // Artist is outside this boundary
     }
 
+    if (mDivided) {
+        // Try to insert the artist into one of the child nodes
+        if (mTopLeft->insert(artist) || mTopRight->insert(artist) || mBottomLeft->insert(artist) ||
+            mBottomRight->insert(artist)) {
+            return true;
+        }
+    }
+
     if (mArtists.size() < mCapacity) {
+        // Still space in this node, just add the artist
         mArtists.push_back(artist);
         return true;
     } else {
         if (!mDivided) {
+            // Subdivide the node when capacity is reached
             subdivide();
         }
 
+        // Try to insert the artist into one of the child nodes
         if (mTopLeft->insert(artist) || mTopRight->insert(artist) || mBottomLeft->insert(artist) ||
             mBottomRight->insert(artist)) {
             return true;
@@ -75,14 +89,25 @@ bool Quadtree::insert(TileNode* tile) {
         return false; // TileNode is outside this boundary
     }
 
+    if (mDivided) {
+        // Try to insert the tile into one of the child nodes
+        if (mTopLeft->insert(tile) || mTopRight->insert(tile) || mBottomLeft->insert(tile) ||
+            mBottomRight->insert(tile)) {
+            return true;
+        }
+    }
+
     if (mTiles.size() < mCapacity) {
+        // Still space in this node, just add the tile
         mTiles.push_back(tile);
         return true;
     } else {
         if (!mDivided) {
+            // Subdivide the node when capacity is reached
             subdivide();
         }
 
+        // Try to insert the tile into one of the child nodes
         if (mTopLeft->insert(tile) || mTopRight->insert(tile) || mBottomLeft->insert(tile) ||
             mBottomRight->insert(tile)) {
             return true;
@@ -102,17 +127,17 @@ void Quadtree::queryArtists(const Boundary& range, std::vector<Artist*>& found) 
         return;
     }
 
-    for (Artist* artist : mArtists) {
-        if (range.contains(artist->getLocation())) {
-            found.push_back(artist);
-        }
-    }
-
     if (mDivided) {
         mTopLeft->queryArtists(range, found);
         mTopRight->queryArtists(range, found);
         mBottomLeft->queryArtists(range, found);
         mBottomRight->queryArtists(range, found);
+    } else {
+        for (Artist* artist : mArtists) {
+            if (range.contains(artist->getLocation())) {
+                found.push_back(artist);
+            }
+        }
     }
 }
 
@@ -126,17 +151,17 @@ void Quadtree::queryTiles(const Boundary& range, std::vector<TileNode*>& found) 
         return;
     }
 
-    for (TileNode* tile : mTiles) {
-        if (range.contains(tile->getX(), tile->getY(), 1.0f, 1.0f)) {
-            found.push_back(tile);
-        }
-    }
-
     if (mDivided) {
         mTopLeft->queryTiles(range, found);
         mTopRight->queryTiles(range, found);
         mBottomLeft->queryTiles(range, found);
         mBottomRight->queryTiles(range, found);
+    } else {
+        for (TileNode* tile : mTiles) {
+            if (range.contains(tile->getX(), tile->getY(), 1.0f, 1.0f)) {
+                found.push_back(tile);
+            }
+        }
     }
 }
 
@@ -145,9 +170,11 @@ void Quadtree::queryTiles(const Boundary& range, std::vector<TileNode*>& found) 
  * @return A vector of boundaries.
  */
 std::vector<Quadtree::Boundary> Quadtree::getBoundaries() {
-    if (mDivided) {
-        std::vector<Boundary> boundaries;
+    // Start by adding the current node's boundary
+    std::vector<Boundary> boundaries{mBoundary};
 
+    // If the node is subdivided, add boundaries from child nodes as well
+    if (mDivided) {
         std::vector<Boundary> topleft = mTopLeft->getBoundaries();
         boundaries.insert(boundaries.end(), topleft.begin(), topleft.end());
 
@@ -159,22 +186,22 @@ std::vector<Quadtree::Boundary> Quadtree::getBoundaries() {
 
         std::vector<Boundary> bottomright = mBottomRight->getBoundaries();
         boundaries.insert(boundaries.end(), bottomright.begin(), bottomright.end());
-
-        return boundaries;
-    } else {
-        return std::vector<Boundary>{mBoundary};
     }
+
+    return boundaries;
 }
 
 /**
  * @brief Subdivides the Quadtree node into four children.
  */
+
 void Quadtree::subdivide() {
     float x = mBoundary.x;
     float y = mBoundary.y;
     float halfWidth = mBoundary.width / 2.0f;
     float halfHeight = mBoundary.height / 2.0f;
 
+    // Create the 4 child nodes
     mTopLeft = std::make_unique<Quadtree>(Boundary{x, y, halfWidth, halfHeight}, mCapacity);
     mTopRight = std::make_unique<Quadtree>(Boundary{x + halfWidth, y, halfWidth, halfHeight}, mCapacity);
     mBottomLeft = std::make_unique<Quadtree>(Boundary{x, y + halfHeight, halfWidth, halfHeight}, mCapacity);
@@ -182,4 +209,22 @@ void Quadtree::subdivide() {
         std::make_unique<Quadtree>(Boundary{x + halfWidth, y + halfHeight, halfWidth, halfHeight}, mCapacity);
 
     mDivided = true;
+
+    // Move all existing Artists to the child nodes
+    for (Artist* artist : mArtists) {
+        if (!mTopLeft->insert(artist))
+            if (!mTopRight->insert(artist))
+                if (!mBottomLeft->insert(artist))
+                    mBottomRight->insert(artist);
+    }
+    mArtists.clear(); // Clear the current node's list after moving to child nodes
+
+    // Move all existing TileNodes to the child nodes
+    for (TileNode* tile : mTiles) {
+        if (!mTopLeft->insert(tile))
+            if (!mTopRight->insert(tile))
+                if (!mBottomLeft->insert(tile))
+                    mBottomRight->insert(tile);
+    }
+    mTiles.clear(); // Clear the current node's list after moving to child nodes
 }

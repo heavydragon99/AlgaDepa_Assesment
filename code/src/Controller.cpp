@@ -1,9 +1,9 @@
 #include "Controller.h"
 
 #include "Command.h"
+#include "Configuration.h"
 #include "FileHandler.h"
 #include "PollingTUI.h"
-#include "Configuration.h"
 #include "View.h"
 
 #include <chrono>
@@ -100,38 +100,38 @@ void Controller::run() {
  */
 void Controller::setCommands() {
     mInputHandler->setCommand((int)Key::Key_C, std::make_unique<ChangeCollisionMethodCommand>());   // Change Collision
-                                                                                                   // Method
+                                                                                                    // Method
     mInputHandler->setCommand((int)Key::Key_Q, std::make_unique<ToggleRenderQuadtreeCommand>());    // Toggle Render
-                                                                                                   // Quadtree
+                                                                                                    // Quadtree
     mInputHandler->setCommand((int)Key::Key_W, std::make_unique<ToggleCollisionWithPathCommand>()); // Toggle Collision
-                                                                                                   // With Path
-    mInputHandler->setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());        // Toggle Render Path
+                                                                                                    // With Path
+    mInputHandler->setCommand((int)Key::Key_P, std::make_unique<ToggleRenderPathCommand>());    // Toggle Render Path
     mInputHandler->setCommand((int)Key::Key_V, std::make_unique<ToggleRenderVisitedCommand>()); // Toggle Render Visited
     mInputHandler->setCommand((int)Key::Key_A, std::make_unique<ToggleRenderArtistsCommand>()); // Toggle Render Artists
 
     mInputHandler->setCommand((int)Key::Key_D, std::make_unique<ChangePathfindingMethodCommand>(
-                                                  [this]() { this->runPathFinding(); })); // Change Pathfinding
-                                                                                          // Method
+                                                   [this]() { this->runPathFinding(); })); // Change Pathfinding
+                                                                                           // Method
     mInputHandler->setCommand((int)Key::Key_Enter,
-                             std::make_unique<RearrangeTileCommand>([this]() { this->rearrangeTile(); })); // Rearrange
-                                                                                                           // Tile
+                              std::make_unique<RearrangeTileCommand>([this]() { this->rearrangeTile(); })); // Rearrange
+                                                                                                            // Tile
     mInputHandler->setCommand((int)Key::Key_Left, std::make_unique<BackwardInTimeCommand>(
-                                                     [this]() { this->loadPreviousMemento(); })); // Backward
-                                                                                                  // In
-                                                                                                  // Time
+                                                      [this]() { this->loadPreviousMemento(); })); // Backward
+                                                                                                   // In
+                                                                                                   // Time
     mInputHandler->setCommand((int)Key::Key_Right,
-                             std::make_unique<ForwardInTimeCommand>([this]() { this->loadNextMemento(); })); // Forward
-                                                                                                             // In Time
+                              std::make_unique<ForwardInTimeCommand>([this]() { this->loadNextMemento(); })); // Forward
+                                                                                                              // In Time
     mInputHandler->setCommand((int)Key::Key_Space, std::make_unique<PlayPauseArtistsCommand>()); // Play/Pause
-                                                                                                // simulation
+                                                                                                 // simulation
     mInputHandler->setCommand((int)Key::Key_LShift, std::make_unique<PlayPauseTilesCommand>());  // Play/Pause
-                                                                                                // artists
+                                                                                                 // artists
     mInputHandler->setCommand((int)Key::Key_Up,
-                             std::make_unique<SpeedUpCommand>([this]() { this->speedUp(); })); // Speed
-                                                                                               // Up
+                              std::make_unique<SpeedUpCommand>([this]() { this->speedUp(); })); // Speed
+                                                                                                // Up
     mInputHandler->setCommand((int)Key::Key_Down,
-                             std::make_unique<SlowDownCommand>([this]() { this->slowDown(); })); // Slow
-                                                                                                 // Down
+                              std::make_unique<SlowDownCommand>([this]() { this->slowDown(); })); // Slow
+                                                                                                  // Down
 }
 
 /**
@@ -176,7 +176,7 @@ void Controller::checkInputs() {
     static PollingTUI tui(*mInputHandler.get(), *mModel.get());
     input.update();
 
-    tui.update();
+    // tui.update();
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 
