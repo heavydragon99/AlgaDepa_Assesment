@@ -6,7 +6,7 @@
 
 ### Prerequisites
 
-Make sure you have CMake, a C++ compiler, SDL2, and CURL installed on your system.
+Make sure you have CMake, a C++ compiler, SDL2, and CURL and gtest installed on your system.
 
 ### Building the Project
 

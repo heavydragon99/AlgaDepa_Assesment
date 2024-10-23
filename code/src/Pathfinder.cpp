@@ -38,10 +38,8 @@ bool PathFinder::findPath(const LevelData* aLevelData, const std::pair<int, int>
     mEnd = aEnd;
 
     reset();
-
-    int cols = mLevelData->getCols();
-    int start = aStart.second * cols + aStart.first;
-    int end = aEnd.second * cols + aEnd.first;
+    int start = calculateIndex(aStart.first, aStart.second);
+    int end = calculateIndex(aEnd.first, aEnd.second);
 
     // Validate start and end positions
     if (start < 0 || start >= mLevelData->getGrid().size() || end < 0 || end >= mLevelData->getGrid().size()) {
@@ -102,8 +100,6 @@ void PathFinder::dijkstra() {
     std::unordered_set<std::pair<int, int>, pair_hash> closedList; // unordered_set for faster lookups
     std::unordered_map<int, int> distanceMap;
 
-    int cols = mLevelData->getCols();
-
     // Initialize the start node
     auto startNode = std::make_shared<PathFinderNode>(mStart.first, mStart.second, 0, nullptr);
     openList.push(startNode);
@@ -123,7 +119,7 @@ void PathFinder::dijkstra() {
 
         std::pair<int, int> currentPos = {currentNode->mX, currentNode->mY};
         mVisited[calculateIndex(currentPos.first, currentPos.second)] = true;
-        int currentId = currentNode->mY * cols + currentNode->mX;
+        int currentId = calculateIndex(currentNode->mX, currentNode->mY);
 
         // If the current node's cost exceeds the shortest path cost, stop exploring
         if (shortestPathFound && currentNode->mGCost > shortestPathCost) {
@@ -185,9 +181,8 @@ void PathFinder::breathfirst() {
     std::queue<std::pair<int, int>> queue;
     std::unordered_map<int, std::pair<int, int>> previousNodes;
 
-    int columns = mLevelData->getCols();
-    int startIndex = mStart.second * columns + mStart.first;
-    int endIndex = mEnd.second * columns + mEnd.first;
+    int startIndex = calculateIndex(mStart.first, mStart.second);
+    int endIndex = calculateIndex(mEnd.first, mEnd.second);
 
     queue.push(mStart);
     mVisited[startIndex] = true;
@@ -196,7 +191,7 @@ void PathFinder::breathfirst() {
         auto currentNode = queue.front();
         queue.pop();
 
-        int currentIndex = currentNode.second * columns + currentNode.first;
+        int currentIndex = calculateIndex(currentNode.first, currentNode.second);
 
         // Check if the end node is reached
         if (currentNode == mEnd) {
@@ -206,7 +201,7 @@ void PathFinder::breathfirst() {
                 mSteps++;
                 path.push_back(currentNode);
                 currentNode = previousNodes[currentIndex];
-                currentIndex = currentNode.second * columns + currentNode.first;
+                currentIndex = calculateIndex(currentNode.first, currentNode.second);
             }
             path.push_back(mStart);
             mAllPaths.push_back(path);
@@ -215,7 +210,7 @@ void PathFinder::breathfirst() {
 
         // Explore neighbors
         for (auto& neighbor : mLevelData->getGrid()[currentIndex].getNeighbors()) {
-            int neighborIndex = neighbor.get().getY() * columns + neighbor.get().getX();
+            int neighborIndex = calculateIndex(neighbor.get().getX(), neighbor.get().getY());
             // Skip if the neighbor is a white tile
             if (mVisited[neighborIndex] || neighbor.get().getTile().getColor() == 'W') {
                 continue;
