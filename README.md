@@ -11,74 +11,56 @@ Make sure you have CMake, a C++ compiler, SDL2, and CURL installed on your syste
 ### Building the Project
 
 1. Navigate to the `code` directory:
-    ```sh
+```sh
     cd code
-    ```
+```
 
 2. Create the build directory if it doesn't exist:
-    ```sh
+```sh
     mkdir -p build
-    ```
+```
 
 3. Navigate to the build directory:
-    ```sh
+```sh
     cd build
-    ```
+```
 
 4. Run CMake to configure the project:
-    ```sh
+```sh
     cmake ..
-    ```
+```
 
 5. Build the project:
-    ```sh
-    make
-    ```
+```sh
+    cmake --build . --parallel 16
+```
 
 ### Running the Program
 
 To run the program normally, execute the following command from the `build` directory:
 ```sh
-./depaAlgo
+    cmake --build . --target run --parallel 16
 ```
 
-### Building and Running with Debug Information
+### Running with Debug Information
 
-To build the project with debug information, follow these steps:
-
-1. Navigate to the `code` directory:
-    ```sh
-    cd code
-    ```
-
-2. Create the build directory if it doesn't exist:
-    ```sh
-    mkdir -p build
-    ```
-
-3. Navigate to the build directory:
-    ```sh
-    cd build
-    ```
-
-4. Run CMake with the `-DDEBUG_BUILD=ON` option to configure the project:
-    ```sh
-    cmake -DDEBUG_BUILD=ON ..
-    ```
-
-5. Build the project:
-    ```sh
-    make
-    ```
-
-6. Run the program with debug information:
-    ```sh
-    ./depaAlgo
-    ```
+To build and run the project with debug information, execute the following command from the `build` directory:
+```sh
+    cmake .. -DENABLE_DEBUG=ON && cmake --build . --target run_debug --parallel 16    
+```
 
 ### Running the Program with Valgrind
 
 To run the program with Valgrind to check for memory leaks, execute the following command from the `build` directory:
 ```sh
-make valgrind
+    cmake --build . --target run_valgrind --parallel 16
+```
+
+Note: this make the program very very slow. Recommended to lower the update frequency of the view and game logic. These can be found in controller.h
+
+### Running Tests
+
+To run the tests using GTest, execute the following command from the `build` directory:
+```sh
+    cmake --build . --target run_tests --parallel 16
 ```
