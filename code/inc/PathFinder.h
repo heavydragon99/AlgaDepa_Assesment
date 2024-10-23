@@ -2,12 +2,11 @@
 #define PATHFINDER_H
 
 #include <memory>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <memory> 
-#include <unordered_map>
 
-class LevelData; 
+class LevelData;
 
 /**
  * @class PathFinder
@@ -27,9 +26,9 @@ private:
      * @brief Struct to represent a node in the pathfinding process.
      */
     struct PathFinderNode {
-        int mX; ///< X coordinate of the node
-        int mY; ///< Y coordinate of the node
-        int mGCost; ///< Cost to reach this node
+        int mX;                                  ///< X coordinate of the node
+        int mY;                                  ///< Y coordinate of the node
+        int mGCost;                              ///< Cost to reach this node
         std::shared_ptr<PathFinderNode> mParent; ///< Parent node
 
         /**
@@ -74,8 +73,9 @@ private:
     void setTileNodes();
     int calculateIndex(int x, int y) const;
 
+private:
     std::vector<std::vector<std::pair<int, int>>> mAllPaths;
-    std::unordered_map<int,bool> mVisited;
+    std::unordered_map<int, bool> mVisited;
 
     LevelData* mLevelData;
     std::pair<int, int> mStart;
