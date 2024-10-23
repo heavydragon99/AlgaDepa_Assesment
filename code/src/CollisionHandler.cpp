@@ -2,7 +2,7 @@
 
 /**
  * @brief Construct a new CollisionHandler object
- * 
+ *
  * @param aModel Pointer to the model object
  */
 CollisionHandler::CollisionHandler(Model* aModel) : mModel(aModel) {}
@@ -25,7 +25,7 @@ void CollisionHandler::handleCollisions() {
 
 /**
  * @brief Check if two artists are colliding
- * 
+ *
  * @param person1 Reference to the first artist
  * @param person2 Reference to the second artist
  * @return true if the artists are colliding
@@ -47,7 +47,7 @@ bool CollisionHandler::isColliding(Artist& person1, Artist& person2) {
 
 /**
  * @brief Check if an artist is colliding with a tile
- * 
+ *
  * @param person1 Reference to the artist
  * @param tileNode Reference to the tile
  * @return true if the artist is colliding with the tile
@@ -163,13 +163,18 @@ void CollisionHandler::quadTreeCollisionCheck() {
     // Insert all artists into the quadtree
     for (Artist& artist : mModel->getLevelData().getPeople()) {
         artist.resetRed();
-        quadtree.insert(&artist);
+        if (quadtree.insert(&artist) == false) {
+            std::cout << "Quadtree artist insertion failed" << std::endl;
+            std::cout << "Artist pos: " << artist.getLocation().mX << ", " << artist.getLocation().mY << std::endl;
+        }
     }
 
     // Insert all tiles into the quadtree
     for (TileNode& tile : mModel->getLevelData().getGrid()) {
         tile.getTile().resetUpdate();
-        quadtree.insert(&tile);
+        if (quadtree.insert(&tile) == false) {
+            std::cout << "Quadtree tile insertion failed" << std::endl;
+        }
     }
 
     std::set<std::tuple<Artist*, TileNode*>> currentTileCollisions;
@@ -186,9 +191,8 @@ void CollisionHandler::quadTreeCollisionCheck() {
         }
 
         // Check for collisions between artists using quadtree
-        Quadtree::Boundary artistBoundary{artist.getLocation().mX - artistWidth,
-                                          artist.getLocation().mY - artistHeight, artistWidth * 2,
-                                          artistHeight * 2};
+        Quadtree::Boundary artistBoundary{artist.getLocation().mX - artistWidth, artist.getLocation().mY - artistHeight,
+                                          artistWidth * 2, artistHeight * 2};
 
         std::vector<Artist*> possibleArtistCollisions;
         quadtree.queryArtists(artistBoundary, possibleArtistCollisions);
@@ -223,7 +227,7 @@ void CollisionHandler::quadTreeCollisionCheck() {
 
 /**
  * @brief Get the boundaries of the quadtree
- * 
+ *
  * @return std::vector<Quadtree::Boundary> Vector of quadtree boundaries
  */
 std::vector<Quadtree::Boundary> CollisionHandler::getBoundaries() {
@@ -234,7 +238,7 @@ std::vector<Quadtree::Boundary> CollisionHandler::getBoundaries() {
     Quadtree::Boundary boundary{0, 0, static_cast<float>(mModel->getLevelData().getCols()),
                                 static_cast<float>(mModel->getLevelData().getRows())};
 
-    Quadtree quadtree(boundary, 32);
+    Quadtree quadtree(boundary, QUADTREE_CAPACITY);
 
     // Insert all artists into the quadtree
     for (Artist& artist : mModel->getLevelData().getPeople()) {
