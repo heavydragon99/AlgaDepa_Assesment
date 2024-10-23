@@ -1,11 +1,15 @@
-#include "tileFactory.h"
+#include "TileFactory.h"
 
-#include "iTileState.h"
-
-#include "iTileBehavior.h"
+#include "ITileState.h"
+#include "ITileBehavior.h"
 
 LevelData* TileFactory::mLevelData = nullptr;
 
+/**
+ * @brief Creates a tile based on the given color.
+ * @param color Character representing the color of the tile.
+ * @return A unique pointer to the created Tile.
+ */
 std::unique_ptr<Tile> TileFactory::createTile(char color) {
     TileColor tColor = charToTileColor(color);
     std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
@@ -25,6 +29,11 @@ std::unique_ptr<Tile> TileFactory::createTile(char color) {
     }
 }
 
+/**
+ * @brief Creates the next state of a tile based on the current color.
+ * @param currentColor Character representing the current color of the tile.
+ * @return A unique pointer to the created ITileState.
+ */
 std::unique_ptr<ITileState> TileFactory::createNextState(char currentColor) {
     TileColor tColor = charToTileColor(currentColor);
     std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
@@ -44,16 +53,29 @@ std::unique_ptr<ITileState> TileFactory::createNextState(char currentColor) {
     }
 }
 
+/**
+ * @brief Creates a blue state tile.
+ * @return A unique pointer to the created ITileState.
+ */
 std::unique_ptr<ITileState> TileFactory::createBlueState() {
     TileColor tColor = charToTileColor('B');
     std::unique_ptr<ITileBehavior> behavior = createBehavior(tColor);
     return std::make_unique<TileStateBlue>(std::move(behavior));
 }
 
+/**
+ * @brief Sets the level data for the tile factory.
+ * @param aLevelData Pointer to the LevelData object.
+ */
 void TileFactory::setLevelData(LevelData* aLevelData) {
     mLevelData = aLevelData;
 }
 
+/**
+ * @brief Converts a character to a TileColor enum.
+ * @param color Character representing the color.
+ * @return Corresponding TileColor enum value.
+ */
 TileColor TileFactory::charToTileColor(char color) {
     switch (color) {
     case 'R':
@@ -71,6 +93,11 @@ TileColor TileFactory::charToTileColor(char color) {
     }
 }
 
+/**
+ * @brief Creates a behavior based on the tile color.
+ * @param aColor TileColor enum value.
+ * @return A unique pointer to the created ITileBehavior.
+ */
 std::unique_ptr<ITileBehavior> TileFactory::createBehavior(TileColor aColor) {
     switch (aColor) {
     case TileColor::Red:

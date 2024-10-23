@@ -3,9 +3,9 @@
 
 #define MAX_PEOPLE 20000
 
-#include "artist.h"
-#include "structs.h"
-#include "tileNode.h"
+#include "Artist.h"
+#include "Structs.h"
+#include "TileNode.h"
 
 #include <memory>
 #include <vector>
@@ -13,6 +13,9 @@
 
 class Tile;
 
+/**
+ * @brief Class representing the level data, including grid and people (artists) management.
+ */
 class LevelData {
 public:
     LevelData();
@@ -42,11 +45,11 @@ private:
     float calculateWeight(const TileNode& aNode);
 
 private:
-    std::vector<Artist> mPeople;
-    std::vector<TileNode> mGrid;
-    int mCols;
-    int mRows;
-    std::vector<std::pair<char, int>> mGridWeights;
+    std::vector<Artist> mPeople; ///< Vector of artists (people) in the level.
+    std::vector<TileNode> mGrid; ///< Vector of tile nodes representing the grid.
+    int mCols; ///< Number of columns in the grid.
+    int mRows; ///< Number of rows in the grid.
+    std::vector<std::pair<char, int>> mGridWeights; ///< Vector of pairs representing grid weights.
 };
 
 #endif // LEVELDATA_H

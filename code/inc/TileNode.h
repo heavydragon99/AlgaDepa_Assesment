@@ -1,20 +1,21 @@
 #ifndef TILENODE_H
 #define TILENODE_H
 
-#include "tile.h"
+#include "Tile.h"
 
 #include <memory>
 #include <vector>
 
+/**
+ * @class TileNode
+ * @brief Represents a node in a tile-based graph.
+ */
 class TileNode {
 public:
     TileNode() = default; // Added so vector can be resized
     TileNode(std::unique_ptr<Tile> aTile, int aX, int aY);
 
-    // Copy constructor
     TileNode(const TileNode& other);
-
-    // Copy assignment operator
     TileNode& operator=(const TileNode& other);
 
     void addNeighbor(TileNode& aNeighbor);
@@ -35,16 +36,15 @@ public:
     bool isVisited() const;
 
 private:
-    std::unique_ptr<Tile> mTile;
-    std::vector<std::reference_wrapper<TileNode>> mNeighbors;
+    std::unique_ptr<Tile> mTile; ///< Pointer to the tile object.
+    std::vector<std::reference_wrapper<TileNode>> mNeighbors; ///< List of neighboring TileNodes.
 
-    int mWeight;
+    int mWeight; ///< Weight of the node.
+    int mX; ///< X-coordinate of the node.
+    int mY; ///< Y-coordinate of the node.
 
-    int mX;
-    int mY;
-
-    bool mIsPath;
-    bool mIsVisited;
+    bool mIsPath; ///< Flag indicating if the node is part of a path.
+    bool mIsVisited; ///< Flag indicating if the node has been visited.
 };
 
 #endif // TILENODE_H

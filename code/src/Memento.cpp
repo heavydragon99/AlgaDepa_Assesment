@@ -1,5 +1,9 @@
 #include "Memento.h"
 
+/**
+ * @brief Constructs a Memento with the given LevelData.
+ * @param aLevelData The LevelData to store.
+ */
 Memento::Memento(LevelData& aLevelData) {
     ParsedGrid grid;
 
@@ -21,10 +25,18 @@ Memento::Memento(LevelData& aLevelData) {
     mGrid = grid;
 }
 
+/**
+ * @brief Gets the stored grid.
+ * @return The stored ParsedGrid.
+ */
 ParsedGrid Memento::getGrid() {
     return mGrid;
 }
 
+/**
+ * @brief Gets the stored people.
+ * @return A reference to the stored vector of Artist.
+ */
 std::vector<Artist>& Memento::getPeople() {
     return mPeople;
 }

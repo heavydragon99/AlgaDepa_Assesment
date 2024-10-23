@@ -1,17 +1,29 @@
-#include "view.h"
+#include "View.h"
 
-#include "artist.h"
-#include "configuration.h"
+#include "Artist.h"
+#include "Configuration.h"
 
 #include <chrono>
 #include <iostream>
 #include <thread>
 
+/**
+ * @brief Constructs a View object.
+ * @param aModel Reference to the Model object.
+ */
 View::View(Model& aModel)
     : mModel(aModel), mRenderer(aModel.getLevelData().getRows(), aModel.getLevelData().getCols()), mTileSize(0) {}
 
+/**
+ * @brief Destructor for the View object.
+ */
 View::~View() {}
 
+/**
+ * @brief Renders the tiles on the screen.
+ * @param tileWidth Width of each tile.
+ * @param tileHeight Height of each tile.
+ */
 void View::renderTile(int tileWidth, int tileHeight) {
     int red, green, blue;
     int x, y;
@@ -42,6 +54,11 @@ void View::renderTile(int tileWidth, int tileHeight) {
     }
 }
 
+/**
+ * @brief Renders the people on the screen.
+ * @param tileWidth Width of each tile.
+ * @param tileHeight Height of each tile.
+ */
 void View::renderPeople(int tileWidth, int tileHeight) {
     LevelData& levelData = mModel.getLevelData();
 
@@ -67,6 +84,9 @@ void View::renderPeople(int tileWidth, int tileHeight) {
     }
 }
 
+/**
+ * @brief Renders the quadtree boundaries on the screen.
+ */
 void View::renderQuadtree() {
     if (mBoundaries.size() == 0) {
         return;
@@ -87,6 +107,9 @@ void View::renderQuadtree() {
     mBoundaries.resize(0);
 }
 
+/**
+ * @brief Renders the entire view including grid, people, and quadtree.
+ */
 void View::render() {
     mRenderer.clear();
 
@@ -114,8 +137,16 @@ void View::render() {
     mRenderer.show();
 }
 
+/**
+ * @brief Sets the quadtree boundaries to be rendered.
+ * @param aBoundaries Vector of quadtree boundaries.
+ */
 void View::setQuadtreeBoundaries(std::vector<Quadtree::Boundary> aBoundaries) { mBoundaries = aBoundaries; }
 
+/**
+ * @brief Handles SDL events such as quitting and key presses.
+ * @param quit Reference to a boolean that indicates whether to quit the application.
+ */
 void View::handleEvents(bool& quit) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
@@ -129,6 +160,10 @@ void View::handleEvents(bool& quit) {
     }
 }
 
+/**
+ * @brief Sets the grid colors.
+ * @param aGridColor Vector of GridColor objects.
+ */
 void View::setGridColor(std::vector<GridColor> aGridColor) {
     // Fill mGridColor with all the different colors
     for (const GridColor& color : aGridColor) {
@@ -136,8 +171,19 @@ void View::setGridColor(std::vector<GridColor> aGridColor) {
     }
 }
 
+/**
+ * @brief Gets the tile size.
+ * @return The size of the tile.
+ */
 int View::getTileSize() const { return mTileSize; }
 
+/**
+ * @brief Gets the color of a tile based on a character.
+ * @param aColor Character representing the color.
+ * @param aRed Reference to the red component.
+ * @param aGreen Reference to the green component.
+ * @param aBlue Reference to the blue component.
+ */
 void View::getTileColor(char aColor, int& aRed, int& aGreen, int& aBlue) {
     for (const GridColor& color : mGridColor) {
         if (color.letter == aColor) {

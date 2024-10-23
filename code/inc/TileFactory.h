@@ -1,20 +1,28 @@
 #ifndef TILEFACTORY_H
 #define TILEFACTORY_H
 
-#include "tile.h"
-#include "iTileBehavior.h"
-#include "levelData.h"
+#include "Tile.h"
+#include "ITileBehavior.h"
+#include "LevelData.h"
 
 #include <memory>
 
+/**
+ * @enum TileColor
+ * @brief Represents the color of a tile.
+ */
 enum class TileColor {
-    Red,
-    Blue,
-    Yellow,
-    Gray,
-    White
+    Red,    /**< Red color */
+    Blue,   /**< Blue color */
+    Yellow, /**< Yellow color */
+    Gray,   /**< Gray color */
+    White   /**< White color */
 };
 
+/**
+ * @class TileFactory
+ * @brief Factory class for creating tiles and their states.
+ */
 class TileFactory {
 public:
     static std::unique_ptr<Tile> createTile(char color);

@@ -1,16 +1,26 @@
 #include "PollingTUI.h"
 
+/**
+ * @brief Constructs a PollingTUI object.
+ * @param aInputHandler Reference to the input handler.
+ * @param aModel Reference to the model.
+ */
 PollingTUI::PollingTUI(InputHandler& aInputHandler, Model& aModel) : mInputHandler(aInputHandler), mModel(aModel) {
     // Initialize terminal settings
     setNonBlockingInput();
 }
 
+/**
+ * @brief Destructs the PollingTUI object.
+ */
 PollingTUI::~PollingTUI() {
     // Reset terminal settings before exiting
     resetInput();
 }
 
-// Starts the polling loop
+/**
+ * @brief Starts the polling loop.
+ */
 void PollingTUI::update() {
     clearScreen(); // Clear the terminal
 
@@ -35,6 +45,9 @@ void PollingTUI::update() {
     }
 }
 
+/**
+ * @brief Displays the main menu.
+ */
 void PollingTUI::mainMenu() {
     // Display the polled data
     int curline = 2;
@@ -83,6 +96,9 @@ void PollingTUI::mainMenu() {
     }
 }
 
+/**
+ * @brief Displays the menu to choose a shortcut to change.
+ */
 void PollingTUI::chooseShortcutToChange() {
     // Display the polled data
     int curLine = 2;
@@ -113,6 +129,9 @@ void PollingTUI::chooseShortcutToChange() {
     }
 }
 
+/**
+ * @brief Opens an artist file.
+ */
 void PollingTUI::openArtistFile() {
     static std::string fileName = "";
 
@@ -147,6 +166,9 @@ void PollingTUI::openArtistFile() {
     std::cout.flush();
 }
 
+/**
+ * @brief Opens a grid file.
+ */
 void PollingTUI::openGridFile() {
     static std::string fileName = "";
 
@@ -181,6 +203,9 @@ void PollingTUI::openGridFile() {
     std::cout.flush();
 }
 
+/**
+ * @brief Sets a new key for a shortcut.
+ */
 void PollingTUI::setKeyForShortcut() {
     static std::string newKeyBind = "";
 
@@ -226,7 +251,9 @@ void PollingTUI::setKeyForShortcut() {
     std::cout.flush();
 }
 
-// Disable input buffering for non-blocking input
+/**
+ * @brief Disables input buffering for non-blocking input.
+ */
 void PollingTUI::setNonBlockingInput() {
     termios term;
     tcgetattr(STDIN_FILENO, &term);
@@ -235,7 +262,9 @@ void PollingTUI::setNonBlockingInput() {
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-// Reset terminal settings after exit
+/**
+ * @brief Resets terminal settings after exit.
+ */
 void PollingTUI::resetInput() {
     termios term;
     tcgetattr(STDIN_FILENO, &term);
@@ -244,14 +273,24 @@ void PollingTUI::resetInput() {
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-// Check if a key has been pressed (non-blocking)
+/**
+ * @brief Checks if a key has been pressed (non-blocking).
+ * @return True if a key has been pressed, false otherwise.
+ */
 bool PollingTUI::kbhit() {
     int bytesWaiting;
     ioctl(STDIN_FILENO, FIONREAD, &bytesWaiting);
     return bytesWaiting > 0;
 }
 
-// ANSI escape codes to clear the terminal and move the cursor
+/**
+ * @brief Clears the terminal screen.
+ */
 void PollingTUI::clearScreen() { std::cout << "\033[2J\033[1;1H"; }
 
+/**
+ * @brief Moves the cursor to the specified position.
+ * @param x The x-coordinate.
+ * @param y The y-coordinate.
+ */
 void PollingTUI::moveCursor(int x, int y) { std::cout << "\033[" << y << ";" << x << "H"; }

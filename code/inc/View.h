@@ -5,13 +5,25 @@
 #include <memory>
 
 #include "Renderer.h"
-#include "model.h"
+#include "Model.h"
 
 #include "Quadtree.h"
 
+/**
+ * @class View
+ * @brief Manages the rendering of the game view.
+ */
 class View {
 public:
+    /**
+     * @brief Constructs a View object.
+     * @param aModel Reference to the Model object.
+     */
     View(Model& aModel);
+
+    /**
+     * @brief Destructor for the View object.
+     */
     ~View();
 
     void render();
@@ -29,13 +41,9 @@ private:
 
 private:
     std::vector<Quadtree::Boundary> mBoundaries;
-
     Model& mModel;
-
     std::vector<GridColor> mGridColor;
-
     Renderer mRenderer;
-
     int mTileSize;
 };
 

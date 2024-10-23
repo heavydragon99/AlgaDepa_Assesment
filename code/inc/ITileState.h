@@ -6,6 +6,10 @@
 class Tile;
 class ITileBehavior;
 
+/**
+ * @class ITileState
+ * @brief Interface for tile states.
+ */
 class ITileState {
 public:
     virtual ~ITileState() = default;
@@ -17,7 +21,10 @@ public:
     virtual void forceBlue(Tile& t) = 0;
 };
 
-// TileStateYellow
+/**
+ * @class TileStateYellow
+ * @brief Concrete implementation of ITileState for the yellow state.
+ */
 class TileStateYellow : public ITileState {
 public:
     TileStateYellow(std::unique_ptr<ITileBehavior> aBehavior);
@@ -31,12 +38,15 @@ public:
     void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<ITileBehavior> mBehavior;
-    int mCounter;
-    static const int requiredActions = 2;
+    std::unique_ptr<ITileBehavior> mBehavior; ///< Behavior associated with the tile state.
+    int mCounter; ///< Counter for tracking state-specific actions.
+    static const int requiredActions = 2; ///< Number of required actions to change state.
 };
 
-// TileStateWhite
+/**
+ * @class TileStateWhite
+ * @brief Concrete implementation of ITileState for the white state.
+ */
 class TileStateWhite : public ITileState {
 public:
     TileStateWhite(std::unique_ptr<ITileBehavior> aBehavior);
@@ -50,10 +60,13 @@ public:
     void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<ITileBehavior> mBehavior;
+    std::unique_ptr<ITileBehavior> mBehavior; ///< Behavior associated with the tile state.
 };
 
-// TileStateRed
+/**
+ * @class TileStateRed
+ * @brief Concrete implementation of ITileState for the red state.
+ */
 class TileStateRed : public ITileState {
 public:
     TileStateRed(std::unique_ptr<ITileBehavior> aBehavior);
@@ -67,10 +80,13 @@ public:
     void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<ITileBehavior> mBehavior;
+    std::unique_ptr<ITileBehavior> mBehavior; ///< Behavior associated with the tile state.
 };
 
-// TileStateGray
+/**
+ * @class TileStateGray
+ * @brief Concrete implementation of ITileState for the gray state.
+ */
 class TileStateGray : public ITileState {
 public:
     TileStateGray(std::unique_ptr<ITileBehavior> aBehavior);
@@ -84,12 +100,15 @@ public:
     void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<ITileBehavior> mBehavior;
-    int mCounter;
-    static const int requiredActions = 2;
+    std::unique_ptr<ITileBehavior> mBehavior; ///< Behavior associated with the tile state.
+    int mCounter; ///< Counter for tracking state-specific actions.
+    static const int requiredActions = 2; ///< Number of required actions to change state.
 };
 
-// TileStateBlue
+/**
+ * @class TileStateBlue
+ * @brief Concrete implementation of ITileState for the blue state.
+ */
 class TileStateBlue : public ITileState {
 public:
     TileStateBlue(std::unique_ptr<ITileBehavior> aBehavior);
@@ -103,9 +122,9 @@ public:
     void forceBlue(Tile& t) override;
 
 private:
-    std::unique_ptr<ITileBehavior> mBehavior;
-    int mCounter;
-    static const int requiredActions = 3;
+    std::unique_ptr<ITileBehavior> mBehavior; ///< Behavior associated with the tile state.
+    int mCounter; ///< Counter for tracking state-specific actions.
+    static const int requiredActions = 3; ///< Number of required actions to change state.
 };
 
 #endif // ITILESTATE_H

@@ -1,10 +1,14 @@
 #ifndef MEMENTO_H
 #define MEMENTO_H
 
-#include "levelData.h"
+#include "LevelData.h"
 
 #include <memory>
 
+/**
+ * @class Memento
+ * @brief A class to store the state of LevelData.
+ */
 class Memento {
 public:
     Memento() = default;
@@ -13,8 +17,8 @@ public:
     std::vector<Artist>& getPeople();
 
 private:
-    ParsedGrid mGrid;
-    std::vector<Artist> mPeople;
+    ParsedGrid mGrid; ///< The stored grid.
+    std::vector<Artist> mPeople; ///< The stored people.
 };
 
 #endif // MEMENTO_H
