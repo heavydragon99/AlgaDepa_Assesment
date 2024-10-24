@@ -28,22 +28,10 @@ enum MenuState { MainMenu = 0, ChooseShortcutToChange, SetKeyForShortcut, OpenAr
  */
 class PollingTUI {
 public:
-    /**
-     * @brief Constructs a PollingTUI object.
-     * @param aInputHandler Reference to the input handler.
-     * @param aModel Reference to the model.
-     */
     PollingTUI(InputHandler& aInputHandler, Model& aModel);
-
-    /**
-     * @brief Destructs the PollingTUI object.
-     */
     ~PollingTUI();
 
-    /**
-     * @brief Starts the polling loop.
-     */
-    void update();
+    int update();
 
 private:
     MenuState mMenuState = MenuState::MainMenu; ///< Current state of the menu.
@@ -51,7 +39,7 @@ private:
     InputHandler& mInputHandler; ///< Reference to the input handler.
     int mChosenShortcut = 0; ///< Currently chosen shortcut.
 
-    void mainMenu();
+    int mainMenu();
 
     void chooseShortcutToChange();
 
