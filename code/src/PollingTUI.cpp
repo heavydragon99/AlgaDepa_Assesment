@@ -53,7 +53,7 @@ int PollingTUI::update() {
  */
 int PollingTUI::mainMenu() {
     // Display the polled data
-    int curline = 2;
+    int curline = 0;
     moveCursor(2, curline += 2);
     std::cout << "Welcome to the best simulation program ever" << std::endl;
 
@@ -77,8 +77,42 @@ int PollingTUI::mainMenu() {
         moveCursor(2, curline += 2);
         std::cout << "Amount of steps in current path: " << mModel.getPathFinder().getSteps() << std::endl;
     }
+
+    // Display current configuration settings
+    Configuration& config = Configuration::getInstance();
+    moveCursor(2, curline += 2);
+    std::cout << "Current Configuration Settings:" << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tRender quadtree:\t" << (config.getConfig("RenderQuadtree") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tRender artists:\t\t" << (config.getConfig("RenderArtists") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tRender path:\t\t" << (config.getConfig("RenderPath") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tRender visited:\t\t" << (config.getConfig("RenderVisited") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tCollision with path:\t" << (config.getConfig("CollisionWithPath") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tPathfinding method:\t" << (config.getConfig("PathfindingMethodDijkstra") ? "Dijkstra" : "breath first") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tCollision method:\t" << (config.getConfig("CollisionMethodQuadTree") ? "quadTree" : "native") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tPause tiles:\t\t" << (config.getConfig("PauseTiles") ? "true" : "false") << std::endl;
+
+    moveCursor(2, curline += 1);
+    std::cout << "\tPause artists:\t\t" << (config.getConfig("PauseArtists") ? "true" : "false") << std::endl;
+
     moveCursor(2, curline += 2);
     std::cout << "Press 'q' to quit" << std::endl;
+
 
     char ch;
     // Check for user input without blocking
