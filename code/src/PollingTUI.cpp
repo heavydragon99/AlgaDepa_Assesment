@@ -186,7 +186,8 @@ void PollingTUI::openArtistFile() {
 
             std::vector<ParsedPerson> persons = fileHandler.loadArtist(fileName);
 
-            mModel.setPersonData(persons);
+            if (persons.size() != 0)
+                mModel.setPersonData(persons);
 
             mMenuState = MenuState::MainMenu;
             fileName = "";
@@ -223,7 +224,8 @@ void PollingTUI::openGridFile() {
 
             ParsedGrid grid = fileHandler.loadGrid(fileName);
 
-            mModel.setGridData(grid);
+            if (grid.cols != 0)
+                mModel.setGridData(grid);
 
             mMenuState = MenuState::MainMenu;
             fileName = "";
