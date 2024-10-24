@@ -83,7 +83,9 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
-            checkInputs();
+            if(checkInputs() == 1){
+                quit = true;
+            }
 
             if (Configuration::getInstance().getConfig("RenderQuadtree")) {
                 mView->setQuadtreeBoundaries(mCollisionHandler->getBoundaries());
@@ -170,13 +172,16 @@ void Controller::runPathFinding() {
 
 /**
  * @brief Checks and processes user inputs.
+ * @return 1 if the user wants to quit, 0 otherwise.
  */
-void Controller::checkInputs() {
+int Controller::checkInputs() {
     Input& input = Input::getInstance();
     static PollingTUI tui(*mInputHandler.get(), *mModel.get());
     input.update();
 
-    tui.update();
+    if(tui.update() == 1){
+        return 1;
+    }
 
     std::vector<Uint8> downKeys = input.getDownKeys();
 
@@ -186,6 +191,7 @@ void Controller::checkInputs() {
     }
 
     handleMouseInput();
+    return 0;
 }
 
 /**

@@ -20,13 +20,14 @@ PollingTUI::~PollingTUI() {
 
 /**
  * @brief Starts the polling loop.
+ * @return 1 if the user wants to quit, 0 otherwise.
  */
-void PollingTUI::update() {
+int PollingTUI::update() {
     clearScreen(); // Clear the terminal
 
     switch (mMenuState) {
     case MenuState::MainMenu:
-        mainMenu();
+        return mainMenu();
         break;
     case MenuState::ChooseShortcutToChange:
         chooseShortcutToChange();
@@ -43,12 +44,14 @@ void PollingTUI::update() {
     default:
         break;
     }
+    return 0;
 }
 
 /**
  * @brief Displays the main menu.
+ * return 0 if the user has chosen an option, 1 if the user has chosen quit.
  */
-void PollingTUI::mainMenu() {
+int PollingTUI::mainMenu() {
     // Display the polled data
     int curline = 2;
     moveCursor(2, curline += 2);
@@ -91,9 +94,10 @@ void PollingTUI::mainMenu() {
             mMenuState = MenuState::OpenGridFile;
         }
         if (ch == 'q') {
-            exit(0);
+            return 1;
         }
     }
+    return 0;
 }
 
 /**

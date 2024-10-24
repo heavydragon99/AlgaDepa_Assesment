@@ -25,7 +25,7 @@ public:
 private:
     void setCommands();
     void handleMouseInput();
-    void checkInputs();
+    int checkInputs();
     void handleUserInput();
     void rearrangeTile();
     void loadPreviousMemento();
