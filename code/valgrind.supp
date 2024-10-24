@@ -1,13 +1,47 @@
 {
-   <sdl2_memory_leak_all>
+  GLX_definite
    Memcheck:Leak
-   match-leak-kinds: all
-   obj:/usr/lib/x86_64-linux-gnu/libSDL2*
+   match-leak-kinds: definite
+   fun:malloc
+   fun:posix_memalign
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
 }
 
 {
-   <glx_mesa_memory_leak_all>
+   GLX_possible
    Memcheck:Leak
-   match-leak-kinds: all
-   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa*
+   match-leak-kinds: possible
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so.0.0.0
 }
+
+{
+   SDL2_possible
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.18.2
+}
+
+{
+   SDL2_indirect
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.18.2
+}
+
+{
+   SDL2_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/x86_64-linux-gnu/dri/swrast_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.18.2
+}
+
+
