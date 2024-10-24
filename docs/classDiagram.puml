@@ -70,6 +70,103 @@ class GridTXTParser{
     '
 ' }
 
+class CollisionHandler {
+    + CollisionHandler(Model* aModel);
+    + ~CollisionHandler();
+
+    + handleCollisions() : void 
+    + isColliding(Artist& person1, Artist& person2) : bool 
+    + isColliding(Artist& person1, TileNode& tileNode) : bool 
+    + naiveCollisionCheck() : void 
+    + quadTreeCollisionCheck() : void 
+    + getBoundaries() : std::vector<Quadtree::Boundary> 
+
+    - std::set<std::tuple<Artist*, TileNode*>> mPreviousTileCollisions;
+
+    - Model* mModel;
+}
+
+class Quadtree {
+
+    + Quadtree(const Boundary& boundary, int capacity, int depth = 0, int maxDepth = 2)
+
+    + insert(Artist* artist) : bool 
+    + insert(TileNode* tile) : bool 
+
+    + queryArtists(const Boundary& range, std::vector<Artist*>& found) const : void 
+    + queryTiles(const Boundary& range, std::vector<TileNode*>& found) const : void 
+
+    + getBoundaries() : std::vector<Boundary> 
+
+    - subdivide() : void 
+
+    - mBoundary             : Boundary 
+    - mCapacity                  : int 
+    - mDivided                  : bool 
+    -                                
+    - mDepth;                     : int 
+    - mMaxDepth;                  : int 
+    -                                
+    - mArtists  : std::vector<Artist*> 
+    - mTiles  : std::vector<TileNode*> 
+
+    - mTopLeft;      : std::unique_ptr<Quadtree> 
+    - mTopRight;     : std::unique_ptr<Quadtree> 
+    - mBottomLeft;   : std::unique_ptr<Quadtree> 
+    - mBottomRight;  : std::unique_ptr<Quadtree> 
+}
+
+enum MenuState { 
+    MainMenu = 0,
+    ChooseShortcutToChange,
+    SetKeyForShortcut,
+    OpenArtistFile,
+    OpenGridFile 
+}
+
+class PollingTUI {
+    + PollingTUI(InputHandler& aInputHandler, Model& aModel);
+    + ~PollingTUI();
+
+    + update() : int 
+
+    - mMenuState : MenuState 
+    - mModel : Model& 
+    - mInputHandler : InputHandler& 
+    - mChosenShortcut : int 
+
+    - mainMenu() : int 
+
+    - chooseShortcutToChange() : void 
+
+    - openArtistFile() : void 
+
+    - openGridFile() : void 
+
+    - setKeyForShortcut() : void 
+
+    - setNonBlockingInput() : void 
+
+    - resetInput() : void 
+
+    - kbhit() : bool 
+
+    - clearScreen() : void 
+
+    - moveCursor(int x, int y) : void 
+}
+
+struct Boundary {
+    + x : float 
+    + y : float 
+    + widt : float 
+    + heigh : float 
+
+    + contains(const Artist::Location& loc) const : bool 
+    + contains(float tileX, float tileY, float tileWidth, float tileHeight) const : bool 
+    + intersects(const Boundary& other) const : bool 
+}
+
 class Controller {
     +Controller()
     +void initialize()
@@ -447,6 +544,8 @@ Controller <-- Model
 Controller <-- Input
 Controller <-- InputHandler
 Controller <-- View
+Controller <-- CollisionHandler
+Controller <-- PollingTUI
 View <-- Model
 View <-- Renderer
 
@@ -503,5 +602,11 @@ IArtistParser <|.. ArtistCSVParser
 GridParser <-- IGridParser
 IGridParser <|.. GridTXTParser
 IGridParser <|.. GridXMLParser
+
+' CollisionHandler
+CollisionHandler <-- Quadtree
+Quadtree <-- Boundary
+
+PollingTUI <-- MenuState
 
 @enduml
