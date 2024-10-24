@@ -100,20 +100,18 @@ class Quadtree {
 
     - subdivide() : void 
 
-    - mBoundary             : Boundary 
-    - mCapacity                  : int 
-    - mDivided                  : bool 
-    -                                
-    - mDepth;                     : int 
-    - mMaxDepth;                  : int 
-    -                                
+    - mBoundary : Boundary 
+    - mCapacity : int 
+    - mDivided : bool                              
+    - mDepth : int 
+    - mMaxDepth : int                
     - mArtists  : std::vector<Artist*> 
     - mTiles  : std::vector<TileNode*> 
 
-    - mTopLeft;      : std::unique_ptr<Quadtree> 
-    - mTopRight;     : std::unique_ptr<Quadtree> 
-    - mBottomLeft;   : std::unique_ptr<Quadtree> 
-    - mBottomRight;  : std::unique_ptr<Quadtree> 
+    - mTopLeft : std::unique_ptr<Quadtree> 
+    - mTopRight : std::unique_ptr<Quadtree> 
+    - mBottomLeft : std::unique_ptr<Quadtree> 
+    - mBottomRight : std::unique_ptr<Quadtree> 
 }
 
 enum MenuState { 
@@ -127,32 +125,22 @@ enum MenuState {
 class PollingTUI {
     + PollingTUI(InputHandler& aInputHandler, Model& aModel);
     + ~PollingTUI();
-
     + update() : int 
 
     - mMenuState : MenuState 
     - mModel : Model& 
     - mInputHandler : InputHandler& 
+
     - mChosenShortcut : int 
-
     - mainMenu() : int 
-
     - chooseShortcutToChange() : void 
-
     - openArtistFile() : void 
-
     - openGridFile() : void 
-
-    - setKeyForShortcut() : void 
-
+    - setKeyForShortcut() : void
     - setNonBlockingInput() : void 
-
-    - resetInput() : void 
-
+    - resetInput() : void
     - kbhit() : bool 
-
     - clearScreen() : void 
-
     - moveCursor(int x, int y) : void 
 }
 
@@ -358,9 +346,9 @@ class Input{
     - mNumKeys : int
 
     - mPreviousKeys : std::vector<Uint8> 
-    - mDownKeys :     std::vector<Uint8> 
-    - mUpKeys :       std::vector<Uint8> 
-    - mHeldKeys :     std::vector<Uint8> 
+    - mDownKeys : std::vector<Uint8> 
+    - mUpKeys : std::vector<Uint8> 
+    - mHeldKeys : std::vector<Uint8> 
 }
 
 
@@ -536,7 +524,7 @@ class ToggleRenderArtistsCommand {
 }
 Command <|.. PlayPauseTilesCommand
 Command <|.. ToggleRenderArtistsCommand
-Command <|.. GeneralCommand
+Command <|.. GenericCommand
 InputHandler <-- Command
 
 Controller <-- FileHandler
@@ -606,7 +594,9 @@ IGridParser <|.. GridXMLParser
 ' CollisionHandler
 CollisionHandler <-- Quadtree
 Quadtree <-- Boundary
-
 PollingTUI <-- MenuState
+Controller -- PlayPauseTilesCommand
+Controller -- ToggleRenderArtistsCommand
+Controller -- GenericCommand
 
 @enduml
