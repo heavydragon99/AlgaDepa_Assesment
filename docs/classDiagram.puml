@@ -536,7 +536,7 @@ class ToggleRenderArtistsCommand {
 }
 Command <|.. PlayPauseTilesCommand
 Command <|.. ToggleRenderArtistsCommand
-Command <|.. GeneralCommand
+Command <|.. GenericCommand
 InputHandler <-- Command
 
 Controller <-- FileHandler
@@ -606,7 +606,9 @@ IGridParser <|.. GridXMLParser
 ' CollisionHandler
 CollisionHandler <-- Quadtree
 Quadtree <-- Boundary
-
 PollingTUI <-- MenuState
+Controller -- PlayPauseTilesCommand
+Controller -- ToggleRenderArtistsCommand
+Controller -- GenericCommand
 
 @enduml
