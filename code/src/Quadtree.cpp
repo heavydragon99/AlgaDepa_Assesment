@@ -3,12 +3,14 @@
 #include <iostream>
 
 /**
- * @brief Constructs a Quadtree with a given boundary and capacity.
+ * @brief Constructs a Quadtree with a given boundary, capacity, and depth.
  * @param boundary The boundary of the Quadtree.
  * @param capacity The maximum number of elements a node can hold before subdividing.
+ * @param depth The current depth of this node.
+ * @param maxDepth The maximum depth allowed for the Quadtree.
  */
-Quadtree::Quadtree(const Boundary& boundary, int capacity)
-    : mBoundary(boundary), mCapacity(capacity), mDivided(false) {}
+Quadtree::Quadtree(const Boundary& boundary, int capacity, int depth, int maxDepth)
+    : mBoundary(boundary), mCapacity(capacity), mDivided(false), mDepth(depth), mMaxDepth(maxDepth) {}
 
 /**
  * @brief Checks if a location is within the boundary.
@@ -50,38 +52,30 @@ bool Quadtree::Boundary::intersects(const Boundary& other) const {
  * @param artist The artist to insert.
  * @return True if the artist was successfully inserted, false otherwise.
  */
-
 bool Quadtree::insert(Artist* artist) {
     if (!mBoundary.contains(artist->getLocation())) {
         return false; // Artist is outside this boundary
     }
 
     if (mDivided) {
-        // Try to insert the artist into one of the child nodes
         if (mTopLeft->insert(artist) || mTopRight->insert(artist) || mBottomLeft->insert(artist) ||
             mBottomRight->insert(artist)) {
             return true;
         }
     }
 
-    if (mArtists.size() < mCapacity) {
-        // Still space in this node, just add the artist
+    if (mArtists.size() < mCapacity || mDepth == mMaxDepth) {
+        // If there's space or we've reached max depth, store the artist
         mArtists.push_back(artist);
         return true;
-    } else {
-        if (!mDivided) {
-            // Subdivide the node when capacity is reached
-            subdivide();
-        }
-
-        // Try to insert the artist into one of the child nodes
-        if (mTopLeft->insert(artist) || mTopRight->insert(artist) || mBottomLeft->insert(artist) ||
-            mBottomRight->insert(artist)) {
-            return true;
-        }
     }
 
-    return false;
+    if (!mDivided) {
+        subdivide();
+    }
+
+    return mTopLeft->insert(artist) || mTopRight->insert(artist) || mBottomLeft->insert(artist) ||
+           mBottomRight->insert(artist);
 }
 
 /**
@@ -95,31 +89,23 @@ bool Quadtree::insert(TileNode* tile) {
     }
 
     if (mDivided) {
-        // Try to insert the tile into one of the child nodes
         if (mTopLeft->insert(tile) || mTopRight->insert(tile) || mBottomLeft->insert(tile) ||
             mBottomRight->insert(tile)) {
             return true;
         }
     }
 
-    if (mTiles.size() < mCapacity) {
-        // Still space in this node, just add the tile
+    if (mTiles.size() < mCapacity || mDepth == mMaxDepth) {
+        // If there's space or we've reached max depth, store the tile
         mTiles.push_back(tile);
         return true;
-    } else {
-        if (!mDivided) {
-            // Subdivide the node when capacity is reached
-            subdivide();
-        }
-
-        // Try to insert the tile into one of the child nodes
-        if (mTopLeft->insert(tile) || mTopRight->insert(tile) || mBottomLeft->insert(tile) ||
-            mBottomRight->insert(tile)) {
-            return true;
-        }
     }
 
-    return false;
+    if (!mDivided) {
+        subdivide();
+    }
+
+    return mTopLeft->insert(tile) || mTopRight->insert(tile) || mBottomLeft->insert(tile) || mBottomRight->insert(tile);
 }
 
 /**
@@ -201,35 +187,22 @@ std::vector<Quadtree::Boundary> Quadtree::getBoundaries() {
  */
 
 void Quadtree::subdivide() {
+    if (mDepth >= mMaxDepth) {
+        return; // Do not subdivide further if the max depth is reached
+    }
+
     float x = mBoundary.x;
     float y = mBoundary.y;
     float halfWidth = mBoundary.width / 2.0f;
     float halfHeight = mBoundary.height / 2.0f;
 
-    // Create the 4 child nodes
-    mTopLeft = std::make_unique<Quadtree>(Boundary{x, y, halfWidth, halfHeight}, mCapacity);
-    mTopRight = std::make_unique<Quadtree>(Boundary{x + halfWidth, y, halfWidth, halfHeight}, mCapacity);
-    mBottomLeft = std::make_unique<Quadtree>(Boundary{x, y + halfHeight, halfWidth, halfHeight}, mCapacity);
-    mBottomRight =
-        std::make_unique<Quadtree>(Boundary{x + halfWidth, y + halfHeight, halfWidth, halfHeight}, mCapacity);
+    mTopLeft = std::make_unique<Quadtree>(Boundary{x, y, halfWidth, halfHeight}, mCapacity, mDepth + 1, mMaxDepth);
+    mTopRight =
+        std::make_unique<Quadtree>(Boundary{x + halfWidth, y, halfWidth, halfHeight}, mCapacity, mDepth + 1, mMaxDepth);
+    mBottomLeft = std::make_unique<Quadtree>(Boundary{x, y + halfHeight, halfWidth, halfHeight}, mCapacity, mDepth + 1,
+                                             mMaxDepth);
+    mBottomRight = std::make_unique<Quadtree>(Boundary{x + halfWidth, y + halfHeight, halfWidth, halfHeight}, mCapacity,
+                                              mDepth + 1, mMaxDepth);
 
     mDivided = true;
-
-    // Move all existing Artists to the child nodes
-    for (Artist* artist : mArtists) {
-        if (!mTopLeft->insert(artist))
-            if (!mTopRight->insert(artist))
-                if (!mBottomLeft->insert(artist))
-                    mBottomRight->insert(artist);
-    }
-    mArtists.clear(); // Clear the current node's list after moving to child nodes
-
-    // Move all existing TileNodes to the child nodes
-    for (TileNode* tile : mTiles) {
-        if (!mTopLeft->insert(tile))
-            if (!mTopRight->insert(tile))
-                if (!mBottomLeft->insert(tile))
-                    mBottomRight->insert(tile);
-    }
-    mTiles.clear(); // Clear the current node's list after moving to child nodes
 }

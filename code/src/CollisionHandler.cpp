@@ -158,7 +158,7 @@ void CollisionHandler::quadTreeCollisionCheck() {
     Quadtree::Boundary boundary{0, 0, static_cast<float>(mModel->getLevelData().getCols()),
                                 static_cast<float>(mModel->getLevelData().getRows())};
 
-    Quadtree quadtree(boundary, QUADTREE_CAPACITY);
+    Quadtree quadtree(boundary, QUADTREE_CAPACITY, 0, QUADTREE_MAX_DEPTH);
 
     // Insert all artists into the quadtree
     for (Artist& artist : mModel->getLevelData().getPeople()) {
@@ -237,7 +237,7 @@ std::vector<Quadtree::Boundary> CollisionHandler::getBoundaries() {
     Quadtree::Boundary boundary{0, 0, static_cast<float>(mModel->getLevelData().getCols()),
                                 static_cast<float>(mModel->getLevelData().getRows())};
 
-    Quadtree quadtree(boundary, QUADTREE_CAPACITY);
+    Quadtree quadtree(boundary, QUADTREE_CAPACITY, 0, QUADTREE_MAX_DEPTH);
 
     // Insert all artists into the quadtree
     for (Artist& artist : mModel->getLevelData().getPeople()) {

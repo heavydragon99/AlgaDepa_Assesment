@@ -21,7 +21,7 @@ public:
         float width;  ///< The width of the boundary.
         float height; ///< The height of the boundary.
 
-        bool contains(const Artist::Location& loc) const;    
+        bool contains(const Artist::Location& loc) const;
         bool contains(float tileX, float tileY, float tileWidth, float tileHeight) const;
         bool intersects(const Boundary& other) const;
     };
@@ -31,7 +31,7 @@ public:
      * @param boundary The boundary of the Quadtree.
      * @param capacity The maximum number of elements a node can hold before subdividing.
      */
-    Quadtree(const Boundary& boundary, int capacity);
+    Quadtree(const Boundary& boundary, int capacity, int depth = 0, int maxDepth = 2);
 
     bool insert(Artist* artist);
     bool insert(TileNode* tile);
@@ -51,9 +51,13 @@ private:
      */
     void subdivide();
 
-    Boundary mBoundary; ///< The boundary of the Quadtree node.
-    int mCapacity;      ///< The maximum number of elements a node can hold before subdividing.
-    bool mDivided;      ///< Indicates whether the node has been subdivided.
+    Boundary mBoundary;            ///< The boundary of the Quadtree node.
+    int mCapacity;                 ///< The maximum number of elements a node can hold before subdividing.
+    bool mDivided;                 ///< Indicates whether the node has been subdivided.
+                                   ///
+    int mDepth;                    ///< Current depth of the node.
+    int mMaxDepth;                 ///< Maximum allowed depth.
+                                   ///
     std::vector<Artist*> mArtists; ///< The artists contained in this node.
     std::vector<TileNode*> mTiles; ///< The tiles contained in this node.
 

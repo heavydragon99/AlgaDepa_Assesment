@@ -6,19 +6,19 @@
 #include <tuple>
 #include <vector>
 
-#include "Quadtree.h"
 #include "Artist.h"
 #include "Configuration.h"
 #include "Model.h"
+#include "Quadtree.h"
 
-#define QUADTREE_CAPACITY 5
+#define QUADTREE_CAPACITY 4
+#define QUADTREE_MAX_DEPTH 7
 
 /**
  * @brief Handles collisions between artists and tiles.
  */
 class CollisionHandler {
 public:
-
     CollisionHandler(Model* aModel);
     ~CollisionHandler();
 
