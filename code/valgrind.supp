@@ -1,0 +1,13 @@
+{
+   <sdl2_memory_leak_all>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libSDL2*
+}
+
+{
+   <glx_mesa_memory_leak_all>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa*
+}
