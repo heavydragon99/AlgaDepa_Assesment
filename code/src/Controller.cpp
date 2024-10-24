@@ -222,13 +222,19 @@ void Controller::loadNextMemento() {
 /**
  * @brief Increases the logic update speed.
  */
-void Controller::speedUp() { mCurrentFPSLogic += 1; }
+void Controller::speedUp() {
+    if (mCurrentFPSLogic < 10) {
+        mCurrentFPSLogic = mCurrentFPSLogic + 2;
+    } else {
+        mCurrentFPSLogic = mCurrentFPSLogic * 1.1;
+    }
+}
 
 /**
  * @brief Decreases the logic update speed.
  */
 void Controller::slowDown() {
-    if (mCurrentFPSLogic > 1) {
-        mCurrentFPSLogic -= 1;
-    }
+    mCurrentFPSLogic = mCurrentFPSLogic * 0.9;
+    if (mCurrentFPSLogic < 1)
+        mCurrentFPSLogic = 1;
 }

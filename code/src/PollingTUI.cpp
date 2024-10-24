@@ -99,10 +99,12 @@ int PollingTUI::mainMenu() {
     std::cout << "\tCollision with path:\t" << (config.getConfig("CollisionWithPath") ? "true" : "false") << std::endl;
 
     moveCursor(2, curline += 1);
-    std::cout << "\tPathfinding method:\t" << (config.getConfig("PathfindingMethodDijkstra") ? "Dijkstra" : "breath first") << std::endl;
+    std::cout << "\tPathfinding method:\t"
+              << (config.getConfig("PathfindingMethodDijkstra") ? "Dijkstra" : "breath first") << std::endl;
 
     moveCursor(2, curline += 1);
-    std::cout << "\tCollision method:\t" << (config.getConfig("CollisionMethodQuadTree") ? "quadTree" : "native") << std::endl;
+    std::cout << "\tCollision method:\t" << (config.getConfig("CollisionMethodQuadTree") ? "quadTree" : "native")
+              << std::endl;
 
     moveCursor(2, curline += 1);
     std::cout << "\tPause tiles:\t\t" << (config.getConfig("PauseTiles") ? "true" : "false") << std::endl;
@@ -112,7 +114,6 @@ int PollingTUI::mainMenu() {
 
     moveCursor(2, curline += 2);
     std::cout << "Press 'q' to quit" << std::endl;
-
 
     char ch;
     // Check for user input without blocking
@@ -186,8 +187,9 @@ void PollingTUI::openArtistFile() {
 
             std::vector<ParsedPerson> persons = fileHandler.loadArtist(fileName);
 
-            if (persons.size() != 0)
+            if (persons.size() != 0) {
                 mModel.setPersonData(persons);
+            }
 
             mMenuState = MenuState::MainMenu;
             fileName = "";

@@ -56,8 +56,9 @@ std::vector<ParsedPerson> FileHandler::loadArtist(std::string aFilePath) {
     try {
         FileLoader fileLoader;
         std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
-        if (filePointer.get() == nullptr)
+        if (filePointer.get() == nullptr){
             return artistData;
+        }
 
         LoadedFile loadedFile;
         loadedFile.fileType = getFileType(aFilePath);
@@ -85,8 +86,9 @@ ParsedGrid FileHandler::loadGrid(std::string aFilePath) {
         FileLoader fileLoader;
         std::unique_ptr<std::ifstream> filePointer = fileLoader.loadFile(aFilePath);
 
-        if (filePointer.get() == nullptr)
+        if (filePointer.get() == nullptr){
             return gridData;
+        }
 
         LoadedFile loadedFile;
         loadedFile.fileType = getFileType(aFilePath);

@@ -32,6 +32,8 @@ struct ParsedGrid {
     int cols; ///< Number of columns in the grid
     std::vector<GridColor> gridColors; ///< Vector of grid colors
     std::vector<char> grid; ///< Vector representing the grid
+
+    ParsedGrid() : rows(0), cols(0) {}
 };
 
 /**
