@@ -215,6 +215,11 @@ void CollisionHandler::quadTreeCollisionCheck() {
                         tile->getTile().updateTile();
                     }
                 }
+                if (Configuration::getInstance().getConfig("CollisionWithPath")) {
+                    if (tile->isPath()) {
+                        artist.triggerRed();
+                    }
+                }
 
                 currentTileCollisions.insert(collisionKey);
             }
