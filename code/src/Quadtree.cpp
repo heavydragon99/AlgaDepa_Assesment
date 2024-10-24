@@ -162,7 +162,7 @@ void Quadtree::queryTiles(const Boundary& range, std::vector<TileNode*>& found) 
  */
 std::vector<Quadtree::Boundary> Quadtree::getBoundaries() {
     // Start by adding the current node's boundary
-    std::vector<Boundary> boundaries{mBoundary};
+    std::vector<Boundary> boundaries;
 
     // If the node is subdivided, add boundaries from child nodes as well
     if (mDivided) {
@@ -177,6 +177,8 @@ std::vector<Quadtree::Boundary> Quadtree::getBoundaries() {
 
         std::vector<Boundary> bottomright = mBottomRight->getBoundaries();
         boundaries.insert(boundaries.end(), bottomright.begin(), bottomright.end());
+    }else{
+        boundaries.push_back(mBoundary);
     }
 
     return boundaries;
