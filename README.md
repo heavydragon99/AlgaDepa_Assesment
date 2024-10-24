@@ -8,6 +8,11 @@
 
 Make sure you have CMake, a C++ compiler, SDL2, and CURL and gtest installed on your system.
 
+Make sure to Initilze the Git submodules:
+```sh
+    git submodule update --init --recursive
+```
+
 ### Building the Project
 
 1. Navigate to the `code` directory:
