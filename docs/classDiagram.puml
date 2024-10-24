@@ -225,7 +225,7 @@ class Artist {
     ' }
 }
 
-class input{
+class Input{
     + static Input& getInstance();
 
     + update() : void
@@ -257,7 +257,7 @@ class input{
     - mCurrentMouse :  Mouse 
     - mPreviousMouse : Mouse 
 
-    mCurrentKeys : const Uint8* 
+    - mCurrentKeys : const Uint8* 
     - mNumKeys : int
 
     - mPreviousKeys : std::vector<Uint8> 
@@ -297,7 +297,30 @@ class View {
     -int mTileSize
 }
 
-class parsedArtist{
+class Renderer{
+    + Renderer(int aRows, int aCols)
+    + ~Renderer()
+
+    + show() : void 
+    + clear() : void 
+    + drawSquare(int x, int y, int width, int height, Color color) : void 
+    + drawSquareRect(int x, int y, int width, int height, Color color) : void 
+    + getWindowWidth() : int 
+    + getWindowHeight() : int 
+
+    - initSDL() : bool 
+    - initializeWindow() : void 
+
+    - mWindow : std::unique_ptr<SDL_Window, void (*)(SDL_Window*)> 
+    - mRenderer : std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer*)> 
+
+    - mScaleFactor : float 
+
+    - mRows : int 
+    - mCols : int 
+}
+
+struct parsedArtist{
     float x;
     float y;
     float vx;
@@ -306,14 +329,14 @@ class parsedArtist{
 
 ' vector<char> parsedTile()
 
-class parsedGrid{
+struct parsedGrid{
     int rows
     int cols
     std::vector<gridColor> colors
     std::vector<char> grid
 }
 
-class gridColor{
+struct gridColor{
     +char letter
     +int red
     +int green
@@ -321,7 +344,7 @@ class gridColor{
     +int weight
 }
 
-class parsedGridColor{
+struct parsedGridColor{
     char letter;
     int red;
     int green;
@@ -378,12 +401,54 @@ class Configuration {
     -std::unordered_map<std::string, bool> configs
 }
 
+class InputHandler {
+    - commandMap : std::map<int, std::unique_ptr<Command>> 
+
+    + setCommand(int input, std::unique_ptr<Command> command) : void
+    + handleInput(int input) : void
+
+    + removeCommand(int input) : void 
+
+     getRegistrations() : std::map<int, std::unique_ptr<Command>>&
+}
+
+interface Command {
+    + virtual ~Command()
+    + virtual execute() : void
+    + virtual getName() : std::string  
+
+    + Command() = default; 
+
+    + Command(const Command& other) = default;
+
+    + virtual Command* clone() const = 0;
+}
+
+class PlayPauseTilesCommand {
+    + execute() override : void
+    + getName() override : std::string 
+
+    + PlayPauseTilesCommand* clone() const override 
+}
+
+class ToggleRenderArtistsCommand {
+    + execute() override : void
+    + getName() override : std::string 
+
+    + ToggleRenderArtistsCommand* clone() const override 
+}
+Command <|.. PlayPauseTilesCommand
+Command <|.. ToggleRenderArtistsCommand
+Command <|.. GeneralCommand
+InputHandler <-- Command
 
 Controller <-- FileHandler
 Controller <-- Model
-Controller <-- inputHandler
+Controller <-- Input
+Controller <-- InputHandler
 Controller <-- View
 View <-- Model
+View <-- Renderer
 
 ' Model
 Model *-- "1" LevelData
@@ -438,10 +503,5 @@ IArtistParser <|.. ArtistCSVParser
 GridParser <-- IGridParser
 IGridParser <|.. GridTXTParser
 IGridParser <|.. GridXMLParser
-
-
-' inputHandler
-inputHandler <-- mouse
-inputHandler <-- keyboard
 
 @enduml
