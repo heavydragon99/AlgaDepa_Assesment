@@ -83,7 +83,7 @@ void Controller::run() {
         int frameDurationView = std::chrono::duration_cast<std::chrono::milliseconds>(frameTimeView).count();
         if (frameDurationView >= frameDelayView) {
             mView->handleEvents(quit);
-            if(checkInputs() == 1){
+            if (checkInputs() == 1) {
                 quit = true;
             }
 
@@ -179,7 +179,7 @@ int Controller::checkInputs() {
     static PollingTUI tui(*mInputHandler.get(), *mModel.get());
     input.update();
 
-    if(tui.update() == 1){
+    if (tui.update() == 1) {
         return 1;
     }
 
@@ -187,7 +187,6 @@ int Controller::checkInputs() {
 
     for (int i = 0; i < downKeys.size(); i++) {
         mInputHandler->handleInput(downKeys[i]);
-        std::cout << "Key: " << downKeys[i] << std::endl;
     }
 
     handleMouseInput();
