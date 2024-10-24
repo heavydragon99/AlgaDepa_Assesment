@@ -31,8 +31,8 @@ Controller::Controller() {
  */
 void Controller::initialize() {
     FileHandler fileHandler;
-    ParsedGrid grid = fileHandler.loadGrid("grid.txt");
-    std::vector<ParsedPerson> persons = fileHandler.loadArtist("artists.csv");
+    ParsedGrid grid = fileHandler.loadGrid("../../grid.txt");
+    std::vector<ParsedPerson> persons = fileHandler.loadArtist("../../artists.csv");
 
     mPersons = persons;
     mGrid = grid;

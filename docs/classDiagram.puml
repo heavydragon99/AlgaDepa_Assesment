@@ -225,16 +225,47 @@ class Artist {
     ' }
 }
 
-class inputHandler{
+class input{
+    + static Input& getInstance();
+
+    + update() : void
+
+    + getHeldKeys() : std::vector<Uint8>& 
+    + getDownKeys() : std::vector<Uint8>& 
+    + getUpKeys() : std::vector<Uint8>& 
+
+    + AnyKey() : bool 
+    + AnyKeyDown() : bool 
+    + MousePosition() : Point 
+    + GetAxis() : double 
+    + GetKey(Key key) : bool 
+    + GetKeyDown(Key key) : bool 
+    + GetKeyUp(Key key) : bool 
+    + GetMouseButton(MouseButton which) : bool 
+    + GetMouseButtonDown(MouseButton which) : bool 
+    + GetMouseButtonUp(MouseButton which) : bool 
+
+    - updatePreviousKeys() : void 
+    - updateCurrentKeys() : void 
+    - updateDownKeys() : void 
+    - updateUpKeys() : void 
+    - updateHeldKeys() : void 
+    - updateMouse() : void 
+
+    - Input();
+
+    - mCurrentMouse :  Mouse 
+    - mPreviousMouse : Mouse 
+
+    mCurrentKeys : const Uint8* 
+    - mNumKeys : int
+
+    - mPreviousKeys : std::vector<Uint8> 
+    - mDownKeys :     std::vector<Uint8> 
+    - mUpKeys :       std::vector<Uint8> 
+    - mHeldKeys :     std::vector<Uint8> 
 }
 
-class mouse{
-    ' use 3rd party library to get mouse coordinates and translate to generic data
-}
-
-class keyboard{
-    ' use 3rd party library to get keyboard input and translate to generic data
-}
 
 class TileFactory{
     + {static} std::unique_ptr<Tile> createTile(char color)
